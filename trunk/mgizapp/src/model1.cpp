@@ -138,7 +138,7 @@ int model1::em_with_tricks(int noIterations, /*Perplexity& perp, sentenceHandler
         pair_no = 0 ;
         it_st = time(NULL);
         cout <<  "-----------\n" << modelName << ": Iteration " << it << '\n';
-        dump_files = (Model1_Dump_Freq != 0) &&  ((it % Model1_Dump_Freq)  == 0) && !NODUMPS ;
+        dump_files = (Model1_Dump_Freq != 0) &&  ((it % Model1_Dump_Freq)  == 0 || it == noIterations) && !NODUMPS ;
 	//dump_files = true;
         number = "";
         int n = it;
