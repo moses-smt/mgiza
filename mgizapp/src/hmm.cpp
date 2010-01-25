@@ -125,6 +125,8 @@ int hmm::em_with_tricks(int noIterations,bool dumpCount,
         it_st = time(NULL) ;
         cout << endl << "-----------\n" << modelName << ": Iteration " << it << '\n';
         dump_files = (dumpFreq != 0) && ((it % dumpFreq) == 0 || it == noIterations) && !NODUMPS;
+
+		cerr << "Dump files " << dump_files << " it " << it << " noIterations " << noIterations << " dumpFreq " << dumpFreq <<endl;
         //dump_files = true;
         number = "";
         int n = it;
