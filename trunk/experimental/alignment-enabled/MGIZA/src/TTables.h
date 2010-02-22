@@ -181,6 +181,8 @@ public:
 	}
       
 	const CPPair*find(int e,int f)const{
+		if(lexmat[e]==0)
+			return 0;
         const pair<unsigned int,CPPair> *be=&(*lexmat[e])[0];
 		const pair<unsigned int,CPPair> *en=&(*lexmat[e])[0]+(*lexmat[e]).size();
 		//const pair<unsigned int,CPPair> *be=&(fs[0])+es[e];
