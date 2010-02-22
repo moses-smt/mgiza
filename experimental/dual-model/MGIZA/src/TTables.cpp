@@ -86,6 +86,10 @@ void tmodel<COUNT, PROB>::printProbTable(const char *filename,
 					 const bool actual) const
 {
 	ofstream of(filename);
+	if(!of){
+		cerr << "Failed to open " << filename << endl;
+		return;
+	}
 	/*  for(unsigned int i=0;i<es.size()-1;++i)
 	for(unsigned int j=es[i];j<es[i+1];++j)
 	{
@@ -104,7 +108,12 @@ void tmodel<COUNT, PROB>::printProbTable(const char *filename,
 				WordIndex e=i,f=(*lexmat[i])[j].first;
 				if( x.prob>PROB_SMOOTH ){
 					if( actual ){
-						of << evlist[e].word << ' ' << fvlist[f].word << ' ' << x.prob << '\n';
+//						cerr << e <<" " << f << endl;
+						if(!(e < evlist.size() && f<fvlist.size())){
+							cerr << "Error, word not found in vocabulary" << e << " " << f <<" " << evlist.size() << " " << fvlist.size() << endl;
+							continue;
+						}
+						of <<fvlist[e].word << ' ' << evlist[f].word << ' ' << x.prob << '\n';
 					}else{
 						of << e << ' ' << f << ' ' << x.prob << '\n';
 					}

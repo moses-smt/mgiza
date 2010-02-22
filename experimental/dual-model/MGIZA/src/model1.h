@@ -92,6 +92,7 @@ public:
     int noEnglishWords;
     int noFrenchWords;
     tmodel<COUNT, PROB>&tTable;
+    tmodel<COUNT, PROB> *tTable2; //Secondary T-Table
     Vector<WordEntry>& evlist ;
     Vector<WordEntry>& fvlist ;
     int threadID;
@@ -108,6 +109,7 @@ public:
     
     model1 (const model1& m1, int _threadID=0);
     void initialize_table_uniformly(sentenceHandler& sHandler1);
+    void mle_with_links(sentenceHandler& sHandler1);
     
     int em_with_tricks(int noIterations, 
         bool seedModel1, Dictionary& dictionary, bool useDict, bool dumpCount = false, 

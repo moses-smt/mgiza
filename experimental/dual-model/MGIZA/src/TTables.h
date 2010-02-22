@@ -148,6 +148,9 @@ class tmodel{
 	typedef LpPair<COUNT, PROB> CPPair;
 public:
 	bool recordDiff;
+	float wt,wmle; // The weight of normal t table and the weight of mle table from manual alignment
+// By now it is fixed
+	tmodel<COUNT,PROB> *secT; // Secondary 
         
 public:
 	int noEnglishWords;  // total number of unique source words
@@ -162,6 +165,24 @@ public:
 		if(p)
 			*p=CPPair(0,0);
 	};
+
+	void init_constant(COUNT c){
+		for (WordIndex e = 0; e < lexmat.size(); e++){
+			if (lexmat[e])
+			for (WordIndex f = 0 ; f < lexmat[e]->size();f++){
+//				cerr << e << " " << f << endl;
+				(*(lexmat[e]))[f].second.count = c;
+			}
+		}
+	}
+
+	void inc_constant(COUNT c){
+		for (WordIndex e = 0; e < lexmat.size(); e++){
+			for (WordIndex f = 0 ; f < lexmat[e]->size();f++){
+				(*(lexmat[e]))[f].second.count += c;
+			}
+		}
+	}
       
     CPPair*find(int e,int f){
 		//pair<unsigned int,CPPair> *be=&(fs[0])+es[e];
@@ -181,6 +202,9 @@ public:
 	}
       
 	const CPPair*find(int e,int f)const{
+		if(e>lexmat.size()||lexmat[e]==NULL){
+			return NULL;
+		}
         const pair<unsigned int,CPPair> *be=&(*lexmat[e])[0];
 		const pair<unsigned int,CPPair> *en=&(*lexmat[e])[0]+(*lexmat[e]).size();
 		//const pair<unsigned int,CPPair> *be=&(fs[0])+es[e];
@@ -297,8 +321,13 @@ public:
 
 	PROB getProb(WordIndex e, WordIndex f) const{
 		const CPPair *p=find(e,f);
-        if( p )
-            return max(p->prob, PROB_SMOOTH);
+        if( p ){
+			float w = p->prob;
+			if(secT && wmle) {
+				w = w*wt + secT->getProb(e,f)*wmle;
+			}
+			return max(p->prob, PROB_SMOOTH);
+		}
         else
             return PROB_SMOOTH;
     }
