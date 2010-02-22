@@ -265,7 +265,14 @@ template<class TRANSPAIR, class MODEL> int collectCountsOverNeighborhood(
 		all_total+=this_total;
 	}
 	_total=all_total;
-	all_total/=(double)count;
+	if(count==0){
+		cerr << "WARNING: COUNT ==0" << endl;
+	}else
+		all_total/=(double)count;
+	if(isinf(all_total)){
+		cerr << "ALL_TOTAL is INF\n" ;
+		return 0;
+	}
 	double sum2=0;
 	if (addCounts && d4Table) {
 		for (unsigned int i=0; i<smsc.size(); ++i) {
@@ -275,13 +282,17 @@ template<class TRANSPAIR, class MODEL> int collectCountsOverNeighborhood(
 					*smsc[i].first, smsc[i].second/all_total, d4Table);
 		}
 		if (!(fabs(count-sum2)<0.05))
-			cerr << "WARNING: DIFFERENT SUMS: (" << count << ") (" << sum2
+			cerr << "WARNING: DIFFERENT SUMS: (" << count << ") (" << sum2 << ") (" << all_total
 					<< ")\n";
 	}
 
 	/**
 	 NOTE! HERE IS THE UPDATE PROCESS！
 	 */
+	if(fabs(all_total)==0){
+		// Error
+		cerr << "Hill climbing yields zero count " << endl;
+	}else{
 	if (addCounts) {
 		for (PositionIndex i=0; i<=l; i++) {
 			for (PositionIndex j=1; j<=m; j++) {
@@ -298,7 +309,7 @@ template<class TRANSPAIR, class MODEL> int collectCountsOverNeighborhood(
 		}
 		p0count+=p0/all_total;
 		p1count+=p1/all_total;
-	}
+	}}
 	return nAl;
 }
 

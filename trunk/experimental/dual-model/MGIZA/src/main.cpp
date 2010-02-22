@@ -63,6 +63,7 @@ GLOBAL_PARAMETER2(bool,Verbose,"verbose","v","0: not verbose; 1: verbose",PARLEV
 GLOBAL_PARAMETER(bool,Log,"log","0: no logfile; 1: logfile",PARLEV_OUTPUT,0);
 
 GLOBAL_PARAMETER(double,P0,"p0","fixed value for parameter p_0 in IBM-3/4 (if negative then it is determined in training)",PARLEV_EM,-1.0);
+GLOBAL_PARAMETER(double,pmle,"pmle","The weight of MLE lexicon table",PARLEV_EM,0.1);
 GLOBAL_PARAMETER(double,M5P0,"m5p0","fixed value for parameter p_0 in IBM-5 (if negative then it is determined in training)",PARLEV_EM,-1.0);
 GLOBAL_PARAMETER3(bool,Peg,"pegging","p","DO PEGGING? (Y/N)","0: no pegging; 1: do pegging",PARLEV_EM,0);
 
@@ -579,6 +580,10 @@ double StartTraining(int&result) {
 
 	//ifstream coocs(CoocurrenceFile.c_str());
 	tmodel<COUNT, PROB> tTable(CoocurrenceFile);
+	tmodel<COUNT, PROB> *mle = NULL;
+	if(pmle>0){
+		mle = new tmodel<COUNT,PROB>(CoocurrenceFile);
+	}
 	cerr << "cooc file loading completed" << endl;
 	
 
@@ -654,7 +659,20 @@ double StartTraining(int&result) {
 	model1 m1(CorpusFilename.c_str(), eTrainVcbList, fTrainVcbList, tTable,
 			trainPerp, *corpus, &testPerp, testCorpus, trainViterbiPerp,
 			&testViterbiPerp);
+	m1.tTable2 = mle;
+	if(mle){
+		cerr << "Build secondary translation table" << endl;
+		m1.mle_with_links(*corpus);
+		cerr << "Done" << endl;
+		m1.tTable.secT = mle;
+		m1.tTable.secT->secT = NULL;
+		m1.tTable.secT->wt = 1;
+		m1.tTable.secT->wmle = 0;
+	}
+	m1.tTable.wt = 1- pmle;
+	m1.tTable.wmle = pmle;
 	cerr << "Model one initalization OK" << endl;
+
 	amodel<PROB> aTable(false);
 	
 	if (restart >2 && restart != 4 ){ // 1 is model 1, 2 is model 2 init, both just need t-table, 4 is directly train HMM from model one
@@ -914,6 +932,8 @@ double StartTraining(int&result) {
 		}
 	}
 	result=minIter;
+	if(mle)
+		delete mle;
 	return errors;
 }
 

@@ -43,14 +43,14 @@ model1::model1(const char* efname, vcbList& evcblist, vcbList& fvcblist,tmodel<C
   eTotalWCount(Elist.totalVocab()), fTotalWCount(Flist.totalVocab()), 
   noEnglishWords(Elist.size()), noFrenchWords(Flist.size()), tTable(_tTable),
   evlist(Elist.getVocabList()), fvlist(Flist.getVocabList())
-{}
+{tTable2 = NULL;}
 
 model1::model1 (const model1& m1, int _threadID):
 report_info(m1),efFilename(m1.efFilename),
 Elist(m1.Elist),Flist(m1.Flist),eTotalWCount(m1.eTotalWCount),fTotalWCount(m1.fTotalWCount),
 noEnglishWords(m1.noEnglishWords),noFrenchWords(m1.noFrenchWords),tTable(m1.tTable),
 evlist(m1.evlist),fvlist(m1.fvlist)
-{}
+{tTable2 = NULL;}
 
 void model1::initialize_table_uniformly(sentenceHandler& sHandler1){
   WordIndex i, j;
@@ -64,10 +64,44 @@ void model1::initialize_table_uniformly(sentenceHandler& sHandler1){
     Vector<WordIndex>& fs = sent.fSent;
     PROB uniform = 1.0/es.size() ;
     for( i=0; i < es.size(); i++)
-          for(j=1; j < fs.size(); j++)
-          tTable.insert(es[i],fs[j],0,uniform);
+      for(j=1; j < fs.size(); j++)
+      tTable.insert(es[i],fs[j],0,uniform);
+	
   }
 }
+void model1::mle_with_links(sentenceHandler& sHandler1){
+	if(tTable2){
+		tTable2->init_constant(1e-10);
+	}else{
+		return;
+	}
+	WordIndex i, j;
+
+  cout << "Initialize tTable (cost)\n";
+
+  sentPair sent ;
+  sHandler1.rewind();
+  while(sHandler1.getNextSentence(sent)){
+    Vector<WordIndex>& es = sent.eSent;
+    Vector<WordIndex>& fs = sent.fSent;
+	for(int k = 0 ; k < sent.eAnchor.size(); k++){
+		i = sent.eAnchor[k];
+		j = sent.fAnchor[k];
+		if(i > es.size()||j > fs.size()){
+			continue;
+		}else{
+			tTable2->incCount(i,j,1);
+		}
+	}
+  }
+  tTable2->normalizeTable(Elist,Flist);
+  cerr << "Outputting MLE TTable file " << endl;
+  string rs = Prefix + ".tmle"  ;
+  cerr << "Before " << Elist.getVocabList().size() << " " << Flist.getVocabList().size()<<endl;
+  tTable2->printProbTable(rs.c_str(),Elist.getVocabList(),Flist.getVocabList(),false);
+
+}
+
 
 struct em_loop_t{
     model1 *m1;
