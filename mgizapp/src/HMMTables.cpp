@@ -73,25 +73,27 @@ template<class CLS, class MAPPERCLASSTOSTRING> double HMMTables<CLS,
 	default:
 		abort();
 	}
-	lock.lock();
+	lock->lock();
 	typename map<AlDeps<CLS>,FlexArray<double> >::const_iterator p=
 			alProb.find(AlDeps<CLS>(sentLength, istrich, j, w1, w2));
 	if (p!=alProb.end() ) {
-		lock.unlock();
+		lock->unlock();
 		return (p->second)[pos];
 	} else {
 		if (iter>0&&iter<5000)
 			cout << "WARNING: Not found: " << ' ' << J << ' ' << sentLength
 					<< '\n';;
-		lock.unlock();
+		lock->unlock();
 		return 1.0/(2*sentLength-1);
 	}
-	lock.unlock();
+	lock->unlock();
 }
 
 template<class CLS, class MAPPERCLASSTOSTRING> void HMMTables<CLS,
 		MAPPERCLASSTOSTRING>::addAlCount(int istrich, int k, int sentLength,
 		int J, CLS w1, CLS w2, int j, double value, double valuePredicted) {
+
+
 	int pos=istrich-k;
 	switch (PredictionInAlignments) {
 	case 0:
@@ -112,25 +114,25 @@ template<class CLS, class MAPPERCLASSTOSTRING> void HMMTables<CLS,
 		abort();
 	}
 
+
 	AlDeps<CLS> deps(AlDeps<CLS>(sentLength, istrich, j, w1, w2));
 
 	{
-		lock.lock();
+		lock->lock();
 		typename map<AlDeps<CLS>,FlexArray<double> >::iterator p=
 				alProb.find(deps);
 		if (p==alProb.end() ) {
 			if ( (CompareAlDeps&1)==0)
-				p
-						=alProb.insert(make_pair(deps,FlexArray<double> (-MAX_SENTENCE_LENGTH,MAX_SENTENCE_LENGTH,0.0))).first;
+				p=alProb.insert(make_pair(deps,FlexArray<double> (-MAX_SENTENCE_LENGTH,MAX_SENTENCE_LENGTH,0.0))).first;
 			else
 				p=alProb.insert(make_pair(deps,FlexArray<double> (-sentLength,sentLength,0.0))).first;
 		}
 		p->second[pos]+=value;
-		lock.unlock();
+		lock->unlock();
 	}
 
 	if (valuePredicted) {
-		lock.lock();
+		lock->lock();
 		typename map<AlDeps<CLS>,FlexArray<double> >::iterator p=
 				alProbPredicted.find(deps);
 		if (p==alProbPredicted.end() ) {
@@ -141,65 +143,74 @@ template<class CLS, class MAPPERCLASSTOSTRING> void HMMTables<CLS,
 				p=alProbPredicted.insert(make_pair(deps,FlexArray<double> (-sentLength,sentLength,0.0))).first;
 		}
 		p->second[pos]+=valuePredicted;
-		lock.unlock();
+		lock->unlock();
 	}
+	
 }
 
 template<class CLS, class MAPPERCLASSTOSTRING> 
-pair<Array<double>,Mutex>&HMMTables<CLS,MAPPERCLASSTOSTRING>::doGetAlphaInit(int I)
+hmmentry_type& HMMTables<CLS,MAPPERCLASSTOSTRING>::doGetAlphaInit(int I)
 {
-	alphalock.lock();
+	alphalock->lock();
 	if( !init_alpha.count(I) ){
-		init_alpha[I]=pair<Array<double>,Mutex>(Array<double>(I,0),Mutex());
+#ifdef WIN32
+		init_alpha[I]=hmmentry_type(Array<double>(I,0),new Mutex());
+#else
+		init_alpha[I]=hmmentry_type(Array<double>(I,0),Mutex());
+#endif
 	}
-	pair<Array<double>,Mutex>& ret  = init_alpha[I];
-	alphalock.unlock();
+	hmmentry_type& ret  = init_alpha[I];
+	alphalock->unlock();
 	return ret;
 }
 template<class CLS, class MAPPERCLASSTOSTRING> 
-pair<Array<double>,Mutex>&HMMTables<CLS,MAPPERCLASSTOSTRING>::doGetBetaInit(int I)
+hmmentry_type& HMMTables<CLS,MAPPERCLASSTOSTRING>::doGetBetaInit(int I)
 {
-	betalock.lock();
+	betalock->lock();
 	if( !init_beta.count(I) ){
+#ifdef WIN32
+		init_beta[I]=hmmentry_type(Array<double>(I,0),new Mutex());
+#else
 		init_beta[I]=pair<Array<double>,Mutex>(Array<double>(I,0),Mutex());
+#endif
 	}
-	pair<Array<double>,Mutex>& ret = init_beta[I];
-	betalock.unlock();
+	hmmentry_type& ret = init_beta[I];
+	betalock->unlock();
 	return ret;
 }
 
 template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 		MAPPERCLASSTOSTRING>::getAlphaInit(int I, Array<double>&x) const {
-	alphalock.lock();
-	hash_map<int,pair<Array<double>,Mutex> >::const_iterator i=init_alpha.find(I);
+	alphalock->lock();
+	hash_map<int,hmmentry_type >::const_iterator i=init_alpha.find(I);
 	if (i==init_alpha.end() ){
-		alphalock.unlock();
+		alphalock->unlock();
 		return 0;
 	}
 	else {
 		x=i->second.first;
-		alphalock.unlock();
+		alphalock->unlock();
 		for (unsigned int j=x.size()/2+1; j<x.size(); ++j)
 			// only first empty word can be chosen
 			x[j]=0;
 		return 1;
 	}
-	alphalock.unlock();
+	alphalock->unlock();
 }
 template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 		MAPPERCLASSTOSTRING>::getBetaInit(int I, Array<double>&x) const {
-	betalock.lock();
-	hash_map<int,pair<Array<double>,Mutex> >::const_iterator i=init_beta.find(I);
+	betalock->lock();
+	hash_map<int,hmmentry_type >::const_iterator i=init_beta.find(I);
 	if (i==init_beta.end() ){
-		betalock.unlock();
+		betalock->unlock();
 		return 0;
 	}
 	else {
 		x=i->second.first;
-		betalock.unlock();
+		betalock->unlock();
 		return 1;
 	}
-	betalock.unlock();
+	betalock->unlock();
 }
 
 /***********************************
@@ -264,7 +275,7 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 			return false;
 		}
 		cerr << "Dumping HMM table to " << alpha << endl;
-		for (typename hash_map<int,pair<Array<double>,Mutex> >::const_iterator i=
+		for (typename hash_map<int,hmmentry_type>::const_iterator i=
 				init_alpha.begin(); i!=init_alpha.end(); i++) {
 			ofs << i->first << " " << i->second.first.size() <<" ";
 			int j;
@@ -282,7 +293,7 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 			return false;
 		}
 		cerr << "Dumping HMM table to " << beta << endl;
-		for (typename hash_map<int,pair<Array<double>,Mutex>  >::const_iterator i=
+		for (typename hash_map<int,hmmentry_type>::const_iterator i=
 				init_beta.begin(); i!=init_beta.end(); i++) {
 			ofs << i->first << " " << i->second.first.size() << " ";
 			int j;
@@ -393,16 +404,25 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 					cerr << "Mismatch in alpha init table!" << endl;
 					return false;
 				}
-				pair<Array<double>, Mutex>&alp = doGetAlphaInit(id);
+				hmmentry_type&alp = doGetAlphaInit(id);
 				Array<double>& gk = alp.first;
 				int j;
 				double v;
+#ifdef WIN32
+				alp.second->lock();
+#else
 				alp.second.lock();
+#endif
 				for (j=0; j<gk.size(); j++) {
 					ss >> v;
 					gk[j]+=v;
 				}
+#ifdef WIN32
+				alp.second->unlock();
+#else
 				alp.second.unlock();
+#endif
+
 			}
 		}
 	}
@@ -427,17 +447,25 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 					cerr << "Mismatch in alpha init table!" << endl;
 					return false;
 				}
-				pair<Array<double>, Mutex>&bet1 = doGetBetaInit(id);
+				hmmentry_type&bet1 = doGetBetaInit(id);
 				Array<double>&bet = bet1.first;
 				
 				int j;
 				double v;
+#ifdef WIN32
+				bet1.second->lock();
+#else
 				bet1.second.lock();
+#endif
 				for (j=0; j<bet.size(); j++) {
 					ss >> v;
 					bet[j]+=v;
 				}
+#ifdef WIN32
+				bet1.second->unlock();
+#else
 				bet1.second.unlock();
+#endif
 			}
 		}
 	}
@@ -476,18 +504,18 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 
 	}
 
-	for (typename hash_map<int,pair<Array<double>,Mutex> >::const_iterator i=
+	for (typename hash_map<int,hmmentry_type>::iterator i=
 			ht.init_alpha.begin(); i!=ht.init_alpha.end(); i++) {
-		pair<Array<double>,Mutex> alp = doGetAlphaInit(i->first);
+		hmmentry_type& alp = doGetAlphaInit(i->first);
 		int j;
 		double v;
 		for (j=0; j<alp.first.size(); j++) {
 			alp.first[j]+=i->second.first[j];
 		}
 	}
-	for (typename hash_map<int,pair<Array<double>,Mutex> >::const_iterator i=
+	for (typename hash_map<int,hmmentry_type>::iterator i=
 			ht.init_beta.begin(); i!=ht.init_beta.end(); i++) {
-		pair<Array<double>,Mutex>&alp = doGetBetaInit(i->first);
+		hmmentry_type&alp = doGetBetaInit(i->first);
 		int j;
 		double v;
 		for (j=0; j<alp.first.size(); j++) {
@@ -506,7 +534,68 @@ template<class CLS, class MAPPERCLASSTOSTRING> HMMTables<CLS,
 	probabilityForEmpty(mfabs(_probForEmpty)),
 			updateProbabilityForEmpty(_probForEmpty<0.0), mapper1(&m1),
 			mapper2(&m2) {
+	lock = new Mutex();
+	alphalock = new Mutex();
+	betalock = new Mutex();
 }
+
+template<class CLS, class MAPPERCLASSTOSTRING> HMMTables<CLS,
+		MAPPERCLASSTOSTRING>::HMMTables(const HMMTables& ref):
+mapper1(ref.mapper1), mapper2(ref.mapper2)
+{
+	probabilityForEmpty=ref.probabilityForEmpty;
+	updateProbabilityForEmpty=ref.updateProbabilityForEmpty;
+	init_alpha=ref.init_alpha;
+	init_beta=ref.init_beta;
+	alProb=ref.alProb;
+	alProbPredicted=ref.alProbPredicted;
+	globalCounter=ref.globalCounter;
+	divSum=ref.divSum;
+	p0_count=ref.p0_count;
+	np0_count=ref.np0_count;
+}
+template<class CLS, class MAPPERCLASSTOSTRING> void HMMTables<CLS,
+	MAPPERCLASSTOSTRING>::operator=(const HMMTables& ref){
+	probabilityForEmpty=ref.probabilityForEmpty;
+	updateProbabilityForEmpty=ref.updateProbabilityForEmpty;
+	init_alpha=ref.init_alpha;
+	init_beta=ref.init_beta;
+	alProb=ref.alProb;
+	alProbPredicted=ref.alProbPredicted;
+	globalCounter=ref.globalCounter;
+	divSum=ref.divSum;
+	p0_count=ref.p0_count;
+	np0_count=ref.np0_count;
+}
+
+
 template<class CLS, class MAPPERCLASSTOSTRING> HMMTables<CLS,
 		MAPPERCLASSTOSTRING>::~HMMTables() {
+#if WIN32
+			for (typename hash_map<int,hmmentry_type>::iterator i=
+				init_alpha.begin(); i!=init_alpha.end(); i++) {
+					i->second.second->unlock();
+			}
+			for (typename hash_map<int,hmmentry_type>::iterator i=
+				init_beta.begin(); i!=init_beta.end(); i++) {
+					i->second.second->unlock();
+			}
+#endif
+
+	lock->unlock();
+	alphalock->unlock();
+	betalock->unlock();
+	delete lock;
+	delete alphalock;
+	delete betalock;
+#if WIN32
+			for (typename hash_map<int,hmmentry_type>::iterator i=
+				init_alpha.begin(); i!=init_alpha.end(); i++) {
+				delete i->second.second;
+			}
+			for (typename hash_map<int,hmmentry_type>::iterator i=
+				init_beta.begin(); i!=init_beta.end(); i++) {
+				delete i->second.second;
+			}
+#endif
 }

@@ -42,7 +42,7 @@ const double LogProb::logb2  = log(b);
 const int    LogProb::nmax   = round(300.0E0 * log(1.0E1) / logb2);
 const int    LogProb::nmin   = -nmax;
 const int    LogProb::tblbnd = round(log((b-1.0E0)/2.0E0)/logb2);
-const int    LogProb::zeron  = round(pow(-2, 23));
+const int    LogProb::zeron  = round(pow((double)-2, (double)23));
 const int    LogProb::onen   = 0;
 const int    LogProb::infn   = onen - zeron;
 

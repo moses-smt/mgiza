@@ -32,9 +32,10 @@ typedef struct {
 extern "C" {
 #endif
 
-#if defined(__STDC__)
+#if defined(__STDC__)  || defined(WIN32)
 int DeclareParams(char *, ...);
 #else
+
 int DeclareParams();
 #endif
 

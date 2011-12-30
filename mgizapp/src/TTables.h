@@ -70,6 +70,7 @@ using __gnu_cxx::hash_map;
 typedef pair<WordIndex, WordIndex> wordPairIds;
 
 
+
 class hashpair : public unary_function< pair<WordIndex, WordIndex>, size_t >
 {
 public:
@@ -80,6 +81,15 @@ public:
 						       unique id for each 
 						       unique pair */
     }
+  #ifdef WIN32
+     inline bool operator() (const pair<WordIndex, WordIndex>& key, const pair<WordIndex, WordIndex>& key2){
+		 return key.first==key2.first && key.second==key2.second;
+	 }
+	 enum
+	 {	// parameters for hash table
+		 bucket_size = 1		// 0 < bucket_size
+	 };
+  #endif
 };
 
 
@@ -155,7 +165,7 @@ public:
 	//vector<pair<unsigned int,CPPair> > fs;
     //vector<unsigned int> es;
     vector< vector<pair<unsigned int,CPPair> >* > lexmat;
-	vector< Mutex > mutex;
+	vector< Mutex* > mutex;
       
     void erase(WordIndex e, WordIndex f){
 		CPPair *p=find(e,f);
@@ -237,7 +247,17 @@ public:
 		count2+=lexmat[olde]->capacity();      
 		cout << "There are " << count << " " << count2 << " entries in table" << '\n';
 		mutex.resize(lexmat.size());
+		for(int _i = 0; _i< lexmat.size();_i++){
+			mutex[_i] = new Mutex();
+		}
 		/* Create mutex */
+	}
+
+	~tmodel(){
+		for(int _i = 0; _i< lexmat.size();_i++){
+			delete mutex[_i];
+		}
+
 	}
 
 
@@ -288,9 +308,9 @@ public:
         if( inc ){
             CPPair *p=find(e,f);
             if( p ){
-				mutex[e].lock();
+				mutex[e]->lock();
 				p->count += inc ;
-				mutex[e].unlock();
+				mutex[e]->unlock();
 			}
         }
     }

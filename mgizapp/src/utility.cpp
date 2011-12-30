@@ -19,7 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
+#include <string>
+#include <time.h>
 #include "mymath.h"
+
+using namespace std;
 
 double factorial(int n)
 {
@@ -27,4 +31,10 @@ double factorial(int n)
   for(int i=2; i <= n; i++)
     f *= i;
   return f;
+}
+
+string my_ctime(const time_t* t){
+	char buffer[256];
+	ctime_s(buffer,256,t);
+	return buffer;
 }

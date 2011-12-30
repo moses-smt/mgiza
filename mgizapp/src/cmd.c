@@ -6,11 +6,13 @@
 #include	<ctype.h>
 #include	<string.h>
 
+
 #include	"cmd.h"
 
 #ifdef WIN32
 #		define popen	_popen
 #		define pclose _pclose
+#include <stdarg.h>
 #endif
 
 static Enum_T	BoolEnum[] = {
@@ -54,10 +56,14 @@ static char	*SepString = " \t\n";
 #include	<stdarg.h>
 int DeclareParams(char *ParName, ...)
 #else
+#ifdef WIN32
+int DeclareParams(char *ParName, ...)
+#else
 #include	<varargs.h>
 int DeclareParams(ParName, va_alist)
 char	*ParName;
 va_dcl
+#endif
 #endif
 {
 	va_list		args;
@@ -66,7 +72,7 @@ va_dcl
 			c;
 	char		*s;
 
-#if defined(__STDC__)
+#if defined(__STDC__) || defined (WIN32)
 	va_start(args, ParName);
 #else
 	va_start(args);

@@ -6,19 +6,45 @@
 #include <pthread.h>
 #include <iostream>
 
+#ifdef WIN32
+#include <boost/thread/mutex.hpp>
 class Mutex{
     private:
-       mutable pthread_mutex_t mutex;
+       mutable boost::mutex* my_mutex;
+	   Mutex(const Mutex&){
+		 
+	   }
+    public:
+        Mutex(){
+			my_mutex = new boost::mutex();
+		};
+        ~Mutex(){delete my_mutex;my_mutex = 0;}
+
+		inline void operator=(const Mutex& ref){}
 
     public:
-        Mutex(){pthread_mutex_init(&mutex,NULL);};
-        ~Mutex(){pthread_mutex_destroy(&mutex);}
-    
-    public:
-        inline void lock() const{pthread_mutex_lock(&mutex);};
-        inline void unlock() const{pthread_mutex_unlock(&mutex);};
+        inline void lock() const{my_mutex->lock();};
+        inline void unlock() const{my_mutex->unlock();};
 };
 
+#else
+
+class Mutex{
+private:
+	mutable pthread_mutex_t mutex;
+
+public:
+	Mutex(){
+		pthread_mutex_init(&mutex,NULL);
+	};
+	~Mutex(){pthread_mutex_destroy(&mutex);}
+
+public:
+	inline void lock() const{pthread_mutex_lock(&mutex);};
+	inline void unlock() const{pthread_mutex_unlock(&mutex);};
+};
+
+#endif
 class SyncDouble{
 private:
 	double i;

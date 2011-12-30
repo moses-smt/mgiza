@@ -22,6 +22,7 @@ USA.
 #ifndef utility_h
 #define utility_h
 #include <iostream>
+#include <time.h>
 #include "Perplexity.h"
 #include "Vector.h"
 #include "TTables.h"
@@ -50,5 +51,9 @@ extern void printAlignToFile(const Vector<WordIndex>& es,  const Vector<WordInde
 			     double viterbi_score);
 
 extern double factorial(int) ;
+
+string my_ctime(const time_t* t);
+
+
 
 #endif

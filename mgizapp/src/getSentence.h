@@ -48,6 +48,7 @@ USA.
 #include "defs.h"
 #include "vocab.h"
 #include "Globals.h"
+#include <boost/thread/mutex.hpp>
 /*----------------------- Class Prototype Definition ------------------------*
  Class Name: sentenceHandleer 
  Objective: This class is defined to handle training sentece pairs from the 
@@ -116,9 +117,10 @@ public:
   
     Vector<sentPair> oldPairs;
     Vector<double> oldProbs;
-	sentenceHandler(){};
+	sentenceHandler(){readsent_mutex=new boost::mutex();setprob_mutex=new boost::mutex();};
     sentenceHandler(const char* filename, vcbList* elist=0, vcbList* flist=0);
     sentenceHandler(const char* filename, vcbList* elist, vcbList* flist,set<WordIndex>& eapp, set<WordIndex>& fapp);
+	~sentenceHandler(){delete readsent_mutex; delete setprob_mutex;}
     void rewind();
     int getNextSentence(sentPair&, vcbList* = 0, vcbList* = 0);  // will be defined in the definition file, this
     int getTotalNoPairs1()const {return totalPairs1;};
@@ -126,8 +128,9 @@ public:
     // method will read the next pair of sentence from memory buffer
     void setProbOfSentence(const sentPair&s,double d);
 private:    
-    pthread_mutex_t readsent_mutex; 
-    pthread_mutex_t setprob_mutex;
+	
+    boost::mutex* readsent_mutex; 
+    boost::mutex* setprob_mutex;
     bool readNextSentence(sentPair&);  // will be defined in the definition file, this
 };
 

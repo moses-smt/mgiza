@@ -22,7 +22,9 @@ USA.
 */
 
 
-
+#ifdef WIN32
+#define strcasecmp strcmpi
+#endif
 
 #include <stdio.h>
 #include <iostream>
@@ -127,7 +129,7 @@ void printUsage(int r)
     " (generates 80 classes for the corpus 'in' and writes the classes in 'out')\n"
     "Literature: \n"
     " Franz Josef Och: »Maximum-Likelihood-Schätzung von Wortkategorien mit Verfahren\n"
-    " der kombinatorischen Optimierung« Studienarbeit, Universität Erlangen-Nürnberg,\n"
+    " der kombinatorischen Optimierung?Studienarbeit, Universität Erlangen-Nürnberg,\n"
     " Germany,1995. \n";
   exit(r);
 }

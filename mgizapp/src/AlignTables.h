@@ -71,8 +71,26 @@ public:
       //      logmsg << " h(k) = " << s << endl ;
       return(s);
     }
+#ifdef WIN32
+  enum
+  {	// parameters for hash table
+	  bucket_size = 1		// 0 < bucket_size
+  };
+
+  bool operator()(const Vector<WordIndex> t1, 
+	  const Vector<WordIndex> t2) const
+  {WordIndex j ;
+  if (t1.size() != t2.size())
+	  return(false);
+  for (j = 1 ; j < t1.size() ; j++)
+	  if (t1[j] != t2[j])
+		  return(false);
+  return(true);
+  }
+#endif
 };
 
+#ifndef WIN32
 class equal_to_myalignment{
   // returns true if two alignments are the same (two vectors have same enties)
 public:
@@ -88,6 +106,7 @@ public:
     }
     
 };
+#endif
 
 /* ---------------- End of Class Defnition for hashmyalignment --------------*/
 
@@ -101,22 +120,33 @@ public:
 
 class alignmodel{
 private:
-  hash_map<Vector<WordIndex>, LogProb, hashmyalignment, equal_to_myalignment > a;
+#ifdef WIN32
+  typedef hash_map<Vector<WordIndex>, LogProb, hashmyalignment > alignment_hash;
+
+#else
+  typedef hash_map<Vector<WordIndex>, LogProb, hashmyalignment, equal_to_myalignment > alignment_hash;
+
+#endif
+    alignment_hash a;
 private:
   //  void erase(Vector<WordIndex>&);
 public:
 
   // methods;
 
-  inline hash_map<Vector<WordIndex>, LogProb, hashmyalignment, equal_to_myalignment >::iterator begin(void){return a.begin();} // begining of hash
-  inline hash_map<Vector<WordIndex>, LogProb, hashmyalignment, equal_to_myalignment >::iterator end(void){return a.end();} // end of hash
-  inline const hash_map<Vector<WordIndex>, LogProb, hashmyalignment, equal_to_myalignment >& getHash() const {return a;}; // reference to hash table
+  inline alignment_hash::iterator begin(void){return a.begin();} // begining of hash
+  inline alignment_hash::iterator end(void){return a.end();} // end of hash
+  inline const alignment_hash& getHash() const {return a;}; // reference to hash table
   bool insert(Vector<WordIndex>&, LogProb val=0.0); // add a alignmnet
  //  void setValue(Vector<WordIndex>&, LogProb val); // not needed
   LogProb getValue(Vector<WordIndex>&)const; // retrieve prob. of alignment
   inline void clear(void){ a.clear();}; // clear hash table 
   //  void printTable(const char* filename);
-  inline void resize(WordIndex n) {a.resize(n);}; // resize table
+  inline void resize(WordIndex n) {
+#ifndef WIN32
+	  return a.resize();
+#endif
+  }; // resize table
 
 };
 

@@ -96,7 +96,9 @@ public:
     static float smooth_factor;
     amodel(bool flag = false)
         : a(MAX_SENTENCE_LENGTH+1,0.0), is_distortion(flag), MaxSentLength(MAX_SENTENCE_LENGTH)
-    {}; 
+    {lock = new Mutex();}; 
+
+	~amodel(){delete lock;};
     
 protected:
     VALTYPE&getRef(WordIndex aj, WordIndex j, WordIndex l, WordIndex m){
@@ -107,20 +109,20 @@ protected:
     }
 public:
     void setValue(WordIndex aj, WordIndex j, WordIndex l, WordIndex m, VALTYPE val) {
-    	lock.lock();
+    	lock->lock();
         getRef(aj, j, l, m)=val;
-        lock.unlock();
+        lock->unlock();
     }
     
-    Mutex lock;
+    Mutex* lock;
 public:
     /**
     By Qin
     */
     void addValue(WordIndex aj, WordIndex j, WordIndex l, WordIndex m, VALTYPE val) {
-    	lock.lock();
+    	lock->lock();
         getRef(aj, j, l, m)+=val;
-        lock.unlock();
+        lock->unlock();
     }
     bool merge(amodel<VALTYPE>& am);
     VALTYPE getValue(WordIndex aj, WordIndex j, WordIndex l, WordIndex m) const{

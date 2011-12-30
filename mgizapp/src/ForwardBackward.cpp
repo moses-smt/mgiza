@@ -33,7 +33,11 @@ double ForwardBackwardTraining(const HMMNetwork&net,Array<double>&g,Array<Array2
   Array<double> alpha(N,0),beta(N,0),sum(J);
   for(int i=0;i<I;i++)
     beta[N-I+i]=net.getBetainit(i);
+#ifdef WIN32
+  double * cur_beta=const_cast<double*>(&(beta[0]))+N-I-1;
+#else
   double * cur_beta=conv<double>(beta.begin())+N-I-1;
+#endif
   for(int j=J-2;j>=0;--j)
     for(int ti=I-1;ti>=0;--ti,--cur_beta) {
       const double *next_beta=conv<double>(beta.begin())+(j+1)*I;
@@ -49,8 +53,14 @@ double ForwardBackwardTraining(const HMMNetwork&net,Array<double>&g,Array<Array2
     }
   for(int i=0;i<I;i++)  
     alpha[i]=net.getAlphainit(i)*net.nodeProb(i,0);
+#ifdef WIN32
+  double* cur_alpha=const_cast<double*>(&(alpha[0]))+I;
+  cur_beta=const_cast<double*>(&(beta[0]))+I;
+#else
   double* cur_alpha=conv<double>(alpha.begin())+I;
   cur_beta=conv<double>(beta.begin())+I;
+#endif
+
   for(int j=1;j<J;j++){
     Array2<double>&e=E[ (E.size()==1)?0:(j-1) ];
     if( (E.size()!=1) || j==1 )
@@ -91,6 +101,16 @@ double ForwardBackwardTraining(const HMMNetwork&net,Array<double>&g,Array<Array2
     esum2=0.0;
   if(!(esum2==0.0||mfabs(esum2-bsum)/bsum<1e-3*I))
     cout << "ERROR2: " << esum2 <<" " <<bsum << " " << esum << net << endl;
+#ifdef WIN32
+  double * sumptr=const_cast<double*>(&(sum[0]));
+  double* ge=const_cast<double*>(&(g[0])+g.size());
+  for(double* gp=const_cast<double*>(&(g[0]));gp!=ge;gp+=I)
+  {
+	  *sumptr++=normalize_if_possible(gp,gp+I);
+	  if(bsum && !(mfabs((*(sumptr-1)-bsum)/bsum)<1e-3*I))
+		  cout << "ERROR: " << *(sumptr-1) << " " << bsum << " " << mfabs((*(sumptr-1)-bsum)/bsum) << ' ' << I << ' ' << J << endl;
+  }
+#else
   double * sumptr=conv<double>(sum.begin());
   double* ge=conv<double>(g.end());
   for(double* gp=conv<double>(g.begin());gp!=ge;gp+=I)
@@ -99,6 +119,7 @@ double ForwardBackwardTraining(const HMMNetwork&net,Array<double>&g,Array<Array2
       if(bsum && !(mfabs((*(sumptr-1)-bsum)/bsum)<1e-3*I))
 	cout << "ERROR: " << *(sumptr-1) << " " << bsum << " " << mfabs((*(sumptr-1)-bsum)/bsum) << ' ' << I << ' ' << J << endl;
     }
+#endif
   for(unsigned int j=0;j<(unsigned int)E.size();j++)
     {
       Array2<double>&e=E[j];
@@ -122,7 +143,11 @@ void HMMViterbi(const HMMNetwork&net,Array<int>&vit) {
   Array<Array2<double> >e(1);
   ForwardBackwardTraining(net,g,e);
   for(int j=0;j<J;j++) {
+#ifdef WIN32
+	  double * begin=const_cast<double*>(&(g[0]))+I*j;
+#else
     double * begin=conv<double>(g.begin())+I*j;
+#endif
     vit[j]=max_element(begin,begin+I)-begin;
   }
 }
@@ -130,7 +155,11 @@ void HMMViterbi(const HMMNetwork&net,Array<double>&g,Array<int>&vit) {
   const int I=net.size1(),J=net.size2();
   vit.resize(J);
   for(int j=0;j<J;j++) {
+#ifdef WIN32
+	double* begin=const_cast<double*>(&(g[0]))+I*j;
+#else
     double* begin=conv<double>(g.begin())+I*j;
+#endif
     vit[j]=max_element(begin,begin+I)-begin;
   }
 }
@@ -149,8 +178,13 @@ double HMMRealViterbi(const HMMNetwork&net,Array<int>&vitar,int pegi,int pegj,bo
 	alpha[i]=0; // only first empty word can be chosen
       bp[i]=0;
     }
+#ifdef WIN32
+  double *cur_alpha=const_cast<double*>(&alpha[0])+I;
+  double **cur_bp=const_cast<double**>(&bp[0])+I;
+#else
   double *cur_alpha=conv<double>(alpha.begin())+I;
   double **cur_bp=conv<double*>(bp.begin())+I;
+#endif
   for(int j=1;j<J;j++)
     {
       if( pegj+1==j)
@@ -158,7 +192,11 @@ double HMMRealViterbi(const HMMNetwork&net,Array<int>&vitar,int pegi,int pegj,bo
 	  if( (pegi!=-1&&ti!=pegi)||(pegi==-1&&ti<I/2) )
 	    (cur_alpha-I)[ti]=0.0;
       for(int ti=0;ti<I;++ti,++cur_alpha,++cur_bp) {
+#ifdef WIN32
+	double* prev_alpha=const_cast<double*>(&(alpha[0]))+I*(j-1);
+#else
 	double* prev_alpha=conv<double>(alpha.begin())+I*(j-1);
+#endif
 	double this_node=net.nodeProb(ti,j);
 	const double *alprob= &net.outProb(j-1,0,ti);
 	for(int pi=0;pi<I;++pi,++prev_alpha,(alprob+=I)){
@@ -180,7 +218,11 @@ double HMMRealViterbi(const HMMNetwork&net,Array<int>&vitar,int pegi,int pegj,bo
 	(alpha)[N-I+ti]=0.0;
 
   int j=J-1;
+#ifdef WIN32
+  cur_alpha=const_cast<double*>(&(alpha[0]))+j*I;
+#else
   cur_alpha=conv<double>(alpha.begin())+j*I;
+#endif
   vitar[J-1]=max_element(cur_alpha,cur_alpha+I)-cur_alpha;
   double ret= *max_element(cur_alpha,cur_alpha+I);
   while(bp[vitar[j]+j*I])

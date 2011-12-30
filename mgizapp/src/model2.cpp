@@ -66,7 +66,7 @@ int model2::em_with_tricks(int noIterations,bool dumpCount,
     st = time(NULL) ;
     sHandler1.rewind();
     cout << "\n==========================================================\n";
-    cout << modelName << " Training Started at: " << ctime(&st) << " iter: " << noIterations << "\n";
+    cout << modelName << " Training Started at: " << my_ctime(&st) << " iter: " << noIterations << "\n";
     for(int it=1; it <= noIterations ; it++){
         pair_no = 0;
         it_st = time(NULL) ;

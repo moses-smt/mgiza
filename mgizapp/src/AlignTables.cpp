@@ -23,7 +23,7 @@ USA.
 
 bool alignmodel::insert(Vector<WordIndex>& aj, LogProb val)
 {
-  hash_map<Vector<WordIndex>, LogProb, hashmyalignment, equal_to_myalignment >::iterator i;
+  alignment_hash::iterator i;
   i = a.find(aj);
   if(i != a.end() || val <= 0)
     return false ;
@@ -35,7 +35,7 @@ bool alignmodel::insert(Vector<WordIndex>& aj, LogProb val)
 LogProb alignmodel::getValue(Vector<WordIndex>& align) const
 {
   const LogProb zero = 0.0 ;
-  hash_map<Vector<WordIndex>, LogProb, hashmyalignment, equal_to_myalignment >::const_iterator i;
+  alignment_hash::const_iterator i;
   i = a.find(align);
   if(i == a.end())
     return zero;

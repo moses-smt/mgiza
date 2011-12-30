@@ -98,16 +98,23 @@ public:
     }
 };
 
+#ifdef WIN32
+typedef pair<Array<double>,Mutex*> hmmentry_type;
+#else
+typedef pair<Array<double>,Mutex> hmmentry_type;
+#endif
+
 template<class CLS,class MAPPERCLASSTOSTRING>
 class HMMTables
 {
-	Mutex lock;
-	Mutex alphalock,betalock;
+	Mutex* lock;
+	Mutex* alphalock,*betalock;
 public:
+
     double probabilityForEmpty;  
     bool updateProbabilityForEmpty;
-    hash_map<int, pair<Array<double>,Mutex> > init_alpha;
-    hash_map<int, pair<Array<double>,Mutex> > init_beta;
+    hash_map<int, hmmentry_type > init_alpha;
+    hash_map<int, hmmentry_type > init_beta;
     map<AlDeps<CLS>,FlexArray<double> > alProb;
     map<AlDeps<CLS>,FlexArray<double> > alProbPredicted;
     int globalCounter;
@@ -119,6 +126,8 @@ public:
     bool merge(HMMTables<CLS,MAPPERCLASSTOSTRING> & ht);
     const HMMTables<CLS,MAPPERCLASSTOSTRING>*getThis()const {return this;}
     HMMTables(double _probForEmpty,const MAPPERCLASSTOSTRING&m1,const MAPPERCLASSTOSTRING&m2);
+	HMMTables(const HMMTables& ref);
+	void operator=(const HMMTables& ref);
     virtual ~HMMTables();
     virtual double getAlProb(int i,int k,int sentLength,int J,CLS w1,CLS w2,int j,int iter=0) const;
     virtual void writeJumps(ostream&) const;
@@ -129,8 +138,8 @@ public:
     virtual void readJumps(istream&);
     virtual bool getAlphaInit(int I,Array<double>&x)const;
     virtual bool getBetaInit(int I,Array<double> &x)const;
-    pair<Array<double>, Mutex> &doGetAlphaInit(int I);
-    pair<Array<double>, Mutex> &doGetBetaInit(int I);
+    hmmentry_type &doGetAlphaInit(int I);
+    hmmentry_type &doGetBetaInit(int I);
     virtual double getProbabilityForEmpty()const
     {return probabilityForEmpty;}  
     void performGISIteration(const HMMTables<CLS,MAPPERCLASSTOSTRING>*old){

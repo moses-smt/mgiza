@@ -42,8 +42,13 @@ public:
     {return p[i-start];}
   int low()const{return start;}
   int high()const{return End;}
+#ifdef WIN32
+  T*begin(){return const_cast<double*>(&p[0]);}
+  T*end(){return const_cast<double*>(&(p[0])+p.size());}
+#else
   T*begin(){return conv<double>(p.begin());}
   T*end(){return conv<double>(p.end());}
+#endif
 };
 
 template<class T>
