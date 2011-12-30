@@ -14,33 +14,34 @@ PRE=$1
 SRC=$2
 TGT=$3
 ROOT=$4
+NUM=$5
 
-mkdir -p $ROOT/giza.${SRC}-${TGT}
-mkdir -p $ROOT/giza.${TGT}-${SRC}
-mkdir -p $ROOT/corpus
+mkdir -p $ROOT/giza-inverse.${NUM}
+mkdir -p $ROOT/giza.${NUM}
+mkdir -p $ROOT/prepared.${NUM}
 
 echo "Generating corpus file " 1>&2
 
-${QMT_HOME}/scripts/plain2snt-hasvcb.py corpus/$SRC.vcb corpus/$TGT.vcb ${PRE}.${SRC} ${PRE}.${TGT} $ROOT/corpus/${TGT}-${SRC}.snt $ROOT/corpus/${SRC}-${TGT}.snt $ROOT/corpus/$SRC.vcb $ROOT/corpus/$TGT.vcb
+${QMT_HOME}/scripts/plain2snt-hasvcb.py prepared.${NUM}/$SRC.vcb prepared.${NUM}/$TGT.vcb ${PRE}.${SRC} ${PRE}.${TGT} $ROOT/prepared.${NUM}/${TGT}-${SRC}.snt $ROOT/prepared.${NUM}/${SRC}-${TGT}.snt $ROOT/prepared.${NUM}/$SRC.vcb $ROOT/prepared.${NUM}/$TGT.vcb
 
-ln -sf $PWD/corpus/$SRC.vcb.classes $PWD/corpus/$TGT.vcb.classes $ROOT/corpus/
+ln -sf $PWD/prepared.${NUM}/$SRC.vcb.classes $PWD/prepared.${NUM}/$TGT.vcb.classes $ROOT/prepared.${NUM}/
 
 echo "Generating co-occurrence file " 1>&2
 
-${QMT_HOME}/bin/snt2cooc $ROOT/giza.${TGT}-${SRC}/$TGT-${SRC}.cooc $ROOT/corpus/$SRC.vcb $ROOT/corpus/$TGT.vcb $ROOT/corpus/${TGT}-${SRC}.snt
-${QMT_HOME}/bin//snt2cooc $ROOT/giza.${SRC}-${TGT}/$SRC-${TGT}.cooc $ROOT/corpus/$TGT.vcb $ROOT/corpus/$SRC.vcb $ROOT/corpus/${SRC}-${TGT}.snt
+${QMT_HOME}/bin/snt2cooc $ROOT/giza.${NUM}/$TGT-${SRC}.cooc $ROOT/prepared.${NUM}/$SRC.vcb $ROOT/prepared.${NUM}/$TGT.vcb $ROOT/prepared.${NUM}/${TGT}-${SRC}.snt
+${QMT_HOME}/bin//snt2cooc $ROOT/giza-inverse.${NUM}/$SRC-${TGT}.cooc $ROOT/prepared.${NUM}/$TGT.vcb $ROOT/prepared.${NUM}/$SRC.vcb $ROOT/prepared.${NUM}/${SRC}-${TGT}.snt
 
 echo "Running force alignment " 1>&2
 
-$MGIZA giza.$TGT-$SRC/$TGT-$SRC.gizacfg -c $ROOT/corpus/$TGT-$SRC.snt -o $ROOT/giza.${TGT}-${SRC}/$TGT-${SRC} \
--s $ROOT/corpus/$SRC.vcb -t $ROOT/corpus/$TGT.vcb -m1 0 -m2 0 -mh 0 -coocurrence $ROOT/giza.${TGT}-${SRC}/$TGT-${SRC}.cooc \
+$MGIZA giza.$TGT-$SRC/$TGT-$SRC.gizacfg -c $ROOT/prepared.${NUM}/$TGT-$SRC.snt -o $ROOT/giza.${NUM}/$TGT-${SRC} \
+-s $ROOT/prepared.${NUM}/$SRC.vcb -t $ROOT/prepared.${NUM}/$TGT.vcb -m1 0 -m2 0 -mh 0 -coocurrence $ROOT/giza.${NUM}/$TGT-${SRC}.cooc \
 -restart 11 -previoust giza.$TGT-$SRC/$TGT-$SRC.t3.final \
 -previousa giza.$TGT-$SRC/$TGT-$SRC.a3.final -previousd giza.$TGT-$SRC/$TGT-$SRC.d3.final \
 -previousn giza.$TGT-$SRC/$TGT-$SRC.n3.final -previousd4 giza.$TGT-$SRC/$TGT-$SRC.d4.final \
 -previousd42 giza.$TGT-$SRC/$TGT-$SRC.D4.final -m3 0 -m4 1
 
-$MGIZA giza.$SRC-$TGT/$SRC-$TGT.gizacfg -c $ROOT/corpus/$SRC-$TGT.snt -o $ROOT/giza.${SRC}-${TGT}/$SRC-${TGT} \
--s $ROOT/corpus/$TGT.vcb -t $ROOT/corpus/$SRC.vcb -m1 0 -m2 0 -mh 0 -coocurrence $ROOT/giza.${SRC}-${TGT}/$SRC-${TGT}.cooc \
+$MGIZA giza.$SRC-$TGT/$SRC-$TGT.gizacfg -c $ROOT/prepared.${NUM}/$SRC-$TGT.snt -o $ROOT/giza-inverse.${NUM}/$SRC-${TGT} \
+-s $ROOT/prepared.${NUM}/$TGT.vcb -t $ROOT/prepared.${NUM}/$SRC.vcb -m1 0 -m2 0 -mh 0 -coocurrence $ROOT/giza-inverse.${NUM}/$SRC-${TGT}.cooc \
 -restart 11 -previoust giza.$SRC-$TGT/$SRC-$TGT.t3.final \
 -previousa giza.$SRC-$TGT/$SRC-$TGT.a3.final -previousd giza.$SRC-$TGT/$SRC-$TGT.d3.final \
 -previousn giza.$SRC-$TGT/$SRC-$TGT.n3.final -previousd4 giza.$SRC-$TGT/$SRC-$TGT.d4.final \
