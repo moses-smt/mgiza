@@ -22,7 +22,12 @@ USA.
 */
 #include "Parameter.h"
 #include "fstream"
+#ifndef WIN32
 #include "unistd.h"
+#else
+#include <direct.h>
+#define getcwd _getcwd
+#endif
 #include <strstream>
 
 

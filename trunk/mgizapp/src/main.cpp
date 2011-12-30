@@ -1121,7 +1121,7 @@ int main(int argc, char* argv[]) {
 
 	cout << '\n' << "Entire Training took: " << difftime(fn, st1)
 			<< " seconds\n";
-	cout << "Program Finished at: "<< ctime(&fn) << '\n';
+	cout << "Program Finished at: "<< my_ctime(&fn) << '\n';
 	cout << "==========================================================\n";
 	return 0;
 }

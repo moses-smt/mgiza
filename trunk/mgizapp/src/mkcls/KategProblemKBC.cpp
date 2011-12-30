@@ -25,7 +25,14 @@ USA.
 
 
 #include <stdlib.h>
+#include <math.h>
 #include "KategProblem.h"
+
+#ifdef WIN32
+#include <boost\math\special_functions\erf.hpp> 
+using namespace boost::math;
+#endif
+
 
 double rhoLo=0.75; 
 #define MAX_VERFAELSCHUNG 5000
@@ -35,6 +42,7 @@ double verfaelsche(int a,double b)
   
   if( a>=0&&verfTabSigma==b&&a<MAX_VERFAELSCHUNG )
     {
+		
       massert(verfTab[a]== b*(erf(10000.0) - erf(a/b))/2+a);
       return verfTab[a];
     }

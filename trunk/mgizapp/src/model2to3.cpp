@@ -288,7 +288,7 @@ void model3::transferSimple(/*model1& m1, model2& m2, */ sentenceHandler& sHandl
  
   st = time(NULL);
   cerr << "==========================================================\n";
-  cerr << "\nTransfer started at: "<< ctime(&st) << '\n';  
+  cerr << "\nTransfer started at: "<< my_ctime(&st) << '\n';  
   
   cerr << "Simple tranfer of Model2 --> Model3 (i.e. estimating initial parameters of Model3 from Model2 tables)\n";
   
@@ -297,7 +297,7 @@ void model3::transferSimple(/*model1& m1, model2& m2, */ sentenceHandler& sHandl
   cerr << "\nTransfer: TRAIN CROSS-ENTROPY " << perp.cross_entropy()
        << " PERPLEXITY " << perp.perplexity() << '\n';
   cerr << "\nTransfer took: " << difftime(fn, st) << " seconds\n";
-  cerr << "\nTransfer Finished at: "<< ctime(&fn) << '\n';  
+  cerr << "\nTransfer Finished at: "<< my_ctime(&fn) << '\n';  
   cerr << "==========================================================\n";
   
 }
@@ -312,7 +312,7 @@ void model3::transfer(sentenceHandler& sHandler1,bool dump_files, Perplexity& pe
     
     st = time(NULL);
     cerr << "==========================================================\n";
-    cerr << "\nTransfer started at: "<< ctime(&st) << '\n';  
+    cerr << "\nTransfer started at: "<< my_ctime(&st) << '\n';  
     cerr << "Transfering Model2 --> Model3 (i.e. estimating initial parameters of Model3 from Model2 tables)\n";
     
     p1_count = p0_count = 0 ;
@@ -390,7 +390,7 @@ void model3::transfer(sentenceHandler& sHandler1,bool dump_files, Perplexity& pe
     //    cerr << "tTable contains " << tTable.getHash().bucket_count() 
     //	 << " buckets and  " << tTable.getHash().size() << " entries." ;
     cerr << "\nTransfer took: " << difftime(fn, st) << " seconds\n";
-    cerr << "\nTransfer Finished at: "<< ctime(&fn) << endl;  
+    cerr << "\nTransfer Finished at: "<< my_ctime(&fn) << endl;  
     cerr << "==========================================================\n";
     
   }

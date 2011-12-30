@@ -55,8 +55,8 @@ sentenceHandler::sentenceHandler(const char*  filename, vcbList* elist,
   // This method is the constructor of the class, it also intitializes the 
   // sentence pair sequential number (count) to zero.
 {
-    pthread_mutex_init(&readsent_mutex,NULL);
-    pthread_mutex_init(&setprob_mutex,NULL);
+    readsent_mutex=new boost::mutex();
+   setprob_mutex = new boost::mutex();
 
     position = 0;
     readflag = false ;
@@ -114,8 +114,8 @@ sentenceHandler::sentenceHandler(const char*  filename, vcbList* elist,
 				   // This method is the constructor of the class, it also intitializes the 
 				   // sentence pair sequential number (count) to z
 { 
-    pthread_mutex_init(&readsent_mutex,NULL);
-    pthread_mutex_init(&setprob_mutex,NULL);
+    readsent_mutex=new boost::mutex();
+    setprob_mutex=new boost::mutex();
     position = 0;
 	readflag = false ;
 	allInMemory = false ;
@@ -165,6 +165,7 @@ sentenceHandler::sentenceHandler(const char*  filename, vcbList* elist,
 
 void sentenceHandler::rewind()
 {
+	readsent_mutex->lock();
     position = 0;
     currentSentence = 0;
     readflag = false ;
@@ -185,12 +186,13 @@ void sentenceHandler::rewind()
             cerr << "\nERROR:(b) Cannot open " << inputFilename << " " << (int)errno;
         }
     }
+	 readsent_mutex->unlock();
 }
 
   
 int sentenceHandler::getNextSentence(sentPair& sent, vcbList* elist, vcbList* flist)
 {
-    pthread_mutex_lock(&readsent_mutex);
+    readsent_mutex->lock();
     
     do{
         sentPair s ;
@@ -264,10 +266,10 @@ int sentenceHandler::getNextSentence(sentPair& sent, vcbList* elist, vcbList* fl
             else
                 sent.realCount=(*realCount)[sent.getSentenceNo()-1];
         }
-        pthread_mutex_unlock(&readsent_mutex);
+        readsent_mutex->unlock();
         return position ;
     }while(false);
-    pthread_mutex_unlock(&readsent_mutex);
+    readsent_mutex->unlock();
     return 0;
 }
 bool sentenceHandler::readNextSentence(sentPair& sent)
@@ -411,7 +413,7 @@ void sentenceHandler::setProbOfSentence(const sentPair&s,double d)
     if( realCount==0 )
         return;
     else{
-        pthread_mutex_lock(&setprob_mutex);
+        setprob_mutex->lock();
         if( s.noOcc<=0 )
         {
             double ed=exp(d);
@@ -431,7 +433,7 @@ void sentenceHandler::setProbOfSentence(const sentPair&s,double d)
             oldPairs.push_back(s);
             oldProbs.push_back(ed);
         }
-        pthread_mutex_unlock(&setprob_mutex);
+        setprob_mutex->unlock();
     }
 }
 

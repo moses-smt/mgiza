@@ -160,11 +160,31 @@ bool operator<(const tri<A,B,C>&x,const tri<A,B,C>&y)
 
 double used_time();
 
-template<class T>
+
+template<class T ,class _Pr = less<T> >
 class my_hash
 {
 public:
-  int operator()(const T&t)const {return Hash(t);}
+	int operator()(const T&t)const {return Hash(t);}
+#ifdef WIN32
+	enum
+	{	// parameters for hash table
+		bucket_size = 1		// 0 < bucket_size
+	};
+	my_hash()
+		: comp()
+	{	// construct with default comparator
+	}
+
+	my_hash(_Pr _Pred)
+		: comp(_Pred)
+	{	// construct with _Pred comparator
+	}
+protected:
+	_Pr comp;
+public:
+	int operator()(const T&t , const T&t1)const {return comp(t,t1);}
+#endif
 };
 
 inline int Hash(int value) { return value; }

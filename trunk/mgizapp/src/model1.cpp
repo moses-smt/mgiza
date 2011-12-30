@@ -100,7 +100,7 @@ int model1::em_thread(int noIterations, int nthread, /*Perplexity& perp, sentenc
     int pair_no;
     bool dump_files = false ;
     cout << "==========================================================\n";
-    cout << modelName << " Training Started at: "<< ctime(&st) << "\n";  
+    cout << modelName << " Training Started at: "<< my_ctime(&st) << "\n";  
     int it = noIterations;
     pair_no = 0 ;
     it_st = time(NULL);
@@ -133,7 +133,7 @@ int model1::em_with_tricks(int noIterations, /*Perplexity& perp, sentenceHandler
     st = time(NULL);
     sHandler1.rewind();
     cout << "==========================================================\n";
-    cout << modelName << " Training Started at: "<< ctime(&st) << "\n";  
+    cout << modelName << " Training Started at: "<< my_ctime(&st) << "\n";  
     for(int it = 1; it <= noIterations; it++){
         pair_no = 0 ;
         it_st = time(NULL);
@@ -266,9 +266,17 @@ void model1::em_loop(int it,Perplexity& perp, sentenceHandler& sHandler1, bool s
         Vector<WordIndex> viterbi_alignment(fs.size());
         double viterbi_score = 1 ;
         
+#ifdef WIN32
+		bool *eindict = new bool[l + 1];
+		bool *findict = new bool[m + 1];
+		bool **indict  = new bool*[m + 1];
+		for(int _i = 0; _i < m+1; _i++)
+			indict[_i] = new bool[l + 1];
+#else
         bool eindict[l + 1];
         bool findict[m + 1];
         bool indict[m + 1][l + 1];
+#endif
         if(it == 1 && useDict){
             for(unsigned int dummy = 0; dummy <= l; dummy++) eindict[dummy] = false;
             for(unsigned int dummy = 0; dummy <= m; dummy++){
@@ -386,6 +394,13 @@ void model1::em_loop(int it,Perplexity& perp, sentenceHandler& sHandler1, bool s
             printAlignToFile(es, fs, evlist, fvlist, of2, viterbi_alignment, sent.sentenceNo, viterbi_score);
         addAL(viterbi_alignment,sent.sentenceNo,l);
         pair_no++;
+#ifdef WIN32
+		delete[] eindict;
+		delete[] findict;		
+		for(int _i = 0; _i < m+1; _i++)
+			delete[] indict[_i];
+		delete[] indict;
+#endif
     } /* of while */
 }
 
@@ -401,7 +416,7 @@ CTTableDiff<COUNT,PROB>* model1::one_step_em(int it, bool seedModel1,
         st = time(NULL);
         sHandler1.rewind();
         cout << "==========================================================\n";
-        cout << modelName << " Training Started at: "<< ctime(&st) << "\n";  
+        cout << modelName << " Training Started at: "<< my_ctime(&st) << "\n";  
         pair_no = 0 ;
         it_st = time(NULL);
         cout <<  "-----------\n" << modelName << ": Iteration " << it << '\n';
@@ -468,10 +483,18 @@ void model1::em_loop_1(CTTableDiff<COUNT,PROB> *diff,int it,Perplexity& perp, se
             cross_entropy = log(1.0);
             Vector<WordIndex> viterbi_alignment(fs.size());
             double viterbi_score = 1 ;
-            
-            bool eindict[l + 1];
-            bool findict[m + 1];
-            bool indict[m + 1][l + 1];
+
+#ifdef WIN32
+			bool *eindict = new bool[l + 1];
+			bool *findict = new bool[m + 1];
+			bool **indict  = new bool*[m + 1];
+			for(int _i = 0; _i < m+1; _i++)
+				indict[_i] = new bool[l + 1];
+#else
+			bool eindict[l + 1];
+			bool findict[m + 1];
+			bool indict[m + 1][l + 1];
+#endif
             if(it == 1 && useDict){
                 for(unsigned int dummy = 0; dummy <= l; dummy++) eindict[dummy] = false;
                 for(unsigned int dummy = 0; dummy <= m; dummy++){
@@ -593,9 +616,17 @@ void model1::em_loop_1(CTTableDiff<COUNT,PROB> *diff,int it,Perplexity& perp, se
                 printAlignToFile(es, fs, evlist, fvlist, of2, viterbi_alignment, sent.sentenceNo, viterbi_score);
             addAL(viterbi_alignment,sent.sentenceNo,l);
             pair_no++;
+#ifdef WIN32
+			delete[] eindict;
+			delete[] findict;		
+			for(int _i = 0; _i < m+1; _i++)
+				delete[] indict[_i];
+			delete[] indict;
+#endif
         } /* of while */
         sHandler1.rewind();
         perp.record("Model1");
         viterbi_perp.record("Model1");
         errorReportAL(cout, "IBM-1");
+
     }

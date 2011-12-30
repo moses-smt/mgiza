@@ -30,9 +30,14 @@ USA.
 
 
 extern "C" {
+
+#ifndef WIN32
 #include <sys/time.h>
 #include <sys/resource.h>
-  
+#else
+#define srand48 srand
+#define drand48() (rand()/RAND_MAX)
+#endif
   
 }
 
@@ -109,6 +114,9 @@ int randomInt(int exclusive)
 
 double clockSec()
 {
+#ifdef WIN32
+	return 0;
+#else
 #ifdef linux
   enum __rusage_who who=RUSAGE_SELF;
 #else
@@ -117,4 +125,5 @@ double clockSec()
   struct rusage rusage;
   getrusage(who, &rusage);
   return rusage.ru_utime.tv_sec+rusage.ru_utime.tv_usec/1000000.0;
+#endif  
 }

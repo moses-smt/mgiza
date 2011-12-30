@@ -1,4 +1,4 @@
-PROJECT (srlextract)
+PROJECT (mgiza)
 
 SET(MGIZA_VERSION_MAJOR "0")
 SET(MGIZA_VERSION_MINOR "6")
@@ -43,7 +43,7 @@ set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
 
-FIND_PACKAGE( Boost 1.46)
+FIND_PACKAGE( Boost 1.46 COMPONENTS thread)
 
  IF(Boost_FOUND)
     IF (NOT _boost_IN_CACHE)

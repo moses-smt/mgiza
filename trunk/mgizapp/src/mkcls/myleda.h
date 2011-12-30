@@ -27,6 +27,9 @@ USA.
 #define myleda_HEADER_defined
 using namespace std;
 #include "myassert.h"
+#ifdef WIN32
+#include<list>
+#endif
 
 
 #if defined(USE_LEDA_array)||defined(USE_LEDA)
@@ -64,16 +67,36 @@ template<class T>
 leda_set<T> operator&(const leda_set<T>&a,const leda_set<T>&b)
 {
   leda_set<T>c;
+
+#ifdef WIN32
+  std::list<T> lst;
+  set_intersection(a.begin(),a.end(),b.begin(),b.end(),lst.begin());
+  for(std::list<T>::iterator it = lst.begin() ;it!=lst.end();it++){
+	  c.insert(*it);
+  }
+#else
   insert_iterator<set<T> > iter(c,c.begin());
   set_intersection(a.begin(),a.end(),b.begin(),b.end(),iter);
+#endif
   return c;
 }
 template<class T>
 leda_set<T> operator-(const leda_set<T>&a,const leda_set<T>&b)
 {
+
   leda_set<T>c;
+  
+  
+#ifdef WIN32
+  std::list<T> lst;
+  set_difference(a.begin(),a.end(),b.begin(),b.end(),lst.begin());
+  for(std::list<T>::iterator it = lst.begin() ;it!=lst.end();it++){
+	  c.insert(*it);
+  }
+#else
   insert_iterator<set<T> > iter(c,c.begin());
   set_difference(a.begin(),a.end(),b.begin(),b.end(),iter);
+#endif
   return c;
 }
 
@@ -135,16 +158,34 @@ double used_time();
 
 #else
 
-template<class T>
+template<class T ,class _Pr = less<T> >
 class my_hash
 {
 public:
   int operator()(const T&t)const {return Hash(t);}
+#ifdef WIN32
+  enum
+  {	// parameters for hash table
+	  bucket_size = 1		// 0 < bucket_size
+  };
+  my_hash()
+	  : comp()
+  {	// construct with default comparator
+  }
+
+  my_hash(_Pr _Pred)
+	  : comp(_Pred)
+  {	// construct with _Pred comparator
+  }
+protected:
+  _Pr comp;
+public:
+  int operator()(const T&t , const T&t1)const {return comp(t,t1);}
+#endif
 };
 
 inline int Hash(int value) { return value; }
 #define MY_HASH_BASE hash_map<A,B,my_hash<A> >
-
 #if __GNUC__>2 
 #include <ext/hash_map>
 using __gnu_cxx::hash_map;
@@ -164,25 +205,25 @@ public:
   bool defined(const A&a) const
     { return find(a)!=this->end(); }
   const B&operator[](const A&a)const
-    { 
-      typename MY_HASH_BASE::const_iterator pos=this->find(a);
-      
-      if( pos==this->end() )
-	return init;
-      else
-	return pos->second;
-    }
+  { 
+	  typename MY_HASH_BASE::const_iterator pos=this->find(a);
+
+	  if( pos==this->end() )
+		  return init;
+	  else
+		  return pos->second;
+  }
   B&operator[](const A&a)
-    { 
-      typename MY_HASH_BASE::iterator pos=this->find(a);
-      if( pos==this->end() )
-	{
-	  insert(typename MY_HASH_BASE::value_type(a,init));
-	  pos=this->find(a);
-	  iassert(pos!=this->end());
-	}
-      return pos->second;
-    }
+  { 
+	  typename MY_HASH_BASE::iterator pos=this->find(a);
+	  if( pos==this->end() )
+	  {
+		  insert(typename MY_HASH_BASE::value_type(a,init));
+		  pos=this->find(a);
+		  iassert(pos!=this->end());
+	  }
+	  return pos->second;
+  }
 };
 
 #define forall_defined_h(a,b,c,d) for(typename leda_h_array<a,b>::const_iterator __jj__=(d).begin();__jj__!=(d).end()&&((c=__jj__->first),1); ++__jj__)

@@ -393,7 +393,7 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
 		trainingString+='6';
 	cout << "\n==========================================================\n";
 	cout << "Starting "<<trainingString<<":  Viterbi Training";
-	cout << "\n "<<trainingString<<" Training Started at: "<< ctime(&st)
+	cout << "\n "<<trainingString<<" Training Started at: "<< my_ctime(&st)
 			<< '\n';
 	
 	
@@ -682,7 +682,7 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
 				<< difftime(it_fn, it_st) << " seconds\n";
 	} /* of iterations */
 	fn = time(NULL);
-	cout << trainingString <<" Training Finished at: " << ctime(&fn) << "\n";
+	cout << trainingString <<" Training Finished at: " << my_ctime(&fn) << "\n";
 	cout << "\n" << "Entire Viterbi "<<trainingString<<" Training took: "
 			<< difftime(fn, st) << " seconds\n";
 	cout << "==========================================================\n";
@@ -703,7 +703,7 @@ int model3::viterbi_hto3() {
 			alignfile, number, test_alignfile, d4file, d5file, zeroFertFile;
 	st = time(NULL);
 	cout << "Starting HMM To Model 3 Viterbi Training";
-	cout << "\n hto3 Training Started at: "<< ctime(&st) << '\n';
+	cout << "\n hto3 Training Started at: "<< my_ctime(&st) << '\n';
 	string modelName="H23";
 	//cout <<"\n---------------------\n"<<modelName<<": Iteration " << it<<'\n';
 	int it = 1;
@@ -784,7 +784,7 @@ int model3::viterbi_3to3() {
 			alignfile, number, test_alignfile, d4file, d5file, zeroFertFile;
 	st = time(NULL);
 	cout << "Starting HMM To Model 3 Viterbi Training";
-	cout << "\n hto3 Training Started at: "<< ctime(&st) << '\n';
+	cout << "\n hto3 Training Started at: "<< my_ctime(&st) << '\n';
 	string modelName="H23";
 	int it = 1;
 
@@ -875,7 +875,7 @@ d4model* model3::viterbi_3to4() {
 			alignfile, number, test_alignfile, d4file, d5file, zeroFertFile;
 	st = time(NULL);
 	cout << "Starting Model 3 To Model 4 Viterbi Training";
-	cout << "\n hto3 Training Started at: "<< ctime(&st) << '\n';
+	cout << "\n hto3 Training Started at: "<< my_ctime(&st) << '\n';
 	string modelName="34";
 	int it = 1;
 	//cout <<"\n---------------------\n"<<modelName<<": Iteration " << it<<'\n';
@@ -1106,7 +1106,7 @@ void multi_thread_m34_em(model3& m3, int ncpu, int Model3_Iterations,
 		trainingString+='4';
 	cout << "\n==========================================================\n";
 	cout << "Starting "<<trainingString<<":  Viterbi Training";
-	cout << "\n "<<trainingString<<" Training Started at: "<< ctime(&st)
+	cout << "\n "<<trainingString<<" Training Started at: "<< my_ctime(&st)
 			<< '\n';
 
 	for (i=0; i<Model3_Iterations+Model4_Iterations; i++) {
@@ -1361,7 +1361,7 @@ void multi_thread_m34_em(model3& m3, int ncpu, int Model3_Iterations,
 				<< difftime(it_fn, it_st) << " seconds\n";
 	}
 	fn = time(NULL);
-	cout << trainingString <<" Training Finished at: " << ctime(&fn) << "\n";
+	cout << trainingString <<" Training Finished at: " << my_ctime(&fn) << "\n";
 	cout << "\n" << "Entire Viterbi "<<trainingString<<" Training took: "
 			<< difftime(fn, st) << " seconds\n";
 	cout << "==========================================================\n";

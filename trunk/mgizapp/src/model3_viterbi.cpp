@@ -22,6 +22,13 @@
 #include "model3.h"
 #include "utility.h"
 #include "Globals.h"
+#include "AlignTables.h"
+#ifdef WIN32
+typedef hash_map<Vector<WordIndex>, LogProb, hashmyalignment > alignment_hash;
+#else
+typedef hash_map<Vector<WordIndex>, LogProb, hashmyalignment, equal_to_myalignment > alignment_hash;
+
+#endif
 
 LogProb model3::prob_of_target_and_alignment_given_source(Vector<WordIndex>& A,
 		Vector<WordIndex>& Fert, tmodel<COUNT, PROB>& tTable,
@@ -498,8 +505,7 @@ void model3::viterbi_loop(Perplexity& perp, Perplexity& viterbiPerp,
 		if (Verbose)
 			cerr << "\nCollecting counts over found alignments, total prob: "
 					<< align_total_count << "\n";
-		hash_map<Vector<WordIndex>, LogProb, hashmyalignment, equal_to_myalignment >::iterator
-				align;
+		alignment_hash::iterator	align;
 		int acount = 0;
 		if (align_total_count == 0) {
 			cerr << " WARNINIG: For the following sentence pair : \n";

@@ -273,6 +273,18 @@ public:
 				p->second[i].second+=it->second[i].second;
 			}
 		}
+#ifdef WIN32
+		map<m4_key,Vpff,compareb1 >::iterator it1;
+		for (it1 = d.Db1.begin(); it1!=d.Db1.end(); it1++) {
+			map<m4_key,Vpff,compareb1 >::iterator p=Db1.find(it->first);
+			if (p==Db1.end())
+				p=Db1.insert(make_pair(it1->first,Vpff(msl*2+1,pair<COUNT,PROB>(0.0,0.0)))).first;
+			int i;
+			for (i=0; i<it->second.size(); i++) {
+				p->second[i].second+=it1->second[i].second;
+			}
+		}
+#else
 		for (it = d.Db1.begin(); it!=d.Db1.end(); it++) {
 			map<m4_key,Vpff,compare1 >::iterator p=Db1.find(it->first);
 			if (p==Db1.end())
@@ -282,6 +294,7 @@ public:
 				p->second[i].second+=it->second[i].second;
 			}
 		}
+#endif
 	}
 
 	bool augCount(const char* fD1, const char* fDb) {

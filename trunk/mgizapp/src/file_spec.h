@@ -36,7 +36,7 @@ USA.
 char *Get_File_Spec (){
   struct tm *local;
   time_t t;
-  char *user;
+  const char *user;
   char time_stmp[57];
   char *file_spec = 0;
   
@@ -46,7 +46,11 @@ char *Get_File_Spec (){
   sprintf(time_stmp, "%02d-%02d-%02d.%02d%02d%02d.", local->tm_year, 
 	  (local->tm_mon + 1), local->tm_mday, local->tm_hour, 
 	  local->tm_min, local->tm_sec);
+#ifdef WIN32
+  user = "WINUSER";
+#else
   user = getenv("USER");
+#endif
 
   file_spec = (char *)malloc(sizeof(char) * 
 			     (strlen(time_stmp) + strlen(user) + 1));

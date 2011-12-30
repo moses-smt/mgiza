@@ -33,12 +33,14 @@ USA.
 //#define  MAX(A,B) ((A) > (B) ? (A) : (B))
 //#define  MIN(A,B) ((A) > (B) ? (B) : (A))
 
-
+#ifdef WIN32
+#define round(x) floor(x+0.5)
+#endif
 class LogProb {
 public:
   // mj for cross entropy
   double base2() const {
-    return (logr * logb2 / log(2));
+    return (logr * logb2 / log((double)2));
   }
   
   // Constructors
