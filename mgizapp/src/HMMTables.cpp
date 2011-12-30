@@ -571,7 +571,7 @@ template<class CLS, class MAPPERCLASSTOSTRING> void HMMTables<CLS,
 
 template<class CLS, class MAPPERCLASSTOSTRING> HMMTables<CLS,
 		MAPPERCLASSTOSTRING>::~HMMTables() {
-#if WIN32
+#if 0
 			for (typename hash_map<int,hmmentry_type>::iterator i=
 				init_alpha.begin(); i!=init_alpha.end(); i++) {
 					i->second.second->unlock();
@@ -582,9 +582,6 @@ template<class CLS, class MAPPERCLASSTOSTRING> HMMTables<CLS,
 			}
 #endif
 
-	lock->unlock();
-	alphalock->unlock();
-	betalock->unlock();
 	delete lock;
 	delete alphalock;
 	delete betalock;
