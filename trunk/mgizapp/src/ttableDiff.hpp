@@ -31,6 +31,11 @@
 #include "types.h"
 
 using namespace std;
+#ifdef WIN32
+		typedef hash_map<wordPairIds, COUNT, hashpair> wordpair_hash;
+#else
+		typedef hash_map<wordPairIds, COUNT, hashpair, equal_to<wordPairIds> > wordpair_hash;
+#endif
 /*!
 This class is meant to create a difference file in order to make
 GIZA paralell.
@@ -42,11 +47,6 @@ private:
 		INT32 noFrenchWords;   // total number of unique target words
 		/*!
 		Store only the counting*/	
-#ifdef WIN32
-		typedef hash_map<wordPairIds, COUNT, hashpair> wordpair_hash;
-#else
-		typedef hash_map<wordPairIds, COUNT, hashpair, equal_to<wordPairIds> > wordpair_hash;
-#endif
 		wordpair_hash ef;
 
 public:

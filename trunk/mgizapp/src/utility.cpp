@@ -32,9 +32,15 @@ double factorial(int n)
     f *= i;
   return f;
 }
-
+#ifdef WIN32
 string my_ctime(const time_t* t){
 	char buffer[256];
 	ctime_s(buffer,256,t);
 	return buffer;
 }
+#else
+
+string my_ctime(const time_t* t){
+	return ctime(t);
+}
+#endif
