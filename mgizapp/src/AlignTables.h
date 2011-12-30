@@ -144,7 +144,7 @@ public:
   //  void printTable(const char* filename);
   inline void resize(WordIndex n) {
 #ifndef WIN32
-	  return a.resize();
+	  a.resize(n);
 #endif
   }; // resize table
 

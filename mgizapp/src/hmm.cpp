@@ -478,7 +478,12 @@ void hmm::em_loop(Perplexity& perp, sentenceHandler& sHandler1,
                 CLASSIFY(i,i_empty,ireal);
                 bi[i]+= *gp2;
             }
+#ifdef WIN32            
             bi0.second->unlock();
+#else            
+            bi0.second.unlock();
+#endif            
+
             if( Verbose )
                 cout << "l: " << l << "m: " << m << " p0c: " << p0c << " np0c: " << np0c << endl;
         }
