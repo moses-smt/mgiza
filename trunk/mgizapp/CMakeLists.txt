@@ -26,7 +26,10 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 #set various platform specific global options
 IF(WIN32)
  SET(CMAKE_DEBUG_POSTFIX "d")
+ OPTION( USE_64_BIT "Set to on if you want to compile Win64" OFF )
 ENDIF(WIN32)
+
+
 
 INCLUDE(cmake/FindTR1.cmake)
 
@@ -60,7 +63,16 @@ ADD_SUBDIRECTORY (src)
 ADD_SUBDIRECTORY (src/mkcls)
 ADD_SUBDIRECTORY (scripts)
 
+IF (WIN32)
+MESSAGE( STATUS "-------------------------------------------------------------------------------" )
+MESSAGE( STATUS "USE_64_BIT = ${USE_64_BIT}" )
+MESSAGE( STATUS "Change a value with: cmake -D<Variable>=<Value>" )
+MESSAGE( STATUS "-------------------------------------------------------------------------------" )
 
+
+SET( USE_64_BIT "${USE_64_BIT}" CACHE BOOL
+    "Set to ON to build Win64" FORCE )
+ENDIF()
 
 
 
