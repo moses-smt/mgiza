@@ -17,6 +17,7 @@ bin_PROGRAMS = mgiza \
 	plain2snt \
 	symal \
 	hmmnorm \
+	snt2coocrmp \
 	d4norm
 
 d4norm_SOURCES = \
@@ -86,6 +87,15 @@ snt2cooc_SOURCES = \
 	snt2cooc.cpp
 
 snt2cooc_CPPFLAGS = \
+	-DNDEBUG \
+	-DWORDINDEX_WITH_4_BYTE \
+	-DBINARY_SEARCH_FOR_TTABLE \
+	-DDEBUG
+
+snt2coocrmp_SOURCES = \
+	snt2cooc-reduce-mem-preprocess.cpp
+
+snt2coocrmp_CPPFLAGS = \
 	-DNDEBUG \
 	-DWORDINDEX_WITH_4_BYTE \
 	-DBINARY_SEARCH_FOR_TTABLE \
