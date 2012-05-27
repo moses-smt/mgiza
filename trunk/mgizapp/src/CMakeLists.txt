@@ -92,6 +92,7 @@ TARGET_LINK_LIBRARIES (
 
 
 ADD_EXECUTABLE(snt2cooc snt2cooc.cpp)
+ADD_EXECUTABLE(snt2coocrmp snt2cooc-reduce-mem-preprocess.cpp)
 ADD_EXECUTABLE(snt2plain snt2plain.cpp)
 ADD_EXECUTABLE(plain2snt plain2snt.cpp)
 ADD_EXECUTABLE(symal symal.cpp cmd.c)
@@ -110,7 +111,7 @@ TARGET_LINK_LIBRARIES (
     ${CMAKE_THREAD_LIBS_INIT}
     )
 
-INSTALL(TARGETS mgiza mgizapp snt2cooc snt2plain plain2snt symal hmmnorm d4norm
+INSTALL(TARGETS mgiza mgizapp snt2cooc snt2plain plain2snt symal hmmnorm d4norm snt2coocrmp
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
