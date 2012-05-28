@@ -1,6 +1,6 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -w 
 
-# sntcooc.perl output vcb1 vcb2 snt12 
+# sntcooc.perl [-sort-buffer-size 200M] [-sort-batch-size 253] [-sort-compress gzip] output vcb1 vcb2 snt12 
 
 use strict;
 use File::Basename;
@@ -8,29 +8,29 @@ use FindBin qw($Bin);
 
 sub systemCheck($);
 
-my $out		= $ARGV[0];
-my $vcb1	= $ARGV[1];
-my $vcb2	= $ARGV[2];
-my $snt12	= $ARGV[3];
 my $sortArgs = "";
-
-for (my $i = 4; $i < @ARGV; ++$i)
+for (my $i = 0; $i < (@ARGV - 4); ++$i)
 {
   my $arg = $ARGV[$i];
   if ($arg eq "-sort-buffer-size")
   {
-		$sortArgs .= "-S " .$ARGV[++$i];
+		$sortArgs .= " -S " .$ARGV[++$i];
   }
   elsif ($arg eq "-sort-batch-size")
   {
-	  $sortArgs .= "--batch-size " .$ARGV[++$i];
+	  $sortArgs .= " --batch-size " .$ARGV[++$i];
   }
   elsif ($arg eq "-sort-compress")
   {
-	  $sortArgs .= "--compress-program " .$ARGV[++$i];
+	  $sortArgs .= " --compress-program " .$ARGV[++$i];
   }
 }
 					
+my $out		= $ARGV[@ARGV - 4];
+my $vcb1	= $ARGV[@ARGV - 3];
+my $vcb2	= $ARGV[@ARGV - 2];
+my $snt12	= $ARGV[@ARGV - 1];
+
 my $SORT_EXEC = `gsort --help 2>/dev/null`; 
 if($SORT_EXEC) {
   $SORT_EXEC = 'gsort';
