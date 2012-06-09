@@ -39,6 +39,7 @@
 #include "D5Tables.h"
 #include "transpair_model4.h"
 #include "transpair_model5.h"
+#include <boost/thread/thread.hpp>
 
 #define ITER_M2 0
 #define ITER_MH 5
@@ -85,7 +86,7 @@ bool Transfer2to3=0;
 short NoEmptyWord=0;
 bool FEWDUMPS=0;
 GLOBAL_PARAMETER(bool,ONLYALDUMPS,"ONLYALDUMPS","1: do not write any files",PARLEV_OUTPUT,0);
-GLOBAL_PARAMETER(short,NCPUS,"NCPUS","Number of CPUS",PARLEV_EM,2);
+GLOBAL_PARAMETER(short,NCPUS,"NCPUS","Number of threads to be executed, use 0 if you just want all CPUs to be used",PARLEV_EM,0);
 GLOBAL_PARAMETER(short,CompactAlignmentFormat,"CompactAlignmentFormat","0: detailled alignment format, 1: compact alignment format ",PARLEV_OUTPUT,0);
 GLOBAL_PARAMETER2(bool,NODUMPS,"NODUMPS","NO FILE DUMPS? (Y/N)","1: do not write any files",PARLEV_OUTPUT,0);
 
@@ -1073,7 +1074,6 @@ int main(int argc, char* argv[]) {
 	time_t st1, fn;
 	st1 = time(NULL); // starting time
 
-//	cerr << "---------------- " << endl;
 	// Program Name
 	
 	string temp(argv[0]);
@@ -1092,6 +1092,19 @@ int main(int argc, char* argv[]) {
 	// 
 	parseArguments(argc, argv);
 
+    // Determine number of threads
+
+    if(NCPUS == 0){
+        cerr << "Trying to detect number of CPUS...";
+        NCPUS = boost::thread::hardware_concurrency();
+        if(NCPUS==0){
+            cerr << "failed, default to 2 threads" << std::endl;
+            NCPUS = 2;
+        }
+        else{
+            cerr << NCPUS << std::endl;
+        }
+    }
 	
 	cerr << "Opening Log File " << endl;	
 	if (Log) {
