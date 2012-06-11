@@ -437,7 +437,8 @@ mgiza_LDFLAGS = \
 
 mgiza_LDADD = \
 	-lgiza \
-	-lpthread
+	-lpthread \
+	-lboost_thread-mt
 
 lib_LIBRARIES = \
 	libgiza.a
