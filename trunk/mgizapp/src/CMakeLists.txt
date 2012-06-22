@@ -63,7 +63,9 @@ SET( LIBMGIZA_SRC
     vocab.h WordClasses.h
 )
 
-ADD_LIBRARY(mgiza STATIC ${LIBMGIZA_SRC})
+ADD_LIBRARY(mgiza_lib STATIC ${LIBMGIZA_SRC})
+SET_TARGET_PROPERTIES(mgiza_lib PROPERTIES OUTPUT_NAME "mgiza")
+
 INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR} )
 IF (WIN32)
 	INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/w32 )
@@ -81,11 +83,11 @@ LINK_DIRECTORIES ( ${LIBRARY_OUTPUT_PATH} )
 
 SET( MGIZA_SRC main.cpp )
 
-ADD_EXECUTABLE( mgizapp ${MGIZA_SRC} )
+ADD_EXECUTABLE( mgiza ${MGIZA_SRC} )
 
 TARGET_LINK_LIBRARIES (
-    mgizapp
     mgiza
+    mgiza_lib
     ${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     )
@@ -100,18 +102,18 @@ ADD_EXECUTABLE(hmmnorm hmmnorm.cxx)
 ADD_EXECUTABLE(d4norm d4norm.cxx)
 TARGET_LINK_LIBRARIES (
     hmmnorm
-    mgiza
+    mgiza_lib
     ${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     )
 TARGET_LINK_LIBRARIES (
     d4norm
-    mgiza
+    mgiza_lib
     ${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     )
 
-INSTALL(TARGETS mgiza mgizapp snt2cooc snt2plain plain2snt symal hmmnorm d4norm snt2coocrmp
+INSTALL(TARGETS mgiza_lib mgiza snt2cooc snt2plain plain2snt symal hmmnorm d4norm snt2coocrmp
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib

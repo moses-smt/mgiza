@@ -121,7 +121,7 @@ mgiza_CPPFLAGS = \
 	-DDEBUG
 
 mgiza_LDFLAGS = \
-	-L.
+	-L. -lboost_thread-mt
 
 mgiza_LDADD = \
 	-lgiza \
