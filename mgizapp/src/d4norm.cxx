@@ -56,6 +56,7 @@ GLOBAL_PARAMETER(WordIndex, MAX_FERTILITY, "MAX_FERTILITY",
 using namespace std;
 string Prefix, LogFilename, OPath, Usage, SourceVocabFilename,
 		TargetVocabFilename, CorpusFilename, TestCorpusFilename, t_Filename,
+		SourceVocabClassesFilename, TargetVocabClassesFilename,
 		a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
 
 
@@ -74,11 +75,11 @@ int main(int argc, char* argv[]){
 	fTrainVcbList.setName(argv[2]);
 	eTrainVcbList.readVocabList();
 	fTrainVcbList.readVocabList();
-	string evcbcls = argv[1];
-	string fvcbcls = argv[2];
-	evcbcls += ".classes";
-	fvcbcls += ".classes";
-	d4m.makeWordClasses(eTrainVcbList, fTrainVcbList, evcbcls.c_str(), fvcbcls.c_str(),eTrainVcbList,fTrainVcbList);
+	SourceVocabClassesFilename = argv[1];
+	TargetVocabClassesFilename = argv[2];
+	SourceVocabClassesFilename += ".classes";
+	TargetVocabClassesFilename += ".classes";
+	d4m.makeWordClasses(eTrainVcbList, fTrainVcbList, SourceVocabClassesFilename.c_str(), TargetVocabClassesFilename.c_str(),eTrainVcbList,fTrainVcbList);
 	// Start iteration:
 	for(int i =4; i< argc ; i++){
 		string name = argv[i];

@@ -32,6 +32,7 @@ extern float PROB_SMOOTH,MINCOUNTINCREASE;
 extern bool Verbose, Log, Peg, Transfer, Transfer2to3, useDict ;
 extern string Prefix, LogFilename, OPath, 
   SourceVocabFilename, TargetVocabFilename, CorpusFilename, TestCorpusFilename, 
+  SourceVocabClassesFilename, TargetVocabClassesFilename,
   t_Filename, a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
 extern ofstream logmsg ;
 extern Mutex logmsg_lock;
