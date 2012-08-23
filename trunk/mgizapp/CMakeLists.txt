@@ -46,7 +46,7 @@ set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
 
-FIND_PACKAGE( Boost 1.46 COMPONENTS thread)
+FIND_PACKAGE( Boost 1.41 COMPONENTS thread)
 
  IF(Boost_FOUND)
     IF (NOT _boost_IN_CACHE)
