@@ -11,17 +11,26 @@ using namespace std;
 
 int main(int argc,char**argv)
 {
+  string snt1(""), snt2(""), vcb1(""), vcb2("");
   vector<double>weights;
   vector<string>filenames;
   for(int i=1;i<argc;++i)
     if(string(argv[i])=="-weight")
       weights.push_back(atof(argv[++i]));
+    else if(string(argv[i])=="-snt1")
+      snt1=argv[++i];
+    else if(string(argv[i])=="-snt2")
+      snt2=argv[++i];
+    else if(string(argv[i])=="-vcb1")
+      vcb1=argv[++i];
+    else if(string(argv[i])=="-vcb2")
+      vcb2=argv[++i];
     else
       filenames.push_back(argv[i]);
   
   if((filenames.size()%2)==1||filenames.size()==0 )
     {
-      cerr << argv[0] << " txt1 txt2 [txt3 txt4 -weight w]\n";
+      cerr << argv[0] << " txt1 txt2 [txt3 txt4 -weight w -vcb1 output1.vcb -vcb2 output2.vcb -snt1 output1_output2.snt -snt2 output2_output1.snt]\n";
       cerr << " Converts plain text into GIZA++ snt-format.\n";
       exit(1);
     }
@@ -40,9 +49,8 @@ int main(int argc,char**argv)
       w2=w2.substr(0,w2.length()-4);
       cerr << "w1:"<< w1 << " w2:" << w2 << endl;
     } 
-      
 
-  string vocab1(w1),vocab2(w2),snt1,snt2;
+  string vocab1(w1),vocab2(w2);
   unsigned int slashpos=vocab1.rfind('/')+1;
 #ifdef WIN32
   if(slashpos==0) slashpos=vocab1.rfind('\\')+1;
@@ -56,11 +64,23 @@ int main(int argc,char**argv)
 #endif
   if( slashpos>=vocab2.length() ) slashpos=0;
   string vocab2x(vocab2.substr(slashpos,vocab2.length()));
-  cout << vocab2 << " -> " << vocab2x << endl;  
-  snt1=vocab1+"_"+vocab2x+string(".snt");
-  snt2=vocab2+"_"+vocab1x+string(".snt");
-  vocab1+=string(".vcb");
-  vocab2+=string(".vcb");
+  cout << vocab2 << " -> " << vocab2x << endl;
+  if (snt1=="") {
+    snt1=vocab1+"_"+vocab2x+string(".snt");
+  }
+  if (snt2=="") {
+    snt2=vocab2+"_"+vocab1x+string(".snt");
+  }
+  if (vcb1=="") {
+    vocab1+=string(".vcb");
+  } else {
+    vocab1=vcb1;
+  }
+  if (vcb2=="") {
+    vocab2+=string(".vcb");
+  } else {
+    vocab2=vcb2;
+  }
 
   ofstream ovocab1(vocab1.c_str()),ovocab2(vocab2.c_str()),osnt1(snt1.c_str()),osnt2(snt2.c_str());
   for(unsigned int i=0;i<filenames.size();i+=2)
