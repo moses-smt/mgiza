@@ -366,8 +366,8 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
 		d4m.readProbTable(previous_d4model.c_str(),previous_d4model_1.c_str());
 	}
 	if(h==NULL)
-	d4m.makeWordClasses(Elist, Flist, SourceVocabFilename+".classes",
-			TargetVocabFilename+".classes",Elist,Flist);
+	d4m.makeWordClasses(Elist, Flist, SourceVocabClassesFilename,
+			TargetVocabClassesFilename,Elist,Flist);
 	
 	d5model d5m(d4m);
 	//d5m.makeWordClasses(Elist, Flist, SourceVocabFilename+".classes",

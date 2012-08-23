@@ -55,6 +55,7 @@ GLOBAL_PARAMETER(WordIndex, MAX_FERTILITY, "MAX_FERTILITY",
 using namespace std;
 string Prefix, LogFilename, OPath, Usage, SourceVocabFilename,
 		TargetVocabFilename, CorpusFilename, TestCorpusFilename, t_Filename,
+		SourceVocabClassesFilename, TargetVocabClassesFilename,
 		a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
 
 
@@ -84,11 +85,11 @@ int main(int argc, char* argv[]){
 	model2 m2(m1, aTable, aCountTable);
 	WordClasses french,english;
 	hmm h(m2,english,french);
-	string evcbcls = argv[1];
-	string fvcbcls = argv[2];
-	evcbcls += ".classes";
-	fvcbcls += ".classes";
-	h.makeWordClasses(m1.Elist, m1.Flist, evcbcls.c_str(), fvcbcls.c_str());
+	SourceVocabClassesFilename = argv[1];
+	TargetVocabClassesFilename = argv[2];
+	SourceVocabClassesFilename += ".classes";
+	TargetVocabClassesFilename += ".classes";
+	h.makeWordClasses(m1.Elist, m1.Flist, SourceVocabClassesFilename.c_str(), TargetVocabClassesFilename.c_str());
 	string base = argv[4];
 	string baseA = base+".alpha";
 	string baseB = base+".beta";

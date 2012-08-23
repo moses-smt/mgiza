@@ -98,6 +98,7 @@ Vector<map< pair<int,int>,char > > ReferenceAlignment;
 bool useDict = false;
 string CoocurrenceFile;
 string Prefix, LogFilename, OPath, Usage, SourceVocabFilename,
+		SourceVocabClassesFilename(""), TargetVocabClassesFilename(""),
 		TargetVocabFilename, CorpusFilename, TestCorpusFilename, t_Filename,
 		a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
 
@@ -250,8 +251,8 @@ void printDecoderConfigFile() {
 	decoder << "Target.vcb = " << TargetVocabFilename << '\n';
 	//  decoder << "Source.classes = " << SourceVocabFilename + ".classes" << '\n';
 	//  decoder << "Target.classes = " << TargetVocabFilename + ".classes" <<'\n';
-	decoder << "Source.classes = " << SourceVocabFilename+".classes" << '\n';
-	decoder << "Target.classes = " << TargetVocabFilename + ".classes" <<'\n';
+	decoder << "Source.classes = " << SourceVocabClassesFilename << '\n';
+	decoder << "Target.classes = " << TargetVocabClassesFilename <<'\n';
 	p=Prefix + ".fe0_"+ /*lastModelName*/"3" + ".final";
 	decoder << "FZeroWords       = " <<stripPath(p.c_str()) << '\n';
 
@@ -836,8 +837,8 @@ double StartTraining(int&result) {
 			if (HMM_Iterations > 0 && (restart < 2 || restart == 4 || restart == 5 || restart == 6)) {
 				cout << "NOTE: I am doing iterations with the HMM model!\n";
 				
-				h.makeWordClasses(m1.Elist, m1.Flist, SourceVocabFilename
-						+".classes", TargetVocabFilename+".classes");
+				h.makeWordClasses(m1.Elist, m1.Flist, SourceVocabClassesFilename
+						, TargetVocabClassesFilename);
 				if(restart != 6) h.initialize_table_uniformly(*corpus);
 				
 				if(Model3_Iterations == 0 && Model4_Iterations == 0 &&
@@ -873,8 +874,8 @@ double StartTraining(int&result) {
 				errors=m3.errorsAL();
 			}
 			if(restart >= 7 && hmmvalid){
-				h.makeWordClasses(m1.Elist, m1.Flist, SourceVocabFilename
-						+".classes", TargetVocabFilename+".classes");
+				h.makeWordClasses(m1.Elist, m1.Flist, SourceVocabClassesFilename
+						, TargetVocabClassesFilename);
 			}
 			if (HMM_Iterations>0 || restart == 7)
 				m3.setHMM(&h);
@@ -959,6 +960,18 @@ int main(int argc, char* argv[]) {
 			ParameterChangedFlag,
 			"target vocabulary file name",
 			TargetVocabFilename,-1));
+	getGlobalParSet().insert(new Parameter<string>(
+			"Source Vocabulary Classes",
+			ParameterChangedFlag,
+			"source vocabulary classes file name",
+			SourceVocabClassesFilename,
+			PARLEV_INPUT));
+	getGlobalParSet().insert(new Parameter<string>(
+			"Target Vocabulary Classes",
+			ParameterChangedFlag,
+			"target vocabulary classes file name",
+			TargetVocabClassesFilename,
+			PARLEV_INPUT));
 	getGlobalParSet().insert(new Parameter<string>(
 			"C",
 			ParameterChangedFlag,
@@ -1091,6 +1104,14 @@ int main(int argc, char* argv[]) {
 	cerr << "Parsing Arguments " << endl;	
 	// 
 	parseArguments(argc, argv);
+
+	if (SourceVocabClassesFilename=="") {
+	  makeSetCommand("sourcevocabularyclasses",SourceVocabFilename+".classes",getGlobalParSet(),2);
+	}
+
+	if (TargetVocabClassesFilename=="") {
+	  makeSetCommand("targetvocabularyclasses",TargetVocabFilename+".classes",getGlobalParSet(),2);
+	}	
 
     // Determine number of threads
 
