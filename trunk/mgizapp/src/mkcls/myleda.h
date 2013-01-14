@@ -218,7 +218,7 @@ public:
 	  typename MY_HASH_BASE::iterator pos=this->find(a);
 	  if( pos==this->end() )
 	  {
-		  insert(typename MY_HASH_BASE::value_type(a,init));
+		  this->insert(typename MY_HASH_BASE::value_type(a,init));
 		  pos=this->find(a);
 		  iassert(pos!=this->end());
 	  }
