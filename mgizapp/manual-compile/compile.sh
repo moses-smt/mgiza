@@ -1,3 +1,8 @@
+GCC=gcc-mp-4.5
+GPP=g++-mp-4.5
+#GCC=gcc
+#GPP=g++
+#LDFLAGS="-static"
 
 SRC_DIR=/Users/hieuhoang/workspace/mgizapp/trunk/mgizapp/src
 BOOST_ROOT=/Users/hieuhoang/workspace/boost/boost_1_52_0
@@ -6,7 +11,7 @@ BOOST_LIBRARYDIR=/Users/hieuhoang/workspace/boost/boost_1_52_0/lib64/
 
 rm *.o libmgiza.a d4norm hmmnorm mgiza plain2snt snt2cooc snt2cooc-reduce-mem-preprocess snt2plain symal mkcls
 
-g++ -I$SRC_DIR -I$BOOST_ROOT/include -c -fPIC   \
+$GPP -I$SRC_DIR -I$BOOST_ROOT/include -c -fPIC   \
  $SRC_DIR/alignment.cpp \
  $SRC_DIR/AlignTables.cpp \
  $SRC_DIR/ATables.cpp \
@@ -39,26 +44,26 @@ g++ -I$SRC_DIR -I$BOOST_ROOT/include -c -fPIC   \
  $SRC_DIR/utility.cpp \
  $SRC_DIR/vocab.cpp
 
-gcc -c -fPIC $SRC_DIR/cmd.c
+$GCC -c -fPIC $SRC_DIR/cmd.c
 
 ar rvs libmgiza.a *.o
 
-g++ -o d4norm $SRC_DIR/d4norm.cxx      -static -I$BOOST_ROOT -I$SRC_DIR -L. -lmgiza  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
+$GPP -o d4norm $SRC_DIR/d4norm.cxx      $LDFLAGS -I$BOOST_ROOT -I$SRC_DIR -L. -lmgiza  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
 
-g++ -o hmmnorm $SRC_DIR/hmmnorm.cxx    -static -I$BOOST_ROOT -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
+$GPP -o hmmnorm $SRC_DIR/hmmnorm.cxx    $LDFLAGS -I$BOOST_ROOT -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
 
-g++ -o mgiza $SRC_DIR/main.cpp         -static -I$BOOST_ROOT -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
+$GPP -o mgiza $SRC_DIR/main.cpp         $LDFLAGS -I$BOOST_ROOT -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
 
-g++ -o plain2snt $SRC_DIR/plain2snt.cpp
+$GPP -o plain2snt $SRC_DIR/plain2snt.cpp
 
-g++ -o snt2cooc  $SRC_DIR/snt2cooc.cpp 
+$GPP -o snt2cooc  $SRC_DIR/snt2cooc.cpp 
 
-g++ -o snt2cooc-reduce-mem-preprocess $SRC_DIR/snt2cooc-reduce-mem-preprocess.cpp 
+$GPP -o snt2cooc-reduce-mem-preprocess $SRC_DIR/snt2cooc-reduce-mem-preprocess.cpp 
 
-g++ -o snt2plain $SRC_DIR/snt2plain.cpp 
+$GPP -o snt2plain $SRC_DIR/snt2plain.cpp 
 
-g++ -o symal $SRC_DIR/symal.cpp        -static -I$BOOST_ROOT -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
+$GPP -o symal $SRC_DIR/symal.cpp        $LDFLAGS -I$BOOST_ROOT -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
 
-g++ -I$SRC_DIR/mkcls  -o mkcls $SRC_DIR/mkcls/mkcls.cpp $SRC_DIR/mkcls/general.cpp $SRC_DIR/mkcls/KategProblemKBC.cpp $SRC_DIR/mkcls/KategProblem.cpp $SRC_DIR/mkcls/Problem.cpp $SRC_DIR/mkcls/ProblemTest.cpp $SRC_DIR/mkcls/IterOptimization.cpp $SRC_DIR/mkcls/StatVar.cpp $SRC_DIR/mkcls/TAOptimization.cpp $SRC_DIR/mkcls/SAOptimization.cpp $SRC_DIR/mkcls/GDAOptimization.cpp $SRC_DIR/mkcls/MYOptimization.cpp $SRC_DIR/mkcls/RRTOptimization.cpp $SRC_DIR/mkcls/HCOptimization.cpp $SRC_DIR/mkcls/Optimization.cpp $SRC_DIR/mkcls/KategProblemWBC.cpp $SRC_DIR/mkcls/KategProblemTest.cpp
+$GPP -I$SRC_DIR/mkcls  -o mkcls $SRC_DIR/mkcls/mkcls.cpp $SRC_DIR/mkcls/general.cpp $SRC_DIR/mkcls/KategProblemKBC.cpp $SRC_DIR/mkcls/KategProblem.cpp $SRC_DIR/mkcls/Problem.cpp $SRC_DIR/mkcls/ProblemTest.cpp $SRC_DIR/mkcls/IterOptimization.cpp $SRC_DIR/mkcls/StatVar.cpp $SRC_DIR/mkcls/TAOptimization.cpp $SRC_DIR/mkcls/SAOptimization.cpp $SRC_DIR/mkcls/GDAOptimization.cpp $SRC_DIR/mkcls/MYOptimization.cpp $SRC_DIR/mkcls/RRTOptimization.cpp $SRC_DIR/mkcls/HCOptimization.cpp $SRC_DIR/mkcls/Optimization.cpp $SRC_DIR/mkcls/KategProblemWBC.cpp $SRC_DIR/mkcls/KategProblemTest.cpp
 
 
