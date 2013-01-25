@@ -1,7 +1,7 @@
 
-SRC_DIR=/home/hieu/workspace/mgizapp/trunk/mgizapp/src
-BOOST_ROOT=/home/hieu/workspace/boost/boost_1_52_0/
-BOOST_LIBRARYDIR=/home/hieu/workspace/boost/boost_1_52_0/lib64/
+SRC_DIR=/Users/hieuhoang/workspace/mgizapp/trunk/mgizapp/src
+BOOST_ROOT=/Users/hieuhoang/workspace/boost/boost_1_52_0
+BOOST_LIBRARYDIR=/Users/hieuhoang/workspace/boost/boost_1_52_0/lib64/
 
 
 rm *.o libmgiza.a d4norm hmmnorm mgiza plain2snt snt2cooc snt2cooc-reduce-mem-preprocess snt2plain symal mkcls
