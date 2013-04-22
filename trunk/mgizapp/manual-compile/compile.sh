@@ -1,8 +1,10 @@
-GCC=gcc-mp-4.5
-GPP=g++-mp-4.5
 #GCC=gcc
 #GPP=g++
 #LDFLAGS="-static"
+
+# mac, 'cos OSX doesn't support static linking and other such nonsense
+GCC=gcc-mp-4.5
+GPP=g++-mp-4.5
 
 SRC_DIR=/Users/hieuhoang/workspace/mgizapp/trunk/mgizapp/src
 BOOST_ROOT=/Users/hieuhoang/workspace/boost/boost_1_52_0
