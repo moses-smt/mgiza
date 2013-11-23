@@ -3,12 +3,14 @@
 #LDFLAGS="-static"
 
 # mac, 'cos OSX doesn't support static linking and other such nonsense
-GCC=gcc-mp-4.5
-GPP=g++-mp-4.5
+#GCC=gcc-mp-4.5
+#GPP=g++-mp-4.5
+GCC=clang
+GPP=clang++
 
-SRC_DIR=/Users/hieuhoang/workspace/mgizapp/trunk/mgizapp/src
-BOOST_ROOT=/Users/hieuhoang/workspace/boost/boost_1_52_0
-BOOST_LIBRARYDIR=/Users/hieuhoang/workspace/boost/boost_1_52_0/lib64/
+SRC_DIR=/Users/hieu/workspace/mgizapp/mgizapp/src
+BOOST_ROOT=/Users/hieu/workspace/boost/boost_1_54_0
+BOOST_LIBRARYDIR=/Users/hieu/workspace/boost/boost_1_54_0/lib64/
 
 
 rm *.o libmgiza.a d4norm hmmnorm mgiza plain2snt snt2cooc snt2cooc-reduce-mem-preprocess snt2plain symal mkcls
