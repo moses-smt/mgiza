@@ -42,7 +42,7 @@ else {
 my $TMPDIR=dirname($out);
 
 my $cmd;
-$cmd = "$Bin/snt2cooc-reduce-mem-preprocess $vcb1 $vcb2 $snt12 ";
+$cmd = "$Bin/snt2coocrmp $vcb1 $vcb2 $snt12 ";
 $cmd .= "| $SORT_EXEC $sortArgs -T $TMPDIR -nk 1 -nk 2 | uniq > $out";
 systemCheck($cmd);
 
