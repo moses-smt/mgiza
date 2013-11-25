@@ -1,19 +1,19 @@
-#GCC=gcc
-#GPP=g++
-#LDFLAGS="-static"
+GCC=gcc
+GPP=g++
+LDFLAGS="-static"
 
 # mac, 'cos OSX doesn't support static linking and other such nonsense
 #GCC=gcc-mp-4.5
 #GPP=g++-mp-4.5
-GCC=clang
-GPP=clang++
+#GCC=clang
+#GPP=clang++
 
-SRC_DIR=/Users/hieu/workspace/mgizapp/mgizapp/src
-BOOST_ROOT=/Users/hieu/workspace/boost/boost_1_54_0
-BOOST_LIBRARYDIR=/Users/hieu/workspace/boost/boost_1_54_0/lib64/
+SRC_DIR=/home/s0565741/workspace/mgizapp/src
+BOOST_ROOT=/home/s0565741/workspace/boost/boost_1_54_0
+BOOST_LIBRARYDIR=/home/s0565741/workspace/boost/boost_1_54_0/lib64/
 
 
-rm *.o libmgiza.a d4norm hmmnorm mgiza plain2snt snt2cooc snt2cooc-reduce-mem-preprocess snt2plain symal mkcls
+rm *.o libmgiza.a d4norm hmmnorm mgiza plain2snt snt2cooc snt2coocrmp snt2plain symal mkcls
 
 $GPP -I$SRC_DIR -I$BOOST_ROOT/include -c -fPIC   \
  $SRC_DIR/alignment.cpp \
@@ -62,7 +62,7 @@ $GPP -o plain2snt $SRC_DIR/plain2snt.cpp
 
 $GPP -o snt2cooc  $SRC_DIR/snt2cooc.cpp 
 
-$GPP -o snt2cooc-reduce-mem-preprocess $SRC_DIR/snt2cooc-reduce-mem-preprocess.cpp 
+$GPP -o snt2coocrmp $SRC_DIR/snt2cooc-reduce-mem-preprocess.cpp 
 
 $GPP -o snt2plain $SRC_DIR/snt2plain.cpp 
 
