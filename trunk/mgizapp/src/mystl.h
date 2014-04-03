@@ -5,6 +5,7 @@
 #ifndef MY_STL_H_DEFINED
 #define MY_STL_H_DEFINED
 
+#include <vector>
 #include <string>
 using namespace std;
 #ifdef USE_STLPORT
@@ -69,8 +70,8 @@ inline bool prefix(const string&x,const string&y)
 /*template<class T>
 int lev(const T&s1,const T&s2)
 {
-  Array2<int,vector<int> > a(s1.size()+1,s2.size()+1,1000);
-  Array2<pair<int,int>,vector<pair<int,int> > > back(s1.size()+1,s2.size()+1,pair<int,int>(0,0));
+  Array2<int,std::vector<int> > a(s1.size()+1,s2.size()+1,1000);
+  Array2<pair<int,int>,std::vector<pair<int,int> > > back(s1.size()+1,s2.size()+1,pair<int,int>(0,0));
   for(unsigned int i=0;i<=s1.size();i++)
     for(unsigned int j=0;j<=s2.size();j++)
       {
@@ -316,13 +317,13 @@ void smooth_standard(T*a,T*b,double p)
 }
 
 template<class T>
-const T *conv(typename vector<T>::const_iterator i)
+const T *conv(typename std::vector<T>::const_iterator i)
 {
   return &(*i);
 }
 #if __GNUC__>2
 template<class T>
-T *conv(typename vector<T>::iterator i)
+T *conv(typename std::vector<T>::iterator i)
 {
   return &(*i);
 }
