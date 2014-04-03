@@ -8,9 +8,9 @@ LDFLAGS="-static"
 #GCC=clang
 #GPP=clang++
 
-SRC_DIR=/Users/hieu/workspace/mgizapp/mgizapp/src
-BOOST_ROOT=/Users/hieu/workspace/boost/boost_1_55_0
-BOOST_LIBRARYDIR=/Users/hieu/workspace/boost/boost_1_55_0/lib64/
+SRC_DIR=/home/s0565741/workspace/thor/mgizapp-code/mgizapp/src
+BOOST_ROOT=/home/s0565741/workspace/thor/boost_1_54_0
+BOOST_LIBRARYDIR=/home/s0565741/workspace/thor/boost_1_54_0/lib64
 
 BOOST_ROOT=/Users/hieu/workspace/boost/old/boost_1_54_0.old
 BOOST_LIBRARYDIR=/Users/hieu/workspace/boost/old/boost_1_54_0.old/lib64/
