@@ -21,7 +21,7 @@ sents = [];
 done = [];
 
 for i in range(1,len(sys.argv)):
-	files.append(open(sys.argv[i],"r"));
+	files.append(open(sys.argv[i],"r", encoding='utf-8'));
 	ids.append(0);
 	sents.append("");
 	done.append(False);
