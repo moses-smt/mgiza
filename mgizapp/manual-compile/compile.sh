@@ -8,16 +8,14 @@ LDFLAGS="-static"
 #GCC=clang
 #GPP=clang++
 
-SRC_DIR=/home/s0565741/workspace/thor/mgizapp-code/mgizapp/src
-BOOST_ROOT=/home/s0565741/workspace/thor/boost_1_54_0
-BOOST_LIBRARYDIR=/home/s0565741/workspace/thor/boost_1_54_0/lib64
-
-BOOST_ROOT=/Users/hieu/workspace/boost/old/boost_1_54_0.old
-BOOST_LIBRARYDIR=/Users/hieu/workspace/boost/old/boost_1_54_0.old/lib64/
+SRC_DIR=/home/hieu/workspace/github/mgiza/mgizapp/src
+BOOST_ROOT=/home/hieu/workspace/boost/boost_1_56_0
+BOOST_INCLUDE=$BOOST_ROOT/include
+BOOST_LIBRARYDIR=$BOOST_ROOT/lib64
 
 rm *.o libmgiza.a d4norm hmmnorm mgiza plain2snt snt2cooc snt2coocrmp snt2plain symal mkcls
 
-$GPP -I$SRC_DIR -I$BOOST_ROOT/include -c -fPIC   \
+$GPP -I$SRC_DIR -I$BOOST_INCLUDE -c -fPIC   \
  $SRC_DIR/alignment.cpp \
  $SRC_DIR/AlignTables.cpp \
  $SRC_DIR/ATables.cpp \
@@ -54,11 +52,11 @@ $GCC -c -fPIC $SRC_DIR/cmd.c
 
 ar rvs libmgiza.a *.o
 
-$GPP -o d4norm $SRC_DIR/d4norm.cxx      $LDFLAGS -I$BOOST_ROOT -I$SRC_DIR -L. -lmgiza  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
+$GPP -o d4norm $SRC_DIR/d4norm.cxx      $LDFLAGS -I$BOOST_INCLUDE -I$SRC_DIR -L. -lmgiza  -L$BOOST_LIBRARYDIR -lboost_system -lboost_thread -lpthread 
 
-$GPP -o hmmnorm $SRC_DIR/hmmnorm.cxx    $LDFLAGS -I$BOOST_ROOT -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
+$GPP -o hmmnorm $SRC_DIR/hmmnorm.cxx    $LDFLAGS -I$BOOST_INCLUDE -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system -lboost_thread -lpthread 
 
-$GPP -o mgiza $SRC_DIR/main.cpp         $LDFLAGS -I$BOOST_ROOT -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
+$GPP -o mgiza $SRC_DIR/main.cpp         $LDFLAGS -I$BOOST_INCLUDE -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system -lboost_thread -lpthread 
 
 $GPP -o plain2snt $SRC_DIR/plain2snt.cpp
 
@@ -68,7 +66,7 @@ $GPP -o snt2coocrmp $SRC_DIR/snt2cooc-reduce-mem-preprocess.cpp
 
 $GPP -o snt2plain $SRC_DIR/snt2plain.cpp 
 
-$GPP -o symal $SRC_DIR/symal.cpp        $LDFLAGS -I$BOOST_ROOT -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system-mt -lboost_thread-mt -lpthread 
+$GPP -o symal $SRC_DIR/symal.cpp        $LDFLAGS -I$BOOST_INCLUDE -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system -lboost_thread -lpthread 
 
 $GPP -I$SRC_DIR/mkcls  -o mkcls $SRC_DIR/mkcls/mkcls.cpp $SRC_DIR/mkcls/general.cpp $SRC_DIR/mkcls/KategProblemKBC.cpp $SRC_DIR/mkcls/KategProblem.cpp $SRC_DIR/mkcls/Problem.cpp $SRC_DIR/mkcls/ProblemTest.cpp $SRC_DIR/mkcls/IterOptimization.cpp $SRC_DIR/mkcls/StatVar.cpp $SRC_DIR/mkcls/TAOptimization.cpp $SRC_DIR/mkcls/SAOptimization.cpp $SRC_DIR/mkcls/GDAOptimization.cpp $SRC_DIR/mkcls/MYOptimization.cpp $SRC_DIR/mkcls/RRTOptimization.cpp $SRC_DIR/mkcls/HCOptimization.cpp $SRC_DIR/mkcls/Optimization.cpp $SRC_DIR/mkcls/KategProblemWBC.cpp $SRC_DIR/mkcls/KategProblemTest.cpp
 
