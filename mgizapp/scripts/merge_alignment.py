@@ -5,8 +5,16 @@
 #          prodcuced by MGIZA, which has sentence IDs, and every file is 
 #          ordered inside
 
+from __future__ import unicode_literals
 import sys
 import re
+import codecs
+import io
+
+if sys.version_info < (3,0,0):
+    sys.stdin = codecs.getreader('UTF-8')(sys.stdin)
+    sys.stdout = codecs.getwriter('UTF-8')(sys.stdout)
+    sys.stderr = codecs.getwriter('UTF-8')(sys.stderr)
 
 if len(sys.argv)<2:
 	sys.stderr.write("Provide me the file names (at least 2)\n");
@@ -21,7 +29,7 @@ sents = [];
 done = [];
 
 for i in range(1,len(sys.argv)):
-	files.append(open(sys.argv[i],"r"));
+	files.append(io.open(sys.argv[i],"r", encoding="UTF-8"));
 	ids.append(0);
 	sents.append("");
 	done.append(False);

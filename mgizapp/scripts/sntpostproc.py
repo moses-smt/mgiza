@@ -3,15 +3,25 @@
 # This script post process the snt file -- either in single-line format or in multi-line format
 # The output, however, will always be in single-line format
 
+from __future__ import unicode_literals
 from sys import *
 from optparse import OptionParser
 import re;
+import codecs
+import io
+
 usage = """
 The script post process the snt file, the input could be single-line snt 
 file or multi-line, (triple line) and can insert sentence weight to the
 file (-w) or add partial alignment to the file (-a)
 Usage %prog -s sntfile -w weight-file -a alignfile -o outputfile
 """
+
+if sys.version_info < (3,0,0):
+    sys.stdin = codecs.getreader('UTF-8')(sys.stdin)
+    sys.stdout = codecs.getwriter('UTF-8')(sys.stdout)
+    sys.stderr = codecs.getwriter('UTF-8')(sys.stderr)
+
 parser = OptionParser(usage=usage)
 
 
@@ -37,21 +47,21 @@ if options.snt == None:
 	parser.print_help();
 	exit();
 else:
-	sfile = open(options.snt,"r");
+	sfile = io.open(options.snt,"r", encoding="UTF-8");
 
 if options.output=="-":
 	ofile = stdout;
 else:
-	ofile = open(options.output,"w");
+	ofile = io.open(options.output,"w", encoding="UTF-8");
 
 wfile = None;
 
 if options.weight <> None:
-	wfile = open(options.weight,"r");
+	wfile = io.open(options.weight,"r", encoding="UTF-8");
 
 afile = None;
 if options.align <> None:
-	afile = open(options.align,"r");
+	afile = io.open(options.align,"r", encoding="UTF-8");
 
 rr = re.compile("[\\|\\#\\*]");
 wt = 0.0;
