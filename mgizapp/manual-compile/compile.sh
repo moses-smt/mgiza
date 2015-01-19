@@ -1,4 +1,4 @@
-GCC=gcc
+GCC="gcc -O3"
 GPP=g++
 LDFLAGS="-static"
 
@@ -8,8 +8,8 @@ LDFLAGS="-static"
 #GCC=clang
 #GPP=clang++
 
-SRC_DIR=/home/hieu/workspace/github/mgiza/mgizapp/src
-BOOST_ROOT=/home/hieu/workspace/boost/boost_1_56_0
+SRC_DIR=~/workspace/github/mgiza/mgizapp/src
+BOOST_ROOT=~/workspace/boost/boost_1_55_0
 BOOST_INCLUDE=$BOOST_ROOT/include
 BOOST_LIBRARYDIR=$BOOST_ROOT/lib64
 
@@ -56,7 +56,7 @@ $GPP -o d4norm $SRC_DIR/d4norm.cxx      $LDFLAGS -I$BOOST_INCLUDE -I$SRC_DIR -L.
 
 $GPP -o hmmnorm $SRC_DIR/hmmnorm.cxx    $LDFLAGS -I$BOOST_INCLUDE -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system -lboost_thread -lpthread 
 
-$GPP -o mgiza $SRC_DIR/main.cpp         $LDFLAGS -I$BOOST_INCLUDE -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system -lboost_thread -lpthread 
+$GPP -o mgiza $SRC_DIR/main.cpp         $LDFLAGS -I$BOOST_INCLUDE -I$SRC_DIR ./libmgiza.a  -L$BOOST_LIBRARYDIR -lboost_system -lboost_thread -lpthread -lrt
 
 $GPP -o plain2snt $SRC_DIR/plain2snt.cpp
 
