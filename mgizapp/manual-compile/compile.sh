@@ -1,12 +1,14 @@
-GCC="gcc -O3"
-GPP=g++
+COMPILE_FLAGS="-O3 -DNDEBUG -DWORDINDEX_WITH_4_BYTE -DBINARY_SEARCH_FOR_TTABLE -MD -MP -MF -MT "
+
+GCC="gcc $COMPILE_FLAGS"
+GPP="g++ $COMPILE_FLAGS"
 LDFLAGS="-static"
 
 # mac, 'cos OSX doesn't support static linking and other such nonsense
-#GCC=gcc-mp-4.5
-#GPP=g++-mp-4.5
-#GCC=clang
-#GPP=clang++
+#GCC="gcc-mp-4.5 $COMPILE_FLAGS"
+#GPP="g++-mp-4.5 $COMPILE_FLAGS"
+#GCC="clang $COMPILE_FLAGS"
+#GPP="clang++ $COMPILE_FLAGS"
 
 SRC_DIR=~/workspace/github/mgiza/mgizapp/src
 BOOST_ROOT=~/workspace/boost/boost_1_55_0
