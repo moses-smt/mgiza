@@ -19,7 +19,7 @@ def loadvcb(fname,out):
 	        id = int(ws[0]);
 		wd = ws[1];
 		dict[wd]=id;
-	return dict;
+	return dict, id
 
 if len(sys.argv)<9:
 	sys.stderr.write("Error, the input should be \n");
@@ -35,8 +35,8 @@ fout = io.open(sys.argv[6],"w", encoding="UTF-8");
 
 evcbx = io.open(sys.argv[7],"w", encoding="UTF-8");
 fvcbx = io.open(sys.argv[8],"w", encoding="UTF-8");
-evcb = loadvcb(sys.argv[1],evcbx);
-fvcb = loadvcb(sys.argv[2],fvcbx);
+evcb, esize = loadvcb(sys.argv[1],evcbx)
+fvcb, fsize = loadvcb(sys.argv[2],fvcbx)
 
 i=0
 while True:
@@ -59,11 +59,10 @@ while True:
 				el.append(evcb[w.lower()]);
 			else:
 				##stdout.write("#E %d %d %s\n" % (i,j,w))
-				#el.append(1);
-				nid = len(evcb)+1;
-				evcb[w.lower()] = nid;
-				evcbx.write("%d %s 1\n" % (nid, w));
-				el.append(nid);
+				esize += 1
+				evcb[w.lower()] = esize
+				evcbx.write("%d %s 1\n" % (esize, w))
+				el.append(esize)
 
 	j=0;
 	for w in fwords:
@@ -75,11 +74,10 @@ while True:
 				fl.append(fvcb[w.lower()]);
 			else:
 				#stdout.write("#F %d %d %s\n" % (i,j,w))
-				nid = len(fvcb)+1;
-				fvcb[w.lower()] = nid;
-				fvcbx.write("%d %s 1\n" % (nid, w));
-				fl.append(nid);
-				#fl.append(1);
+				fsize += 1
+				fvcb[w.lower()] = fsize
+				fvcbx.write("%d %s 1\n" % (fsize, w))
+				fl.append(fsize)
 	eout.write("1\n");
 	fout.write("1\n");
 	for I in el:
