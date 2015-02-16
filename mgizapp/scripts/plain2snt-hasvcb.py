@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from __future__ import unicode_literals
-from sys import *
+import sys
 import codecs
 import io
 
@@ -21,22 +21,22 @@ def loadvcb(fname,out):
 		dict[wd]=id;
 	return dict;
 
-if len(argv)<9:
-	stderr.write("Error, the input should be \n");
-	stderr.write("%s evcb fvcb etxt ftxt esnt(out) fsnt(out) evcbx(out) fvcbx(out)\n" % argv[0]);
-	stderr.write("You should concatenate the evcbx and fvcbx to existing vcb files\n");
-	exit();
+if len(sys.argv)<9:
+	sys.stderr.write("Error, the input should be \n");
+	sys.stderr.write("%s evcb fvcb etxt ftxt esnt(out) fsnt(out) evcbx(out) fvcbx(out)\n" % sys.argv[0]);
+	sys.stderr.write("You should concatenate the evcbx and fvcbx to existing vcb files\n");
+	sys.exit();
 
-ein = io.open(argv[3],"r", encoding="UTF-8");
-fin = io.open(argv[4],"r", encoding="UTF-8");
+ein = io.open(sys.argv[3],"r", encoding="UTF-8");
+fin = io.open(sys.argv[4],"r", encoding="UTF-8");
 
-eout = io.open(argv[5],"w", encoding="UTF-8");
-fout = io.open(argv[6],"w", encoding="UTF-8");
+eout = io.open(sys.argv[5],"w", encoding="UTF-8");
+fout = io.open(sys.argv[6],"w", encoding="UTF-8");
 
-evcbx = io.open(argv[7],"w", encoding="UTF-8");
-fvcbx = io.open(argv[8],"w", encoding="UTF-8");
-evcb = loadvcb(argv[1],evcbx);
-fvcb = loadvcb(argv[2],fvcbx);
+evcbx = io.open(sys.argv[7],"w", encoding="UTF-8");
+fvcbx = io.open(sys.argv[8],"w", encoding="UTF-8");
+evcb = loadvcb(sys.argv[1],evcbx);
+fvcb = loadvcb(sys.argv[2],fvcbx);
 
 i=0
 while True:

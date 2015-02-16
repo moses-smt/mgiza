@@ -4,8 +4,8 @@
 # The output, however, will always be in single-line format
 
 from __future__ import unicode_literals
-from sys import *
 from optparse import OptionParser
+import sys
 import re;
 import codecs
 import io
@@ -45,7 +45,7 @@ parser.add_option("-a", "--align", dest="align",default=None,
 
 if options.snt == None:
 	parser.print_help();
-	exit();
+	sys.exit();
 else:
 	sfile = io.open(options.snt,"r", encoding="UTF-8");
 
