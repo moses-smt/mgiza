@@ -29,10 +29,12 @@ IF(WIN32)
  OPTION( USE_64_BIT "Set to on if you want to compile Win64" OFF )
 ENDIF(WIN32)
 
+SET(CMAKE_C_COMPILER "gcc" )
 SET(CMAKE_C_FLAGS
     "-O3 -DNDEBUG -DWORDINDEX_WITH_4_BYTE -DBINARY_SEARCH_FOR_TTABLE -MD -MP -MF -MT"
     )
 
+SET(CMAKE_CXX_COMPILER "g++" )
 SET(CMAKE_CXX_FLAGS
     "-O3 -DNDEBUG -DWORDINDEX_WITH_4_BYTE -DBINARY_SEARCH_FOR_TTABLE -MD -MP -MF -MT"
     )
@@ -54,7 +56,8 @@ set(Boost_USE_STATIC_RUNTIME    OFF)
 
 FIND_PACKAGE( Boost 1.41 COMPONENTS thread system)
 
- IF(Boost_FOUND)
+
+IF(Boost_FOUND)
     IF (NOT _boost_IN_CACHE)
      MESSAGE( "Boost found" )
      message(STATUS "Boost_INCLUDE_DIR    : ${Boost_INCLUDE_DIR}")
@@ -62,7 +65,19 @@ FIND_PACKAGE( Boost 1.41 COMPONENTS thread system)
 	LINK_DIRECTORIES ( ${Boost_LIBRARY_DIRS} )
 	INCLUDE_DIRECTORIES ( ${Boost_INCLUDE_DIRS} )
 ELSE()
-    MESSAGE(FATAL_ERROR "Boost not found, please set the BOOST_ROOT and BOOST_LIBRARYDIR environment variables " )
+    set(Boost_USE_STATIC_LIBS        OFF)
+    
+    FIND_PACKAGE( Boost 1.41 COMPONENTS thread system)
+    IF(Boost_FOUND)
+       IF (NOT _boost_IN_CACHE)
+          MESSAGE( "Boost found" )
+          message(STATUS "Boost_INCLUDE_DIR    : ${Boost_INCLUDE_DIR}")
+       ENDIF (NOT _boost_IN_CACHE)
+        LINK_DIRECTORIES ( ${Boost_LIBRARY_DIRS} )
+        INCLUDE_DIRECTORIES ( ${Boost_INCLUDE_DIRS} )
+    ELSE()
+       MESSAGE(FATAL_ERROR "Boost not found, please set the BOOST_ROOT and BOOST_LIBRARYDIR environment variables " )
+    ENDIF()
 ENDIF()
 
 ADD_SUBDIRECTORY (src)
