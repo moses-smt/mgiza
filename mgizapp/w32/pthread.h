@@ -302,6 +302,10 @@ enum {
 #endif
 #endif
 
+#ifdef __MINGW32__
+#define HAVE_STRUCT_TIMESPEC 1
+#endif /* __MINGW32__ */
+
 #ifndef HAVE_STRUCT_TIMESPEC
 #define HAVE_STRUCT_TIMESPEC 1
 struct timespec {
