@@ -71,7 +71,7 @@ leda_set<T> operator&(const leda_set<T>&a,const leda_set<T>&b)
 #ifdef WIN32
   std::list<T> lst;
   set_intersection(a.begin(),a.end(),b.begin(),b.end(),lst.begin());
-  for(std::list<T>::iterator it = lst.begin() ;it!=lst.end();it++){
+  for(typename std::list<T>::iterator it = lst.begin() ;it!=lst.end();it++){
 	  c.insert(*it);
   }
 #else
@@ -90,7 +90,7 @@ leda_set<T> operator-(const leda_set<T>&a,const leda_set<T>&b)
 #ifdef WIN32
   std::list<T> lst;
   set_difference(a.begin(),a.end(),b.begin(),b.end(),lst.begin());
-  for(std::list<T>::iterator it = lst.begin() ;it!=lst.end();it++){
+  for(typename std::list<T>::iterator it = lst.begin() ;it!=lst.end();it++){
 	  c.insert(*it);
   }
 #else
