@@ -10,11 +10,12 @@ import sys
 import re
 import codecs
 import io
+import os
 
 if sys.version_info < (3,0,0):
-    sys.stdin = codecs.getreader('UTF-8')(sys.stdin)
-    sys.stdout = codecs.getwriter('UTF-8')(sys.stdout)
-    sys.stderr = codecs.getwriter('UTF-8')(sys.stderr)
+	sys.stdin = codecs.getreader('UTF-8')(sys.stdin)
+	sys.stdout = codecs.getwriter('UTF-8')(sys.stdout)
+	sys.stderr = codecs.getwriter('UTF-8')(sys.stderr)
 
 if len(sys.argv)<2:
 	sys.stderr.write("Provide me the file names (at least 2)\n");
@@ -29,7 +30,8 @@ sents = [];
 done = [];
 
 for i in range(1,len(sys.argv)):
-	files.append(io.open(sys.argv[i],"r", encoding="UTF-8"));
+	fname = sys.argv[i].replace('\\', os.sep).replace('/', os.sep)
+	files.append(io.open(fname, "r", encoding="UTF-8"));
 	ids.append(0);
 	sents.append("");
 	done.append(False);
@@ -48,7 +50,7 @@ while i< len(files):
 		ids[i] = id;
 		sents[i] = (st1, st2, st3);
 	i += 1
-		
+
 cont = True;
 while (cont):
 	sent_id += 1;
