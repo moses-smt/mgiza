@@ -22,7 +22,7 @@ USA.
 */
 #ifndef _d5tables_h_define
 #define _d5tables_h_define
-#include <math.h>
+#include <cmath>
 #include "D4Tables.h"
 
 extern float d5modelsmooth_countoffset;

@@ -25,7 +25,7 @@ USA.
 
 #include "StatVar.h"
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 
 double compareStatVarQuantil=-1; 
 

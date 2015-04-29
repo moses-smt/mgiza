@@ -21,7 +21,7 @@
  */
 #ifndef _model3_h
 #define _model3_h 1
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <algorithm>
 #include <functional>
@@ -36,9 +36,9 @@ using __gnu_cxx::hash_map;
 #include <hash_map>
 #endif
 
-#include <time.h>
+#include <ctime>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include "MoveSwapMatrix.h"
 #include "TTables.h"
 #include "ATables.h"

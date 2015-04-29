@@ -36,7 +36,7 @@ USA.
 #include "defs.h"
 #include "vocab.h"  
 
-#include <assert.h>
+#include <cassert>
  
 #include <iostream>
 #include <algorithm>

@@ -41,7 +41,7 @@ using __gnu_cxx::hash_map;
 #else
 #include <hash_map>
 #endif
-#include <math.h>
+#include <cmath>
 #include <fstream>
 #include "transpair_model1.h"
 

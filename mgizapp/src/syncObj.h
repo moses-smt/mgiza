@@ -1,8 +1,8 @@
 #ifndef __SYNC_OBJ_H__
 #define __SYNC_OBJ_H__
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <pthread.h>
 #include <iostream>
 

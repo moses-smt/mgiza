@@ -20,7 +20,7 @@ USA.
 
 */
 #include <string>
-#include <time.h>
+#include <ctime>
 #include "mymath.h"
 
 using namespace std;

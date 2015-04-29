@@ -25,7 +25,7 @@ USA.
 
 
 #include "MSBOptimization.h"
-#include <stdlib.h>
+#include <cstdlib>
 #include "ProblemTest.h"
 
 #ifdef __GNUC__

@@ -26,7 +26,7 @@ USA.
 #ifndef STATVAR_H
 #define STATVAR_H
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 #include "Array.h"
 #include "mystl.h"

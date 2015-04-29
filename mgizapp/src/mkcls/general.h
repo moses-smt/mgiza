@@ -35,7 +35,7 @@ USA.
 #ifdef NeXT
 #include <minmax.h>
 #endif
-#include <string.h>
+#include <cstring>
 
 
 

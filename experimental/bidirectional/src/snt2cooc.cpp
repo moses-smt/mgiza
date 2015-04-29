@@ -5,8 +5,8 @@
 #include <map>
 #include <vector>
 #include <set>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 using namespace std;
 

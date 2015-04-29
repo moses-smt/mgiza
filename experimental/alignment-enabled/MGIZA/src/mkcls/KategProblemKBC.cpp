@@ -24,7 +24,7 @@ USA.
 
 
 
-#include <stdlib.h>
+#include <cstdlib>
 #include "KategProblem.h"
 
 double rhoLo=0.75; 

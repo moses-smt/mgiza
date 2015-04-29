@@ -23,7 +23,7 @@ USA.
 #ifndef HEADER_Pointer_DEFINED
 #define HEADER_Pointer_DEFINED
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 
 template<class T>

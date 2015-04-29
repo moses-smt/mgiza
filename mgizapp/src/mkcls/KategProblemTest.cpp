@@ -32,8 +32,8 @@ USA.
 #include "RRTOptimization.h"
 #include "GDAOptimization.h"
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include <string>
 #include <strstream>
 

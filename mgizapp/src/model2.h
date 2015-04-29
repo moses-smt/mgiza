@@ -22,7 +22,7 @@ USA.
 #ifndef _model2_h
 #define _model2_h 1
 
-#include <assert.h>
+#include <cassert>
  
 #include <iostream>
 #include <algorithm>
@@ -40,8 +40,8 @@ using __gnu_cxx::hash_map;
 #endif
 
 #include <fstream>
-#include <math.h>
-#include <time.h>
+#include <cmath>
+#include <ctime>
 
 #include "TTables.h"
 #include "ATables.h" 

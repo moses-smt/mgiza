@@ -31,9 +31,9 @@ USA.
 #include "TAOptimization.h"
 #include "GDAOptimization.h"
 #include "MYOptimization.h"
-#include <stdio.h>
+#include <cstdio>
 #include "general.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 short ProblemTestVerboseMode=1;
 ofstream *PrintBestTo=0,*PrintBestTo2=0;

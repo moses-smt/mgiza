@@ -27,7 +27,7 @@ USA.
 // It is assumed that b > 1, something like b = 1.001
 
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 
 //#define  MAX(A,B) ((A) > (B) ? (A) : (B))

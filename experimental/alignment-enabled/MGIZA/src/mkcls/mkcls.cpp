@@ -24,10 +24,10 @@ USA.
 
 
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
-#include <stdlib.h>
-#include <ctype.h>
+#include <cstdlib>
+#include <cctype>
 #include "general.h"
 
 #include "KategProblem.h"

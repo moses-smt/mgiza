@@ -34,7 +34,7 @@ void imyerror(int line,const char *file,const char *expression);
 
 #define vassert(expr) do {} while(0)
 
-#include <assert.h>
+#include <cassert>
 
 #endif
 

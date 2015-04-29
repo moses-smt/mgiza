@@ -4,8 +4,8 @@
 #include <fstream>
 #include <map>
 #include <vector>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 
 using namespace std;
 

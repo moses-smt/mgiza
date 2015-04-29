@@ -25,8 +25,8 @@ USA.
 //  It is assumed that b > 1, something like b = 1.001;
 
 #include "logprob.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include <iostream>
 #include <fstream>
 #include <string>

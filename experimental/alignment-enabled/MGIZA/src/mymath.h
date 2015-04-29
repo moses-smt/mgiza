@@ -5,5 +5,5 @@
 #ifndef HEADER_MYMATH_DEFINED
 #define HEADER_MYMATH_DEFINED
 inline double mfabs(double x){return (x<0)?(-x):x;}
-#include <math.h>
+#include <cmath>
 #endif

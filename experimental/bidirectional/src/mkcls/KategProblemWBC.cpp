@@ -24,7 +24,7 @@ USA.
 
 
 
-#include <stdlib.h>
+#include <cstdlib>
 #include "KategProblem.h"
 
 static int oneFreqCompareSteigend(const void *p,const void *j)

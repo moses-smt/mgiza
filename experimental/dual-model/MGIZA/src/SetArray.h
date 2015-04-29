@@ -11,8 +11,8 @@ be threadsafe
 #include <vector>
 #include "defs.h"
 #include "vocab.h"  
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <pthread.h>
 #include "syncObj.h"
 

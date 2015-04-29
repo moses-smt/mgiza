@@ -22,7 +22,7 @@ USA.
 #ifndef utility_h
 #define utility_h
 #include <iostream>
-#include <time.h>
+#include <ctime>
 #include "Perplexity.h"
 #include "Vector.h"
 #include "TTables.h"

@@ -22,8 +22,8 @@ USA.
 #ifndef _defs_h
 #define _defs_h 1
 #include <string>
-#include <math.h>
-#include <limits.h>
+#include <cmath>
+#include <climits>
 
 const int TRANSFER_SIMPLE=1;
 const int TRANSFER=0;

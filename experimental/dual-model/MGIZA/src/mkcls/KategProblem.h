@@ -30,7 +30,7 @@ USA.
 #define KATEG_OPT_H
 #include <string>
 
-#include <stdlib.h>
+#include <cstdlib>
 #include "Problem.h"
 
 extern double rhoLo; 

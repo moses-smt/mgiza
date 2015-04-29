@@ -29,7 +29,7 @@ USA.
 #include <string>
 #include "Globals.h"
 #include <fstream>
-#include <string.h>
+#include <cstring>
 
 #ifdef WIN32
 #define strcasecmp _strcmpi

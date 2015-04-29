@@ -33,8 +33,8 @@ USA.
 #include "getSentence.h"
 #include <iostream>
 #include <strstream>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <boost/algorithm/string.hpp>
 #include <vector>
 #include <set>

@@ -20,7 +20,7 @@ USA.
 
 */
 #include <strstream>
-#include <time.h>
+#include <ctime>
 #include <set>
 #include "defs.h"
 #include "vocab.h" 

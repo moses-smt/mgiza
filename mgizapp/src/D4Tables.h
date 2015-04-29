@@ -22,7 +22,7 @@
  */
 #ifndef _d4tables_h_define
 #define _d4tables_h_define
-#include <math.h>
+#include <cmath>
 #include "WordClasses.h"
 #include "Globals.h"
 #include "myassert.h"

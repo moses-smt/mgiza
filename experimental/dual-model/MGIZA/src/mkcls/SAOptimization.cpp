@@ -24,7 +24,7 @@ USA.
 
 
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 
 #include "SAOptimization.h"

@@ -22,10 +22,10 @@ USA.
 #ifndef FILE_SPEC_H
 #define FILE_SPEC_H
 
-#include <time.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include <ctime>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
 
 /* This function returns a string, locally called file_spec. This
    string is the concatenation of the date and time of execution

@@ -41,8 +41,8 @@ USA.
 #include <fstream>
 #include <string>
 #include <set>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <pthread.h>
 #include "Vector.h"
 #include "defs.h"
