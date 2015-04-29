@@ -29,7 +29,7 @@ USA.
 #include "KategProblem.h"
 
 #ifdef WIN32
-#include <boost\math\special_functions\erf.hpp> 
+#include <boost/math/special_functions/erf.hpp>
 using namespace boost::math;
 #endif
 
