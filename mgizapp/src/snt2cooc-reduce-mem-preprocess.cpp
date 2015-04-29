@@ -33,12 +33,10 @@ int main(int argc,char **argv)
         cerr << "Converts GIZA++ snt-format into plain text.\n";
         exit(1);
     }
-    bool counts=0;
     if( argc==6 )
     {
         if(string(argv[4])!="-counts")
             cerr << "ERROR: wrong option " << argv[5] << endl;
-        counts=1;
         maxElems=10000000;
     }
     ifstream v1(argv[1]),v2(argv[2]),t(argv[3]);
@@ -47,7 +45,6 @@ int main(int argc,char **argv)
     readVoc(v2,voc2);
     string line1,line2,line3;
     int nLine=0;
-    int totalElems=0;
     while(getline(t,line1)&&getline(t,line2)&&getline(t,line3))
     {
         istrstream eingabe1(line1.c_str()),eingabe2(line2.c_str()),eingabe3(line3.c_str());

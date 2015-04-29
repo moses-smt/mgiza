@@ -373,7 +373,7 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
 	//d5m.makeWordClasses(Elist, Flist, SourceVocabFilename+".classes",
 	//		TargetVocabFilename+".classes");
 	time_t it_st, st, it_fn, fn;
-	bool dump_files = false;
+	bool dump_files;
 	string tfile, tfile_actual, dfile, afile, nfile, nfile_actual, p0file,
 			alignfile, number, test_alignfile, d4file, d5file, zeroFertFile;
 	st = time(NULL);
@@ -697,11 +697,10 @@ int model3::viterbi_hto3() {
 
 	double minErrors=1.0;
 	int minIter=0;
-	time_t it_st, st, it_fn, fn;
 	bool dump_files = false;
 	string tfile, tfile_actual, dfile, afile, nfile, nfile_actual, p0file,
 			alignfile, number, test_alignfile, d4file, d5file, zeroFertFile;
-	st = time(NULL);
+	time_t st = time(NULL);
 	cout << "Starting HMM To Model 3 Viterbi Training";
 	cout << "\n hto3 Training Started at: "<< my_ctime(&st) << '\n';
 	string modelName="H23";
@@ -778,11 +777,10 @@ int model3::viterbi_3to3() {
 	bool final = false;
 	double minErrors=1.0;
 	int minIter=0;
-	time_t it_st, st, it_fn, fn;
 	bool dump_files = false;
 	string tfile, tfile_actual, dfile, afile, nfile, nfile_actual, p0file,
 			alignfile, number, test_alignfile, d4file, d5file, zeroFertFile;
-	st = time(NULL);
+	time_t st = time(NULL);
 	cout << "Starting HMM To Model 3 Viterbi Training";
 	cout << "\n hto3 Training Started at: "<< my_ctime(&st) << '\n';
 	string modelName="H23";
@@ -857,8 +855,6 @@ int model3::viterbi_3to3() {
 
 d4model* model3::viterbi_3to4() {
 	double minErrors=1.0;
-	int minIter=0;
-	time_t it_st, st, it_fn, fn;
 	bool final = false;
 	bool dump_files = false;
 	if(ewordclasses==NULL)
@@ -873,7 +869,7 @@ d4model* model3::viterbi_3to4() {
 
 	string tfile, tfile_actual, dfile, afile, nfile, nfile_actual, p0file,
 			alignfile, number, test_alignfile, d4file, d5file, zeroFertFile;
-	st = time(NULL);
+	time_t st = time(NULL);
 	cout << "Starting Model 3 To Model 4 Viterbi Training";
 	cout << "\n hto3 Training Started at: "<< my_ctime(&st) << '\n';
 	string modelName="34";
@@ -938,10 +934,7 @@ d4model* model3::viterbi_3to4() {
 	viterbi_loop(*testPerp, *testViterbiPerp, *testHandler,
 			dump_files, test_alignfile.c_str(), false, model);
 #endif	
-	if (errorsAL()<minErrors) {
-		minErrors=errorsAL();
-		minIter=it;
-	}
+	if (errorsAL()<minErrors) minErrors=errorsAL();
 	return dm1;
 }
 
@@ -1080,12 +1073,10 @@ void multi_thread_m34_em(model3& m3, int ncpu, int Model3_Iterations,
 	string tfile, tfile_actual, dfile, afile, nfile, nfile_actual, p0file,
 			alignfile, number, test_alignfile, d4file, d5file, zeroFertFile;
 	vector<model3_align_struct> threads;
-	bool dump_files = false;
+	bool dump_files;
 	threads.resize(ncpu);
 	time_t it_st, st, it_fn, fn;
 	int i, j;
-	int H = 0;
-	int T4 = Model3_Iterations;
 	ncpu=1;
 	vector<amodel<COUNT> > counts;
 	counts.resize(ncpu);

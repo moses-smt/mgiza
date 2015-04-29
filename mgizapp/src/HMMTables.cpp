@@ -318,7 +318,6 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 		}
 		cerr << "Reading HMM table from " << alprob << endl;
 		string strLine="";
-		bool expect_data = false;
 		while (!ifs.eof()) {
 			strLine = "";
 			getline(ifs, strLine);
@@ -354,7 +353,6 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 		}
 		cerr << "Reading HMM table from " << alpredict << endl;
 		string strLine="";
-		bool expect_data = false;
 		while (!ifs.eof()) {
 			strLine = "";
 			getline(ifs, strLine);
@@ -392,7 +390,6 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 			return false;
 		}
 		string strLine="";
-		bool expect_data = false;
 		while (!ifs.eof()) {
 			strLine = "";
 			getline(ifs, strLine);
@@ -435,7 +432,6 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 			return false;
 		}
 		string strLine="";
-		bool expect_data = false;
 		while (!ifs.eof()) {
 			strLine = "";
 			getline(ifs, strLine);
@@ -508,7 +504,6 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 			ht.init_alpha.begin(); i!=ht.init_alpha.end(); i++) {
 		hmmentry_type& alp = doGetAlphaInit(i->first);
 		int j;
-		double v;
 		for (j=0; j<alp.first.size(); j++) {
 			alp.first[j]+=i->second.first[j];
 		}
@@ -517,7 +512,6 @@ template<class CLS, class MAPPERCLASSTOSTRING> bool HMMTables<CLS,
 			ht.init_beta.begin(); i!=ht.init_beta.end(); i++) {
 		hmmentry_type&alp = doGetBetaInit(i->first);
 		int j;
-		double v;
 		for (j=0; j<alp.first.size(); j++) {
 			alp.first[j]+=i->second.first[j];
 		}

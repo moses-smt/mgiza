@@ -405,7 +405,7 @@ void model3::viterbi_loop_with_tricks(Perplexity& perp, Perplexity& viterbiPerp,
         writeNBestErrorsFile= new ofstream(x.c_str());
     }
     ofstream *of3=0;
-    PositionIndex i, j, l, m ;
+    PositionIndex l, m ;
     ofstream of2;
     int pair_no;
     int HillClimbingSteps=0;

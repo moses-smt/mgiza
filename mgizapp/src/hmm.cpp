@@ -112,7 +112,6 @@ int hmm::em_with_tricks(int noIterations,bool dumpCount,
     int dumpFreq=ModelH_Dump_Freq;
     time_t it_st, st, it_fn, fn;
     string tfile, afile,afileh, number, alignfile, test_alignfile;
-    int pair_no = 0;
     bool dump_files = false ;
     ofstream of2 ;
     st = time(NULL) ;
@@ -122,7 +121,6 @@ int hmm::em_with_tricks(int noIterations,bool dumpCount,
     vector<hmm_em_loop_t> th;
     th.resize(NCPUS);
     for(int it=1; it <= noIterations ; it++){
-        pair_no = 0;
         it_st = time(NULL) ;
         cout << endl << "-----------\n" << modelName << ": Iteration " << it << '\n';
         dump_files = (dumpFreq != 0) && ((it % dumpFreq) == 0 || it == noIterations) && !NODUMPS;

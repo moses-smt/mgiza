@@ -1138,8 +1138,6 @@ int main(int argc, char* argv[]) {
 
 	int a=-1;
 
-	double errors=0.0;
-
 	if (OldADBACKOFF!=0)
 		cerr
 				<< "WARNING: Parameter -adBackOff does not exist further; use CompactADTable instead.\n";
@@ -1149,7 +1147,7 @@ int main(int argc, char* argv[]) {
 				<< " > " << MAX_SENTENCE_LENGTH_ALLOWED << '\n';
 
 	// Actually word is done here
-	errors=StartTraining(a);
+	StartTraining(a);
 
 	fn = time(NULL); // finish time
 

@@ -90,20 +90,16 @@ int model1::em_thread(int noIterations, int nthread, /*Perplexity& perp, sentenc
 			     Dictionary& dictionary, bool useDict /*Perplexity* testPerp, sentenceHandler* testHandler, 
 										     Perplexity& trainViterbiPerp, Perplexity* testViterbiPerp */ )
 {
-    double minErrors=1.0;int minIter=0;
     string modelName="Model1",shortModelName="1";
     char b[2];
     b[1] = '\0';
     b[0] = '0' + nthread;
-    time_t st, it_st, fn, it_fn;
+    time_t st = time(NULL);
     string tfile, number, alignfile, test_alignfile;
-    int pair_no;
     bool dump_files = false ;
     cout << "==========================================================\n";
     cout << modelName << " Training Started at: "<< my_ctime(&st) << "\n";  
     int it = noIterations;
-    pair_no = 0 ;
-    it_st = time(NULL);
     cout <<  "-----------\n" << modelName << ": Iteration " << it << '\n';
     dump_files = (Model1_Dump_Freq != 0) &&  ((it % Model1_Dump_Freq)  == 0 || noIterations == it) && !NODUMPS ;
 //    dump_files = true;
@@ -116,7 +112,7 @@ int model1::em_thread(int noIterations, int nthread, /*Perplexity& perp, sentenc
     alignfile = alignfile + b;
 
     em_loop(it,perp, sHandler1, false, dump_files, alignfile.c_str(), dictionary, useDict, trainViterbiPerp); 
-    return minIter;
+    return 0;
 }
 
 int model1::em_with_tricks(int noIterations, /*Perplexity& perp, sentenceHandler& sHandler1, */
@@ -128,14 +124,12 @@ int model1::em_with_tricks(int noIterations, /*Perplexity& perp, sentenceHandler
     string modelName="Model1",shortModelName="1";
     time_t st, it_st, fn, it_fn;
     string tfile, number, alignfile, test_alignfile;
-    int pair_no;
     bool dump_files = false ;
     st = time(NULL);
     sHandler1.rewind();
     cout << "==========================================================\n";
     cout << modelName << " Training Started at: "<< my_ctime(&st) << "\n";  
     for(int it = 1; it <= noIterations; it++){
-        pair_no = 0 ;
         it_st = time(NULL);
         cout <<  "-----------\n" << modelName << ": Iteration " << it << '\n';
         dump_files = (Model1_Dump_Freq != 0) &&  ((it % Model1_Dump_Freq)  == 0 || it == noIterations) && !NODUMPS ;
@@ -407,17 +401,15 @@ void model1::em_loop(int it,Perplexity& perp, sentenceHandler& sHandler1, bool s
 CTTableDiff<COUNT,PROB>* model1::one_step_em(int it, bool seedModel1, 
     Dictionary& dictionary, bool useDict){
         CTTableDiff<COUNT,PROB> *diff = new CTTableDiff<COUNT,PROB>();
-        double minErrors=1.0;int minIter=0;
+        double minErrors=1.0;
         string modelName="Model1",shortModelName="1";
-        time_t st, it_st, fn, it_fn;
+        time_t st, it_st, fn;
         string tfile, number, alignfile, test_alignfile;
-        int pair_no;
         bool dump_files = false ;
         st = time(NULL);
         sHandler1.rewind();
         cout << "==========================================================\n";
         cout << modelName << " Training Started at: "<< my_ctime(&st) << "\n";  
-        pair_no = 0 ;
         it_st = time(NULL);
         cout <<  "-----------\n" << modelName << ": Iteration " << it << '\n';
         dump_files = (Model1_Dump_Freq != 0) &&  ((it % Model1_Dump_Freq)  == 0) && !NODUMPS ;
@@ -434,10 +426,7 @@ CTTableDiff<COUNT,PROB>* model1::one_step_em(int it, bool seedModel1,
                   dump_files, alignfile.c_str(), dictionary, useDict, trainViterbiPerp); 
         //if (testPerp && testHandler) // calculate test perplexity
         //    em_loop(it,*testPerp, *testHandler, seedModel1, dump_files, test_alignfile.c_str(), dictionary, useDict, *testViterbiPerp, true); 
-        if( errorsAL()<minErrors ){
-            minErrors=errorsAL();
-            minIter=it;
-        }
+        if( errorsAL()<minErrors ) minErrors=errorsAL();
         fn = time(NULL) ;
         cout <<  "Partial " << modelName << " Training took: " << difftime(fn, it_st) << " seconds\n";
         return diff;        

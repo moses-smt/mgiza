@@ -16,16 +16,16 @@
 #define	CMDBOOLTYPE	9
 
 typedef struct {
-	char	*Name;
-	int	Idx;
+	const char *Name;
+	int Idx;
 } Enum_T;
 
 typedef struct {
-	int	Type;
-	char	*Name,
-		*ArgStr;
-	void	*Val,
-		*p;
+	int Type;
+	const char *Name,
+		   *ArgStr;
+	void *Val,
+	     *p;
 } Cmd_T;
 
 #ifdef  __cplusplus
