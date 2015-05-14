@@ -227,7 +227,7 @@ int printsrctotgt(fstream& out,int m,int *a,int n,int* b){
 //to represent the grow alignment as the unionalignment of a
 //directed and inverted alignment
 
-int printgrow(fstream& out,int m,int *a,int n,int* b, bool diagonal=false,bool final=false,bool bothuncovered=false){
+int printgrow(fstream& out,int m,int *a,int n,int* b, bool diagonal=false,bool isfinal=false,bool bothuncovered=false){
    
    ostringstream sout;
    
@@ -321,7 +321,7 @@ int printgrow(fstream& out,int m,int *a,int n,int* b, bool diagonal=false,bool f
       }
    }
       
-      if (final){
+      if (isfinal){
          for (k=unionalignment.begin();k!=unionalignment.end();k++)
             if (A[k->first][k->second]==1)
             {            
@@ -390,10 +390,10 @@ int printgrow(fstream& out,int m,int *a,int n,int* b, bool diagonal=false,bool f
 int main(int argc, char** argv){
 	
 int alignment=0;   
-char* input="/dev/stdin";
-char* output="/dev/stdout";
+const char* input="/dev/stdin";
+const char* output="/dev/stdout";
 int diagonal=false;
-int final=false;
+int isfinal=false;
 int bothuncovered=false;
 
 	
@@ -401,8 +401,8 @@ int bothuncovered=false;
                  "alignment", CMDENUMTYPE,  &alignment, AlignEnum,
                  "d", CMDENUMTYPE,  &diagonal, BoolEnum,
                  "diagonal", CMDENUMTYPE,  &diagonal, BoolEnum,
-                 "f", CMDENUMTYPE,  &final, BoolEnum,
-                 "final", CMDENUMTYPE,  &final, BoolEnum,
+                 "f", CMDENUMTYPE,  &isfinal, BoolEnum,
+                 "final", CMDENUMTYPE,  &isfinal, BoolEnum,
                  "b", CMDENUMTYPE,  &bothuncovered, BoolEnum,  
                  "both", CMDENUMTYPE,  &bothuncovered, BoolEnum,  
                  "i", CMDSTRINGTYPE, &input,
@@ -410,7 +410,7 @@ int bothuncovered=false;
                  "v", CMDENUMTYPE,  &verbose, BoolEnum,
                  "verbose", CMDENUMTYPE,  &verbose, BoolEnum,
 
-                 (char *)NULL);
+                 NULL);
   
 	GetParams(&argc, &argv, (char*) NULL);
    
@@ -464,11 +464,11 @@ int bothuncovered=false;
 			break;
       case GROW:
      cerr << "symal: computing grow alignment: diagonal ("
-         << diagonal << ") final ("<< final << ")" 
+         << diagonal << ") final ("<< isfinal << ")" 
          <<  "both-uncovered (" << bothuncovered <<")\n"; 
          
          while(getals(inp,m,a,n,b,out)) 
-               printgrow(out,m,a,n,b,diagonal,final,bothuncovered);
+               printgrow(out,m,a,n,b,diagonal,isfinal,bothuncovered);
          
          break;
       case TGTTOSRC:

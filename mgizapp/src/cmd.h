@@ -33,7 +33,7 @@ extern "C" {
 #endif
 
 #if defined(__STDC__)  || defined(WIN32)
-int DeclareParams(char *, ...);
+int DeclareParams(const char *, ...);
 #else
 
 int DeclareParams();

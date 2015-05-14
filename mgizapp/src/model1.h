@@ -71,13 +71,22 @@ class report_info{
 	      sentenceHandler* _testHandler,
 	      Perplexity& _trainViterbiPerp,
 	      Perplexity* _testViterbiPerp)
-    : perp(_perp),sHandler1(_sHandler1),testPerp(_testPerp),testHandler(_testHandler),trainViterbiPerp(_trainViterbiPerp),testViterbiPerp(_testViterbiPerp)
+    :
+        perp(_perp),
+        sHandler1(_sHandler1),
+        testPerp(_testPerp),
+        testHandler(_testHandler),
+        trainViterbiPerp(_trainViterbiPerp),
+        testViterbiPerp(_testViterbiPerp)
     {}
     
-    report_info(const report_info & rp):
-        perp(rp.perp),sHandler1(rp.sHandler1), testPerp(rp.testPerp),
-        trainViterbiPerp(rp.trainViterbiPerp), testViterbiPerp(rp.testViterbiPerp),
-        testHandler(rp.testHandler)
+    report_info(const report_info &rp) :
+        perp(rp.perp),
+        sHandler1(rp.sHandler1),
+        testPerp(rp.testPerp),
+        testHandler(rp.testHandler),
+        trainViterbiPerp(rp.trainViterbiPerp),
+        testViterbiPerp(rp.testViterbiPerp)
     {}
 };
 

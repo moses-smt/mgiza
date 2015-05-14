@@ -1,6 +1,7 @@
 
 // $Id: cmd.c 1307 2007-03-14 22:22:36Z hieuhoang1972 $
 
+#include	<stdarg.h>
 #include	<stdio.h>
 #include	<stdlib.h>
 #include	<ctype.h>
@@ -52,19 +53,7 @@ static int	Scan(),
 static Cmd_T	cmds[MAXPARAM+1];
 static char	*SepString = " \t\n";
 
-#if defined(__STDC__)
-#include	<stdarg.h>
-int DeclareParams(char *ParName, ...)
-#else
-#ifdef WIN32
-int DeclareParams(char *ParName, ...)
-#else
-#include	<varargs.h>
-int DeclareParams(ParName, va_alist)
-char	*ParName;
-va_dcl
-#endif
-#endif
+int DeclareParams(const char *ParName, ...)
 {
 	va_list		args;
 	static int	ParamN = 0;
@@ -72,11 +61,7 @@ va_dcl
 			c;
 	char		*s;
 
-#if defined(__STDC__) || defined (WIN32)
 	va_start(args, ParName);
-#else
-	va_start(args);
-#endif
 	for(;ParName;) {
 		if(ParamN==MAXPARAM) {
 			fprintf(stderr, "Too many parameters !!\n");

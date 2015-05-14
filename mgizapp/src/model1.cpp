@@ -32,12 +32,18 @@ extern short NCPUS;
 GLOBAL_PARAMETER2(int,Model1_Dump_Freq,"MODEL 1 DUMP FREQUENCY","t1","dump frequency of Model 1",PARLEV_OUTPUT,0);
 int NumberOfVALIalignments=100;
 
-model1::model1(const char* efname, vcbList& evcblist, vcbList& fvcblist,tmodel<COUNT, PROB>&_tTable,Perplexity& _perp,
-	      sentenceHandler& _sHandler1,
-	      Perplexity* _testPerp,
-	      sentenceHandler* _testHandler,
-	      Perplexity& _trainViterbiPerp,
-	      Perplexity* _testViterbiPerp):
+model1::model1(
+    const char* efname,
+    vcbList& evcblist,
+    vcbList& fvcblist,
+    tmodel<COUNT, PROB> &_tTable,
+    Perplexity & _perp,
+    sentenceHandler& _sHandler1,
+    Perplexity* _testPerp,
+    sentenceHandler* _testHandler,
+    Perplexity& _trainViterbiPerp,
+    Perplexity* _testViterbiPerp)
+    :
   report_info(_perp,_sHandler1,_testPerp,_testHandler,_trainViterbiPerp,_testViterbiPerp),
   efFilename(efname), Elist(evcblist), Flist(fvcblist), 
   eTotalWCount(Elist.totalVocab()), fTotalWCount(Flist.totalVocab()), 
@@ -45,11 +51,18 @@ model1::model1(const char* efname, vcbList& evcblist, vcbList& fvcblist,tmodel<C
   evlist(Elist.getVocabList()), fvlist(Flist.getVocabList())
 {}
 
-model1::model1 (const model1& m1, int _threadID):
-report_info(m1),efFilename(m1.efFilename),
-Elist(m1.Elist),Flist(m1.Flist),eTotalWCount(m1.eTotalWCount),fTotalWCount(m1.fTotalWCount),
-noEnglishWords(m1.noEnglishWords),noFrenchWords(m1.noFrenchWords),tTable(m1.tTable),
-evlist(m1.evlist),fvlist(m1.fvlist)
+model1::model1(const model1& m1, int _threadID) :
+  report_info(m1),
+  efFilename(m1.efFilename),
+  Elist(m1.Elist),
+  Flist(m1.Flist),
+  eTotalWCount(m1.eTotalWCount),
+  fTotalWCount(m1.fTotalWCount),
+  noEnglishWords(m1.noEnglishWords),
+  noFrenchWords(m1.noFrenchWords),
+  tTable(m1.tTable),
+  evlist(m1.evlist),
+  fvlist(m1.fvlist)
 {}
 
 void model1::initialize_table_uniformly(sentenceHandler& sHandler1){
