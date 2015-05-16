@@ -8,14 +8,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -30,10 +30,10 @@ USA.
 
 extern float PROB_SMOOTH,MINCOUNTINCREASE;
 extern bool Verbose, Log, Peg, Transfer, Transfer2to3, useDict ;
-extern string Prefix, LogFilename, OPath, 
-  SourceVocabFilename, TargetVocabFilename, CorpusFilename, TestCorpusFilename, 
-  SourceVocabClassesFilename, TargetVocabClassesFilename,
-  t_Filename, a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
+extern string Prefix, LogFilename, OPath,
+       SourceVocabFilename, TargetVocabFilename, CorpusFilename, TestCorpusFilename,
+       SourceVocabClassesFilename, TargetVocabClassesFilename,
+       t_Filename, a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
 extern ofstream logmsg ;
 extern Mutex logmsg_lock;
 extern double M5P0,P0 ;

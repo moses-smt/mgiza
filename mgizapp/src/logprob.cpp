@@ -8,14 +8,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -76,24 +76,21 @@ int LogProb::Initialize()
   int i;
   std::cerr << "Building integer logs conversion tables\n";
   ntof[0] = 0 ;
-  
-  for (i=nmin+1; i<=nmax; ++i) 
-    {
-      double x = i;
-      ntof[i-nmin] = exp(x*logb2);
-      
-    }
-  for (i=tblbnd; i<=0; ++i) 
-    {
-      double x = 1.0 + pow(b, i);
-      addtbl[i-tblbnd] = round(log(x)/logb2);
-    }
+
+  for (i=nmin+1; i<=nmax; ++i) {
+    double x = i;
+    ntof[i-nmin] = exp(x*logb2);
+
+  }
+  for (i=tblbnd; i<=0; ++i) {
+    double x = 1.0 + pow(b, i);
+    addtbl[i-tblbnd] = round(log(x)/logb2);
+  }
   double sqrtb = exp(0.5*logb2);
-  for (i=0; i<=-tblbnd; ++i) 
-    {
-      double x = sqrtb * pow(b, i) - 1.0;
-      subtbl[i] = round(log(x)/logb2);
-    }
+  for (i=0; i<=-tblbnd; ++i) {
+    double x = sqrtb * pow(b, i) - 1.0;
+    subtbl[i] = round(log(x)/logb2);
+  }
   //      if (toolsRoot)
   //	{
   //      ofstream ofs(filename.c_str());
@@ -118,9 +115,9 @@ int LogProb::Initialize()
 
 void LogProb::FreeTables()
 {
-   delete [] addtbl;
-   delete [] subtbl;
-   delete [] ntof;
+  delete [] addtbl;
+  delete [] subtbl;
+  delete [] ntof;
 }
 
 //---------------------------------------------------------------------------
@@ -129,22 +126,20 @@ void LogProb::FreeTables()
 
 
 // Subtract two logarithm numbers. Use the following method:
-// b**n - b**m = b**m( b**(n-m) - 1 ), assuming n >= m. 
-LogProb& LogProb::operator-=(const LogProb &subs) 
+// b**n - b**m = b**m( b**(n-m) - 1 ), assuming n >= m.
+LogProb& LogProb::operator-=(const LogProb &subs)
 {
   if (subs.logr == zeron)
     return *this;
   int a = logr - subs.logr;
-  if (a <= 0)
-    {
-      if (a < 0)
-	{
-	  std::cerr << "WARNING(logprob): Invalid arguments to nsub" <<(*this)<< " " << subs << std::endl;
-	  //abort();
-	}
-      logr = zeron;
-      return *this;
+  if (a <= 0) {
+    if (a < 0) {
+      std::cerr << "WARNING(logprob): Invalid arguments to nsub" <<(*this)<< " " << subs << std::endl;
+      //abort();
     }
+    logr = zeron;
+    return *this;
+  }
   if (a > -tblbnd)
     return *this;
   logr = subs.logr + subtbl[a];

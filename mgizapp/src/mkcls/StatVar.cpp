@@ -9,14 +9,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -27,10 +27,10 @@ USA.
 #include <iostream>
 #include <cstdlib>
 
-double compareStatVarQuantil=-1; 
+double compareStatVarQuantil=-1;
 
 StatV::~StatV() {}
-                               
+
 
 int doublecompare(const void *p,const void *j)
 {
@@ -46,16 +46,13 @@ int compareStatVar(const void *p,const void *j)
 {
   double a;
   double b;
-  if(compareStatVarQuantil>=0)
-    {
-      a=((StatVar *)p)->quantil(compareStatVarQuantil);
-      b=((StatVar *)j)->quantil(compareStatVarQuantil);
-    }
-  else
-    {
-      a=((StatVar *)p)->getMean();
-      b=((StatVar *)j)->getMean();
-    }
+  if(compareStatVarQuantil>=0) {
+    a=((StatVar *)p)->quantil(compareStatVarQuantil);
+    b=((StatVar *)j)->quantil(compareStatVarQuantil);
+  } else {
+    a=((StatVar *)p)->getMean();
+    b=((StatVar *)j)->getMean();
+  }
   if(a==b)
     return 0;
   if(a<b)
@@ -69,14 +66,12 @@ double StatVar::getSigmaSmaller()
 {
   double ss=0;
   int ns=0;
-  for(int i=0;i<n;i++)
-    {
-      if( values[i]<getMean() )
-	{
-	  ss+=(values[i]-getMean())*(values[i]-getMean());
-	  ns++;
-	}
+  for(int i=0; i<n; i++) {
+    if( values[i]<getMean() ) {
+      ss+=(values[i]-getMean())*(values[i]-getMean());
+      ns++;
     }
+  }
   if( ss/ns>0 )
     return sqrt(ss/ns);
   else
@@ -86,12 +81,11 @@ double StatVar::getSigmaBigger()
 {
   double ss=0;
   int ns=0;
-  for(int i=0;i<n;i++)
-    if( values[i]>getMean() )
-      {
-	ss+=(values[i]-getMean())*(values[i]-getMean());
-	ns++;
-      }
+  for(int i=0; i<n; i++)
+    if( values[i]>getMean() ) {
+      ss+=(values[i]-getMean())*(values[i]-getMean());
+      ns++;
+    }
   if( ss/ns>0 )
     return sqrt(ss/ns);
   else
@@ -99,42 +93,39 @@ double StatVar::getSigmaBigger()
 }
 
 
-  
+
 void StatV::dumpOn(ostream &strm)
 {
-  strm << "MEAN: " << getMean() << " (" << smallest << "-" << biggest 
-    << ")  SIGMA:" << getSigma()<< "   ";
+  strm << "MEAN: " << getMean() << " (" << smallest << "-" << biggest
+       << ")  SIGMA:" << getSigma()<< "   ";
 }
 
 
-  
+
 double StatVar::quantil(double percent)
 {
   int index=(int)(n*percent);
   if(index==n)
     index=n-1;
   assert(index>=0&&index<n);
-  if(sortedFlag==0)
-    {
-      qsort(values.getPointerToData(),n,sizeof(double),doublecompare);
-      assert(n<=values.size());
-      sortedFlag=1;
-    }
-  if(index<0)
-    {
-      cerr << "WARNING: StatVar.cc\n";
-      return 0.0;
-    }
-  else
+  if(sortedFlag==0) {
+    qsort(values.getPointerToData(),n,sizeof(double),doublecompare);
+    assert(n<=values.size());
+    sortedFlag=1;
+  }
+  if(index<0) {
+    cerr << "WARNING: StatVar.cc\n";
+    return 0.0;
+  } else
     return values[index];
 }
 
-  
+
 void StatVar::printValues(ostream &strm)
 {
   qsort(values.getPointerToData(),n,sizeof(double),doublecompare);
   assert(n<=values.size());
-  for(int i=0;i<n;i++)
+  for(int i=0; i<n; i++)
     strm << i/(double)n << " " << values[i] << endl;
   return;
 }

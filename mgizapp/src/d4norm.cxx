@@ -51,78 +51,82 @@ GLOBAL_PARAMETER(short,CompactAlignmentFormat,"CompactAlignmentFormat","0: detai
 GLOBAL_PARAMETER2(bool,NODUMPS,"NODUMPS","NO FILE DUMPS? (Y/N)","1: do not write any files",PARLEV_OUTPUT,0);
 
 GLOBAL_PARAMETER(WordIndex, MAX_FERTILITY, "MAX_FERTILITY",
-		"maximal fertility for fertility models", PARLEV_EM, 10);
+                 "maximal fertility for fertility models", PARLEV_EM, 10);
 
 using namespace std;
 string Prefix, LogFilename, OPath, Usage, SourceVocabFilename,
-		TargetVocabFilename, CorpusFilename, TestCorpusFilename, t_Filename,
-		SourceVocabClassesFilename, TargetVocabClassesFilename,
-		a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
+       TargetVocabFilename, CorpusFilename, TestCorpusFilename, t_Filename,
+       SourceVocabClassesFilename, TargetVocabClassesFilename,
+       a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
 
 
-int main(int argc, char* argv[]){
-	if(argc < 5){
-		cerr << "Usage: " << argv[0] << "  vcb1 vcb2 outputFile baseFile [additional1 ]..." << endl;
-		return 1;
-	}
-	WordClasses ewc,fwc;
-	d4model d4m(MAX_SENTENCE_LENGTH,ewc,fwc);
-	Vector<WordEntry> evlist,fvlist;
-	vcbList eTrainVcbList(evlist), fTrainVcbList(fvlist);
-	TargetVocabFilename = argv[2];
-	SourceVocabFilename = argv[1];
-	eTrainVcbList.setName(argv[1]);
-	fTrainVcbList.setName(argv[2]);
-	eTrainVcbList.readVocabList();
-	fTrainVcbList.readVocabList();
-	SourceVocabClassesFilename = argv[1];
-	TargetVocabClassesFilename = argv[2];
-	SourceVocabClassesFilename += ".classes";
-	TargetVocabClassesFilename += ".classes";
-	d4m.makeWordClasses(eTrainVcbList, fTrainVcbList, SourceVocabClassesFilename.c_str(), TargetVocabClassesFilename.c_str(),eTrainVcbList,fTrainVcbList);
-	// Start iteration:
-	for(int i =4; i< argc ; i++){
-		string name = argv[i];
-		string nameA = name ;
-		string nameB = name + ".b";
-		if(d4m.augCount(nameA.c_str(),nameB.c_str())){
-			cerr << "Loading (d4) table " << nameA << "/" << nameB  << " OK" << endl;
+int main(int argc, char* argv[])
+{
+  if(argc < 5) {
+    cerr << "Usage: " << argv[0] << "  vcb1 vcb2 outputFile baseFile [additional1 ]..." << endl;
+    return 1;
+  }
+  WordClasses ewc,fwc;
+  d4model d4m(MAX_SENTENCE_LENGTH,ewc,fwc);
+  Vector<WordEntry> evlist,fvlist;
+  vcbList eTrainVcbList(evlist), fTrainVcbList(fvlist);
+  TargetVocabFilename = argv[2];
+  SourceVocabFilename = argv[1];
+  eTrainVcbList.setName(argv[1]);
+  fTrainVcbList.setName(argv[2]);
+  eTrainVcbList.readVocabList();
+  fTrainVcbList.readVocabList();
+  SourceVocabClassesFilename = argv[1];
+  TargetVocabClassesFilename = argv[2];
+  SourceVocabClassesFilename += ".classes";
+  TargetVocabClassesFilename += ".classes";
+  d4m.makeWordClasses(eTrainVcbList, fTrainVcbList, SourceVocabClassesFilename.c_str(), TargetVocabClassesFilename.c_str(),eTrainVcbList,fTrainVcbList);
+  // Start iteration:
+  for(int i =4; i< argc ; i++) {
+    string name = argv[i];
+    string nameA = name ;
+    string nameB = name + ".b";
+    if(d4m.augCount(nameA.c_str(),nameB.c_str())) {
+      cerr << "Loading (d4) table " << nameA << "/" << nameB  << " OK" << endl;
 
-		}else{
-			cerr << "ERROR Loading (d) table " << nameA << "  " << nameB << endl;
-		}   
-	}
+    } else {
+      cerr << "ERROR Loading (d) table " << nameA << "  " << nameB << endl;
+    }
+  }
 
-	d4m.normalizeTable();
-	string DiffOPath = argv[3];
-	string diff1 = DiffOPath;
-	string diff2 = DiffOPath+".b";
-	cerr << "Outputing d4 table to " << diff1 << " " << diff2;
-	d4m.printProbTable(diff1.c_str(),diff2.c_str());
+  d4m.normalizeTable();
+  string DiffOPath = argv[3];
+  string diff1 = DiffOPath;
+  string diff2 = DiffOPath+".b";
+  cerr << "Outputing d4 table to " << diff1 << " " << diff2;
+  d4m.printProbTable(diff1.c_str(),diff2.c_str());
 
-	
+
 }
 
 // Some utility functions to get it compile..
 
 ofstream logmsg;
-const string str2Num(int n) {
-	string number = "";
-	do {
-		number.insert((size_t)0, 1, (char)(n % 10 + '0'));
-	} while ((n /= 10) > 0);
-	return (number);
+const string str2Num(int n)
+{
+  string number = "";
+  do {
+    number.insert((size_t)0, 1, (char)(n % 10 + '0'));
+  } while ((n /= 10) > 0);
+  return (number);
 }
 double LAMBDA=1.09;
 
 Vector<map< pair<int,int>,char > > ReferenceAlignment;
 
 double ErrorsInAlignment(const map< pair<int,int>,char >&reference,
-		const Vector<WordIndex>&test, int l, int&missing, int&toomuch,
-		int&eventsMissing, int&eventsToomuch, int pair_no){
-			return 0;
-		}
+                         const Vector<WordIndex>&test, int l, int&missing, int&toomuch,
+                         int&eventsMissing, int&eventsToomuch, int pair_no)
+{
+  return 0;
+}
 
-void printGIZAPars(ostream&out){
+void printGIZAPars(ostream&out)
+{
 }
 

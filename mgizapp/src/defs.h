@@ -8,14 +8,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -46,23 +46,44 @@ extern double LAMBDA; // Lambda that is used to scale cross_entropy factor
 
 typedef float PROB ;
 typedef float COUNT ;
- 
-class LogProb {
- private:
+
+class LogProb
+{
+private:
   double x ;
- public:
-  LogProb():x(0){}
-  LogProb(double y):x(y){}
-  LogProb(float y):x(y){}
-  LogProb(int y):x(y){}
-  LogProb(WordIndex y):x(y){}
-  operator double() const {return x;}
-  LogProb operator *= (double y) { x *= y ; return *this;}
-  LogProb operator *= (LogProb y) { x *= y.x ; return *this;}
-  LogProb operator /= (double y) { x /= y ; return *this;}
-  LogProb operator /= (LogProb y) { x /= y.x ; return *this;}
-  LogProb operator += (double y) { x += y ; return *this;}
-  LogProb operator += (LogProb y) { x += y.x ; return *this;}
+public:
+  LogProb():x(0) {}
+  LogProb(double y):x(y) {}
+  LogProb(float y):x(y) {}
+  LogProb(int y):x(y) {}
+  LogProb(WordIndex y):x(y) {}
+  operator double() const {
+    return x;
+  }
+  LogProb operator *= (double y) {
+    x *= y ;
+    return *this;
+  }
+  LogProb operator *= (LogProb y) {
+    x *= y.x ;
+    return *this;
+  }
+  LogProb operator /= (double y) {
+    x /= y ;
+    return *this;
+  }
+  LogProb operator /= (LogProb y) {
+    x /= y.x ;
+    return *this;
+  }
+  LogProb operator += (double y) {
+    x += y ;
+    return *this;
+  }
+  LogProb operator += (LogProb y) {
+    x += y.x ;
+    return *this;
+  }
 };
 
 const int PARLEV_ITER=1;
@@ -75,4 +96,4 @@ const int PARLEV_SPECIAL=7;
 const int PARLEV_INPUT=8;
 
 #endif
-  
+

@@ -8,14 +8,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -31,15 +31,16 @@ USA.
 #include "Dictionary.h"
 #include <cstring>
 
-Dictionary::Dictionary(const char *filename){
-  if(!strcmp(filename, "")){
+Dictionary::Dictionary(const char *filename)
+{
+  if(!strcmp(filename, "")) {
     dead = true;
     return;
   }
   dead = false;
   cout << "Reading dictionary from:  " << filename << '\n';
   ifstream dFile(filename);
-  if(!dFile){
+  if(!dFile) {
     cerr << "ERROR: Can't open dictionary: " << filename << '\n';
     exit(1);
   }
@@ -48,7 +49,7 @@ Dictionary::Dictionary(const char *filename){
   currindexmax = 0;
   currval = 0;
   int p, q;
-  while((dFile >> p >> q)){
+  while((dFile >> p >> q)) {
     pairs[0].push_back(p);
     pairs[1].push_back(q);
   }
@@ -57,24 +58,24 @@ Dictionary::Dictionary(const char *filename){
 }
 
 
-bool Dictionary::indict(int p, int q){
+bool Dictionary::indict(int p, int q)
+{
   if(dead) return false;
   if(p == 0 && q == 0) return false;
-  if(currval == p){
+  if(currval == p) {
     for(int i = currindexmin; i <= currindexmax; i++)
       if(pairs[1][i] == q) return true;
     return false;
-  }
-  else{
+  } else {
     int begin = 0, end = pairs[0].size() - 1, middle = 0;
     unsigned int t;
     bool ret = false;
-    while(begin <= end){
+    while(begin <= end) {
       middle = begin + ((end - begin) >> 1);
       if(p < pairs[0][middle]) end = middle - 1;
       else if(p > pairs[0][middle]) begin = middle + 1;
-      else{
-	break;
+      else {
+        break;
       }
     }
     t = middle;
@@ -89,5 +90,5 @@ bool Dictionary::indict(int p, int q){
     return ret;
   }
 }
-  
+
 

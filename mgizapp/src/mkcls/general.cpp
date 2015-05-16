@@ -9,14 +9,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -38,14 +38,14 @@ extern "C" {
 #define srand48 srand
 #define drand48() (rand()/RAND_MAX)
 #endif
-  
+
 }
 
 #include "general.h"
 
 extern "C" {
 #ifndef __linux__
-int getrusage(int who, struct rusage *rusage);
+  int getrusage(int who, struct rusage *rusage);
 #endif
 };
 int verboseMode=0;
@@ -57,18 +57,18 @@ int verboseMode=0;
 
 void myerror(int line,const char *file,const char *expression)
 {
-  cerr << "(general.h):Assertion failed: '" << expression <<  "' ::: b " 
-    << file << ":" << line << endl;
+  cerr << "(general.h):Assertion failed: '" << expression <<  "' ::: b "
+       << file << ":" << line << endl;
 }
 
 
 void imyerror(int line,const char *file,const char *expression)
 {
-  cerr << "Error: '" << expression <<  "' ::: in Source " << file 
-    << ":" << line << endl;
-  #ifndef DEBUG
-  
-  #endif
+  cerr << "Error: '" << expression <<  "' ::: in Source " << file
+       << ":" << line << endl;
+#ifndef DEBUG
+
+#endif
 }
 
 
@@ -115,7 +115,7 @@ int randomInt(int exclusive)
 double clockSec()
 {
 #ifdef WIN32
-	return 0;
+  return 0;
 #else
 #ifdef linux
   enum __rusage_who who=RUSAGE_SELF;
@@ -125,5 +125,5 @@ double clockSec()
   struct rusage rusage;
   getrusage(who, &rusage);
   return rusage.ru_utime.tv_sec+rusage.ru_utime.tv_usec/1000000.0;
-#endif  
+#endif
 }

@@ -9,14 +9,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -31,14 +31,14 @@ USA.
 
 class OneMoveSwap
 {
- public:
+public:
   short type;
   short a,b;
   OneMoveSwap(short _type,short _a,short _b)
     : type(_type),a(_a),b(_b)
-    {}
+  {}
   OneMoveSwap()
-    : type(0){}
+    : type(0) {}
 };
 
 inline bool operator<(const OneMoveSwap&a,const OneMoveSwap&b)
@@ -62,7 +62,7 @@ inline ostream&operator<<(ostream&out,const OneMoveSwap&o)
 
 inline ostream &operator<<(ostream &out,const set<OneMoveSwap>&s)
 {
-  for(set<OneMoveSwap>::const_iterator i=s.begin();i!=s.end();++i)
+  for(set<OneMoveSwap>::const_iterator i=s.begin(); i!=s.end(); ++i)
     cout << *i << ' ';
   return out;
 }
@@ -71,10 +71,10 @@ bool makeOneMoveSwap(const alignment&a,const alignment&b,set<OneMoveSwap>&oms);
 
 template<class TRANSPAIR,class MODEL>
 int collectCountsOverNeighborhood(const Vector<pair<MoveSwapMatrix<TRANSPAIR>*,LogProb> >&smsc,
-				   Vector<WordIndex>&es,
-				   Vector<WordIndex>&fs,tmodel<COUNT,PROB>&tTable,
-				   amodel<COUNT>&aCountTable,amodel<COUNT>&dCountTable,
-				   nmodel<COUNT>&nCountTable,double&p1count,double&p0count,
-				   LogProb&_total,float count,bool addCounts,MODEL*d4Table=0);
+                                  Vector<WordIndex>&es,
+                                  Vector<WordIndex>&fs,tmodel<COUNT,PROB>&tTable,
+                                  amodel<COUNT>&aCountTable,amodel<COUNT>&dCountTable,
+                                  nmodel<COUNT>&nCountTable,double&p1count,double&p0count,
+                                  LogProb&_total,float count,bool addCounts,MODEL*d4Table=0);
 
 #endif

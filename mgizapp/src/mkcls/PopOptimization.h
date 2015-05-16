@@ -9,14 +9,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -32,8 +32,7 @@ USA.
 
 #include "Optimization.h"
 
-typedef struct 
-{
+typedef struct {
   Optimization *opt;
   Problem *prob;
 } ProbAndOpt;
@@ -47,43 +46,44 @@ inline DEFINE_STANDARD_COMPARE(ProbAndOpt);
 
 int compareProbAndOpt(const void *p,const void *j);
 
-class PopOptimization : public Optimization {
+class PopOptimization : public Optimization
+{
 
 
-   private:
-     Array<ProbAndOpt> probandopt; 
-       
-   protected:
-     int initialisiert;          
-     Problem *originalProblem;   
-											     
-											     
-											     int verfahren;              
-                                 
+private:
+  Array<ProbAndOpt> probandopt;
 
-      virtual void zInitialize();
-     
+protected:
+  int initialisiert;
+  Problem *originalProblem;
 
-   public:
-      PopOptimization(Problem &s,int verf,int anz);
-     
-     
-     virtual ~PopOptimization() {}
 
-      int size();
-     
-     
-      void sort();
-     
+  int verfahren;
 
-      virtual Problem& bestProblem()=0;
-     
 
-      Problem *problem(int i);
-     
+  virtual void zInitialize();
 
-      Optimization *optimization(int i);
-     
+
+public:
+  PopOptimization(Problem &s,int verf,int anz);
+
+
+  virtual ~PopOptimization() {}
+
+  int size();
+
+
+  void sort();
+
+
+  virtual Problem& bestProblem()=0;
+
+
+  Problem *problem(int i);
+
+
+  Optimization *optimization(int i);
+
 
 };
 #endif

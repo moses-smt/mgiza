@@ -50,88 +50,92 @@ GLOBAL_PARAMETER(short,CompactAlignmentFormat,"CompactAlignmentFormat","0: detai
 GLOBAL_PARAMETER2(bool,NODUMPS,"NODUMPS","NO FILE DUMPS? (Y/N)","1: do not write any files",PARLEV_OUTPUT,0);
 
 GLOBAL_PARAMETER(WordIndex, MAX_FERTILITY, "MAX_FERTILITY",
-		"maximal fertility for fertility models", PARLEV_EM, 10);
+                 "maximal fertility for fertility models", PARLEV_EM, 10);
 
 using namespace std;
 string Prefix, LogFilename, OPath, Usage, SourceVocabFilename,
-		TargetVocabFilename, CorpusFilename, TestCorpusFilename, t_Filename,
-		SourceVocabClassesFilename, TargetVocabClassesFilename,
-		a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
+       TargetVocabFilename, CorpusFilename, TestCorpusFilename, t_Filename,
+       SourceVocabClassesFilename, TargetVocabClassesFilename,
+       a_Filename, p0_Filename, d_Filename, n_Filename, dictionary_Filename;
 
 
-int main(int argc, char* argv[]){
-	if(argc < 5){
-		cerr << "Usage: " << argv[0] << " vcb1 vcb2 outputFile baseFile [additional1 ]..." << endl;
-		return 1;
-	}
-	Vector<WordEntry> evlist,fvlist;
-	vcbList eTrainVcbList(evlist), fTrainVcbList(fvlist);
-	TargetVocabFilename = argv[2];
-	SourceVocabFilename = argv[1];
-	eTrainVcbList.setName(argv[1]);
-	fTrainVcbList.setName(argv[2]);
-	eTrainVcbList.readVocabList();
-	fTrainVcbList.readVocabList();
-	Perplexity trainPerp, testPerp, trainViterbiPerp, testViterbiPerp;
-	tmodel<float, float> tTable;
-	sentenceHandler *corpus = new sentenceHandler();
-	
+int main(int argc, char* argv[])
+{
+  if(argc < 5) {
+    cerr << "Usage: " << argv[0] << " vcb1 vcb2 outputFile baseFile [additional1 ]..." << endl;
+    return 1;
+  }
+  Vector<WordEntry> evlist,fvlist;
+  vcbList eTrainVcbList(evlist), fTrainVcbList(fvlist);
+  TargetVocabFilename = argv[2];
+  SourceVocabFilename = argv[1];
+  eTrainVcbList.setName(argv[1]);
+  fTrainVcbList.setName(argv[2]);
+  eTrainVcbList.readVocabList();
+  fTrainVcbList.readVocabList();
+  Perplexity trainPerp, testPerp, trainViterbiPerp, testViterbiPerp;
+  tmodel<float, float> tTable;
+  sentenceHandler *corpus = new sentenceHandler();
 
-	model1 m1(CorpusFilename.c_str(), eTrainVcbList, fTrainVcbList, tTable,
-		trainPerp, *corpus, &testPerp, corpus, trainViterbiPerp,
-		&testViterbiPerp);
-	amodel<float> aTable(false);
-	amodel<float> aCountTable(false);
-	model2 m2(m1, aTable, aCountTable);
-	WordClasses french,english;
-	hmm h(m2,english,french);
-	SourceVocabClassesFilename = argv[1];
-	TargetVocabClassesFilename = argv[2];
-	SourceVocabClassesFilename += ".classes";
-	TargetVocabClassesFilename += ".classes";
-	h.makeWordClasses(m1.Elist, m1.Flist, SourceVocabClassesFilename.c_str(), TargetVocabClassesFilename.c_str());
-	string base = argv[4];
-	string baseA = base+".alpha";
-	string baseB = base+".beta";
-	string output = argv[3];
-	string outputA = output+".alpha";
-	string  outputB = output+".beta";
-	h.probs.readJumps(base.c_str(),NULL,baseA.c_str(), baseB.c_str());
-	// Start iteration:
-	for(int i = 5; i< argc ; i++){
-		string name = argv[i];
-		string nameA = name + ".alpha";
-		string nameB = name + ".beta";
-		if(h.counts.readJumps(name.c_str(),NULL,nameA.c_str(), nameB.c_str()))
-			h.probs.merge(h.counts);
-		else
-			cerr << "Error, cannot load name.c_str()";
-		h.clearCountTable();
-	}
-	h.probs.writeJumps(output.c_str(),NULL,outputA.c_str(), outputB.c_str());
-	delete corpus;
+
+  model1 m1(CorpusFilename.c_str(), eTrainVcbList, fTrainVcbList, tTable,
+            trainPerp, *corpus, &testPerp, corpus, trainViterbiPerp,
+            &testViterbiPerp);
+  amodel<float> aTable(false);
+  amodel<float> aCountTable(false);
+  model2 m2(m1, aTable, aCountTable);
+  WordClasses french,english;
+  hmm h(m2,english,french);
+  SourceVocabClassesFilename = argv[1];
+  TargetVocabClassesFilename = argv[2];
+  SourceVocabClassesFilename += ".classes";
+  TargetVocabClassesFilename += ".classes";
+  h.makeWordClasses(m1.Elist, m1.Flist, SourceVocabClassesFilename.c_str(), TargetVocabClassesFilename.c_str());
+  string base = argv[4];
+  string baseA = base+".alpha";
+  string baseB = base+".beta";
+  string output = argv[3];
+  string outputA = output+".alpha";
+  string  outputB = output+".beta";
+  h.probs.readJumps(base.c_str(),NULL,baseA.c_str(), baseB.c_str());
+  // Start iteration:
+  for(int i = 5; i< argc ; i++) {
+    string name = argv[i];
+    string nameA = name + ".alpha";
+    string nameB = name + ".beta";
+    if(h.counts.readJumps(name.c_str(),NULL,nameA.c_str(), nameB.c_str()))
+      h.probs.merge(h.counts);
+    else
+      cerr << "Error, cannot load name.c_str()";
+    h.clearCountTable();
+  }
+  h.probs.writeJumps(output.c_str(),NULL,outputA.c_str(), outputB.c_str());
+  delete corpus;
 }
 
 // Some utility functions to get it compile..
 
 ofstream logmsg;
-const string str2Num(int n) {
-	string number = "";
-	do {
-		number.insert((size_t)0, 1, (char)(n % 10 + '0'));
-	} while ((n /= 10) > 0);
-	return (number);
+const string str2Num(int n)
+{
+  string number = "";
+  do {
+    number.insert((size_t)0, 1, (char)(n % 10 + '0'));
+  } while ((n /= 10) > 0);
+  return (number);
 }
 double LAMBDA=1.09;
 
 Vector<map< pair<int,int>,char > > ReferenceAlignment;
 
 double ErrorsInAlignment(const map< pair<int,int>,char >&reference,
-		const Vector<WordIndex>&test, int l, int&missing, int&toomuch,
-		int&eventsMissing, int&eventsToomuch, int pair_no){
-			return 0;
-		}
+                         const Vector<WordIndex>&test, int l, int&missing, int&toomuch,
+                         int&eventsMissing, int&eventsToomuch, int pair_no)
+{
+  return 0;
+}
 
-void printGIZAPars(ostream&out){
+void printGIZAPars(ostream&out)
+{
 }
 

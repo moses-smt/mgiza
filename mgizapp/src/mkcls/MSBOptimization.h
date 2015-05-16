@@ -9,14 +9,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -28,39 +28,39 @@ USA.
 
 
 #ifndef MSBOPTIMIZATION
-#define MSBOPTIMIZATION 
+#define MSBOPTIMIZATION
 
 #include "PopOptimization.h"
 
 class MSBOptimization : public PopOptimization
-	{
+{
 
-   protected:
-     
-     Array<double> percentOfSteps; 
-     Array<double> percentOfRun;
+protected:
 
-     int expectedSteps;     
-     short nachMinimierung; 
-     
-      virtual void zInitialize();
-     
+  Array<double> percentOfSteps;
+  Array<double> percentOfRun;
 
-   public:
-      MSBOptimization(Problem &s,int verf,int anz,Array<double> &pos,
-				 Array<double> &por);
-     
+  int expectedSteps;
+  short nachMinimierung;
 
-     virtual ~MSBOptimization(){}
+  virtual void zInitialize();
 
-      virtual double minimize(int steps=-1);
-     
 
-      static void optimizeValues(Problem &p,int verfahren);
-     
+public:
+  MSBOptimization(Problem &s,int verf,int anz,Array<double> &pos,
+                  Array<double> &por);
 
-      Problem& bestProblem();
-     
+
+  virtual ~MSBOptimization() {}
+
+  virtual double minimize(int steps=-1);
+
+
+  static void optimizeValues(Problem &p,int verfahren);
+
+
+  Problem& bestProblem();
+
 
 };
 #endif

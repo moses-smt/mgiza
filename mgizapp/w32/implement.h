@@ -10,25 +10,25 @@
  *      Pthreads-win32 - POSIX Threads Library for Win32
  *      Copyright(C) 1998 John E. Bossom
  *      Copyright(C) 1999,2005 Pthreads-win32 contributors
- * 
+ *
  *      Contact Email: rpj@callisto.canberra.edu.au
- * 
+ *
  *      The current list of contributors is contained
  *      in the file CONTRIBUTORS included with the source
  *      code distribution. The list can also be seen at the
  *      following World Wide Web location:
  *      http://sources.redhat.com/pthreads-win32/contributors.html
- * 
+ *
  *      This library is free software; you can redistribute it and/or
  *      modify it under the terms of the GNU Lesser General Public
  *      License as published by the Free Software Foundation; either
  *      version 2 of the License, or (at your option) any later version.
- * 
+ *
  *      This library is distributed in the hope that it will be useful,
  *      but WITHOUT ANY WARRANTY; without even the implied warranty of
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *      Lesser General Public License for more details.
- * 
+ *
  *      You should have received a copy of the GNU Lesser General Public
  *      License along with this library in the file COPYING.LIB;
  *      if not, write to the Free Software Foundation, Inc.,
@@ -98,8 +98,7 @@ typedef VOID (APIENTRY *PAPCFUNC)(DWORD dwParam);
 #define int64_t _int64
 #endif
 
-typedef enum
-{
+typedef enum {
   /*
    * This enumeration represents the state of the thread;
    * The thread is still "alive" if the numeric value of the
@@ -122,8 +121,7 @@ PThreadState;
 
 typedef struct ptw32_thread_t_ ptw32_thread_t;
 
-struct ptw32_thread_t_
-{
+struct ptw32_thread_t_ {
 #ifdef _UWIN
   DWORD dummy[5];
 #endif
@@ -154,13 +152,12 @@ struct ptw32_thread_t_
 };
 
 
-/* 
+/*
  * Special value to mark attribute objects as valid.
  */
 #define PTW32_ATTR_VALID ((unsigned long) 0xC4C0FFEE)
 
-struct pthread_attr_t_
-{
+struct pthread_attr_t_ {
   unsigned long valid;
   void *stackaddr;
   size_t stacksize;
@@ -182,8 +179,7 @@ struct pthread_attr_t_
  * ====================
  */
 
-struct sem_t_
-{
+struct sem_t_ {
   int value;
   pthread_mutex_t lock;
   HANDLE sem;
@@ -195,8 +191,7 @@ struct sem_t_
 #define PTW32_OBJECT_AUTO_INIT ((void *) -1)
 #define PTW32_OBJECT_INVALID   NULL
 
-struct pthread_mutex_t_
-{
+struct pthread_mutex_t_ {
   LONG lock_idx;		/* Provides exclusive access to mutex state
 				   via the Interlocked* mechanism.
 				    0: unlocked/free.
@@ -212,8 +207,7 @@ struct pthread_mutex_t_
 				   threads. */
 };
 
-struct pthread_mutexattr_t_
-{
+struct pthread_mutexattr_t_ {
   int pshared;
   int kind;
 };
@@ -239,18 +233,15 @@ struct pthread_mutexattr_t_
 #define PTW32_SPIN_LOCKED      (2)
 #define PTW32_SPIN_USE_MUTEX   (3)
 
-struct pthread_spinlock_t_
-{
+struct pthread_spinlock_t_ {
   long interlock;		/* Locking element for multi-cpus. */
-  union
-  {
+  union {
     int cpus;			/* No. of cpus if multi cpus, or   */
     pthread_mutex_t mutex;	/* mutex if single cpu.            */
   } u;
 };
 
-struct pthread_barrier_t_
-{
+struct pthread_barrier_t_ {
   unsigned int nCurrentBarrierHeight;
   unsigned int nInitialBarrierHeight;
   int iStep;
@@ -258,13 +249,11 @@ struct pthread_barrier_t_
   sem_t semBarrierBreeched[2];
 };
 
-struct pthread_barrierattr_t_
-{
+struct pthread_barrierattr_t_ {
   int pshared;
 };
 
-struct pthread_key_t_
-{
+struct pthread_key_t_ {
   DWORD key;
   void (*destructor) (void *);
   pthread_mutex_t keyLock;
@@ -275,16 +264,14 @@ struct pthread_key_t_
 typedef struct ThreadParms ThreadParms;
 typedef struct ThreadKeyAssoc ThreadKeyAssoc;
 
-struct ThreadParms
-{
+struct ThreadParms {
   pthread_t tid;
   void *(*start) (void *);
   void *arg;
 };
 
 
-struct pthread_cond_t_
-{
+struct pthread_cond_t_ {
   long nWaitersBlocked;		/* Number of threads blocked            */
   long nWaitersGone;		/* Number of threads timed out          */
   long nWaitersToUnblock;	/* Number of threads to unblock         */
@@ -301,15 +288,13 @@ struct pthread_cond_t_
 };
 
 
-struct pthread_condattr_t_
-{
+struct pthread_condattr_t_ {
   int pshared;
 };
 
 #define PTW32_RWLOCK_MAGIC 0xfacade2
 
-struct pthread_rwlock_t_
-{
+struct pthread_rwlock_t_ {
   pthread_mutex_t mtxExclusiveAccess;
   pthread_mutex_t mtxSharedAccessCompleted;
   pthread_cond_t cndSharedAccessCompleted;
@@ -319,16 +304,14 @@ struct pthread_rwlock_t_
   int nMagic;
 };
 
-struct pthread_rwlockattr_t_
-{
+struct pthread_rwlockattr_t_ {
   int pshared;
 };
 
 /*
  * MCS lock queue node - see ptw32_MCS_lock.c
  */
-struct ptw32_mcs_node_t_
-{
+struct ptw32_mcs_node_t_ {
   struct ptw32_mcs_node_t_ **lock;        /* ptr to tail of queue */
   struct ptw32_mcs_node_t_  *next;        /* ptr to successor in queue */
   LONG                       readyFlag;   /* set after lock is released by
@@ -341,8 +324,7 @@ typedef struct ptw32_mcs_node_t_   ptw32_mcs_local_node_t;
 typedef struct ptw32_mcs_node_t_  *ptw32_mcs_lock_t;
 
 
-struct ThreadKeyAssoc
-{
+struct ThreadKeyAssoc {
   /*
    * Purpose:
    *      This structure creates an association between a thread and a key.
@@ -423,7 +405,7 @@ struct ThreadKeyAssoc
    *              The pthread_key_t->threads attribute is the head of
    *              a chain of assoctiations that runs through the
    *              nextThreads link. This chain provides the 1 to many
-   *              relationship between a pthread_key_t and all the 
+   *              relationship between a pthread_key_t and all the
    *              PThreads that have called pthread_setspecific for
    *              this pthread_key_t.
    *
@@ -512,8 +494,8 @@ struct ThreadKeyAssoc
 
 /* Declared in global.c */
 extern PTW32_INTERLOCKED_LONG (WINAPI *
-			       ptw32_interlocked_compare_exchange)
-  (PTW32_INTERLOCKED_LPLONG, PTW32_INTERLOCKED_LONG, PTW32_INTERLOCKED_LONG);
+                               ptw32_interlocked_compare_exchange)
+(PTW32_INTERLOCKED_LPLONG, PTW32_INTERLOCKED_LONG, PTW32_INTERLOCKED_LONG);
 
 /* Declared in pthread_cancel.c */
 extern DWORD (*ptw32_register_cancelation) (PAPCFUNC, HANDLE, DWORD);
@@ -553,13 +535,13 @@ extern "C"
 {
 #endif				/* __cplusplus */
 
-/*
- * =====================
- * =====================
- * Forward Declarations
- * =====================
- * =====================
- */
+  /*
+   * =====================
+   * =====================
+   * Forward Declarations
+   * =====================
+   * =====================
+   */
 
   int ptw32_is_attr (const pthread_attr_t * attr);
 
@@ -568,17 +550,17 @@ extern "C"
   int ptw32_rwlock_check_need_init (pthread_rwlock_t * rwlock);
 
   PTW32_INTERLOCKED_LONG WINAPI
-    ptw32_InterlockedCompareExchange (PTW32_INTERLOCKED_LPLONG location,
-				      PTW32_INTERLOCKED_LONG value,
-				      PTW32_INTERLOCKED_LONG comparand);
+  ptw32_InterlockedCompareExchange (PTW32_INTERLOCKED_LPLONG location,
+                                    PTW32_INTERLOCKED_LONG value,
+                                    PTW32_INTERLOCKED_LONG comparand);
 
   LONG WINAPI
-    ptw32_InterlockedExchange (LPLONG location,
-			       LONG value);
+  ptw32_InterlockedExchange (LPLONG location,
+                             LONG value);
 
   DWORD
-    ptw32_RegisterCancelation (PAPCFUNC callback,
-			       HANDLE threadH, DWORD callback_arg);
+  ptw32_RegisterCancelation (PAPCFUNC callback,
+                             HANDLE threadH, DWORD callback_arg);
 
   int ptw32_processInitialize (void);
 
@@ -605,7 +587,7 @@ extern "C"
 #else
   void
 #endif
-    ptw32_threadStart (void *vthreadParms);
+  ptw32_threadStart (void *vthreadParms);
 
   void ptw32_callUserDestroyRoutines (pthread_t thread);
 
@@ -626,13 +608,13 @@ extern "C"
   void ptw32_filetime_to_timespec (const FILETIME * ft, struct timespec *ts);
 #endif
 
-/* Declared in misc.c */
+  /* Declared in misc.c */
 #ifdef NEED_CALLOC
 #define calloc(n, s) ptw32_calloc(n, s)
   void *ptw32_calloc (size_t n, size_t s);
 #endif
 
-/* Declared in private.c */
+  /* Declared in private.c */
   void ptw32_throw (DWORD exception);
 
 #ifdef __cplusplus
@@ -647,11 +629,11 @@ extern "C"
 {
 #       endif
   _CRTIMP unsigned long __cdecl _beginthread (void (__cdecl *) (void *),
-					      unsigned, void *);
+      unsigned, void *);
   _CRTIMP void __cdecl _endthread (void);
   _CRTIMP unsigned long __cdecl _beginthreadex (void *, unsigned,
-						unsigned (__stdcall *) (void *),
-						void *, unsigned, unsigned *);
+      unsigned (__stdcall *) (void *),
+      void *, unsigned, unsigned *);
   _CRTIMP void __cdecl _endthreadex (unsigned);
 #       ifdef __cplusplus
 }
@@ -684,7 +666,7 @@ extern "C"
  */
 #if defined(__CYGWIN32__) || defined(__CYGWIN__) || defined(NEED_CREATETHREAD)
 
-/* 
+/*
  * Macro uses args so we can cast start_proc to LPTHREAD_START_ROUTINE
  * in order to avoid warnings because of return type
  */

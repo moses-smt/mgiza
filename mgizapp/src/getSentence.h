@@ -8,14 +8,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -50,37 +50,48 @@ USA.
 #include "Globals.h"
 #include <boost/thread/mutex.hpp>
 /*----------------------- Class Prototype Definition ------------------------*
- Class Name: sentenceHandleer 
- Objective: This class is defined to handle training sentece pairs from the 
- parallel corpus. Each pair has: a target sentece, called here French; a 
+ Class Name: sentenceHandleer
+ Objective: This class is defined to handle training sentece pairs from the
+ parallel corpus. Each pair has: a target sentece, called here French; a
  source sentece, called here English sentece; and an integer number denoting
- the number of times this pair occured in trining corpus. Both source and 
- target senteces are represented as integer vector (variable size arrays), 
+ the number of times this pair occured in trining corpus. Both source and
+ target senteces are represented as integer vector (variable size arrays),
  each entry is a numeric value which is the token id for the particular token
  in the sentece.
 
  *---------------------------------------------------------------------------*/
 
-class sentPair{
- public:
+class sentPair
+{
+public:
   int sentenceNo ;
   float noOcc;
   float realCount;
   Vector<WordIndex> eSent ;
   Vector<WordIndex> fSent;
 
- public:
-  sentPair(){};
-  void clear(){ eSent.clear(); fSent.clear(); noOcc=0; realCount=0; sentenceNo=0;};
-  const Vector<WordIndex>&get_eSent()const
-    { return eSent; }
-  const Vector<WordIndex>&get_fSent()const
-    { return fSent; }
-  int getSentenceNo()const
-    { return sentenceNo; }
-  double getCount()const
-    { return realCount; }
-    
+public:
+  sentPair() {};
+  void clear() {
+    eSent.clear();
+    fSent.clear();
+    noOcc=0;
+    realCount=0;
+    sentenceNo=0;
+  };
+  const Vector<WordIndex>&get_eSent()const {
+    return eSent;
+  }
+  const Vector<WordIndex>&get_fSent()const {
+    return fSent;
+  }
+  int getSentenceNo()const {
+    return sentenceNo;
+  }
+  double getCount()const {
+    return realCount;
+  }
+
 };
 
 inline ostream&operator<<(ostream&of,const sentPair&s)
@@ -99,40 +110,51 @@ inline ostream&operator<<(ostream&of,const sentPair&s)
 }
 
 /*Thread-safe version of sentence handler*/
-class sentenceHandler{
+class sentenceHandler
+{
 public:
-    const char * inputFilename;   // parallel corpus file name, similar for all 
-                            // sentence pair objects
-    ifstream *inputFile;     // parallel corpus file handler
-    Vector<sentPair> Buffer;
-    int noSentInBuffer ;
-    int currentSentence ;
-    int position; /*Sentence position (will be returned)*/
-    int totalPairs1 ;
-    double totalPairs2;
-    bool readflag ; // true if you reach the end of file
-    bool allInMemory ;
-    int pair_no ;
-    Vector<double> *realCount;
-  
-    Vector<sentPair> oldPairs;
-    Vector<double> oldProbs;
-	sentenceHandler(){readsent_mutex=new boost::mutex();setprob_mutex=new boost::mutex();};
-    sentenceHandler(const char* filename, vcbList* elist=0, vcbList* flist=0);
-    sentenceHandler(const char* filename, vcbList* elist, vcbList* flist,set<WordIndex>& eapp, set<WordIndex>& fapp);
-	~sentenceHandler(){delete readsent_mutex; delete setprob_mutex;}
-    void rewind();
-    int getNextSentence(sentPair&, vcbList* = 0, vcbList* = 0);  // will be defined in the definition file, this
-    int getTotalNoPairs1()const {return totalPairs1;};
-    double getTotalNoPairs2()const {return totalPairs2;};
-    // method will read the next pair of sentence from memory buffer
-    void setProbOfSentence(const sentPair&s,double d);
-private:    
-	
-    boost::mutex* readsent_mutex; 
-    boost::mutex* setprob_mutex;
-    bool readNextSentence(sentPair&);  // will be defined in the definition file, this
+  const char * inputFilename;   // parallel corpus file name, similar for all
+  // sentence pair objects
+  ifstream *inputFile;     // parallel corpus file handler
+  Vector<sentPair> Buffer;
+  int noSentInBuffer ;
+  int currentSentence ;
+  int position; /*Sentence position (will be returned)*/
+  int totalPairs1 ;
+  double totalPairs2;
+  bool readflag ; // true if you reach the end of file
+  bool allInMemory ;
+  int pair_no ;
+  Vector<double> *realCount;
+
+  Vector<sentPair> oldPairs;
+  Vector<double> oldProbs;
+  sentenceHandler() {
+    readsent_mutex=new boost::mutex();
+    setprob_mutex=new boost::mutex();
+  };
+  sentenceHandler(const char* filename, vcbList* elist=0, vcbList* flist=0);
+  sentenceHandler(const char* filename, vcbList* elist, vcbList* flist,set<WordIndex>& eapp, set<WordIndex>& fapp);
+  ~sentenceHandler() {
+    delete readsent_mutex;
+    delete setprob_mutex;
+  }
+  void rewind();
+  int getNextSentence(sentPair&, vcbList* = 0, vcbList* = 0);  // will be defined in the definition file, this
+  int getTotalNoPairs1()const {
+    return totalPairs1;
+  };
+  double getTotalNoPairs2()const {
+    return totalPairs2;
+  };
+  // method will read the next pair of sentence from memory buffer
+  void setProbOfSentence(const sentPair&s,double d);
+private:
+
+  boost::mutex* readsent_mutex;
+  boost::mutex* setprob_mutex;
+  bool readNextSentence(sentPair&);  // will be defined in the definition file, this
 };
 
 #endif
-  
+

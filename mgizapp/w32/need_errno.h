@@ -32,7 +32,7 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+  /* Define _CRTIMP */
 
 #ifndef _CRTIMP
 #ifdef  _DLL
@@ -43,13 +43,13 @@ extern "C" {
 #endif  /* _CRTIMP */
 
 
-/* Define __cdecl for non-Microsoft compilers */
+  /* Define __cdecl for non-Microsoft compilers */
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/* Define _CRTAPI1 (for compatibility with the NT SDK) */
+  /* Define _CRTAPI1 (for compatibility with the NT SDK) */
 
 #ifndef _CRTAPI1
 #if	_MSC_VER >= 800 && _M_IX86 >= 300
@@ -60,16 +60,16 @@ extern "C" {
 #endif
 
 
-/* declare reference to errno */
+  /* declare reference to errno */
 
 #if     (defined(_MT) || defined(_MD) || defined(_DLL)) && !defined(_MAC)
-_CRTIMP extern int * __cdecl _errno(void);
+  _CRTIMP extern int * __cdecl _errno(void);
 #define errno   (*_errno())
 #else   /* ndef _MT && ndef _MD && ndef _DLL */
-_CRTIMP extern int errno;
+  _CRTIMP extern int errno;
 #endif  /* _MT || _MD || _DLL */
 
-/* Error Codes */
+  /* Error Codes */
 
 #define EPERM           1
 #define ENOENT          2
@@ -105,7 +105,7 @@ _CRTIMP extern int errno;
 #define ERANGE          34
 #define EDEADLK         36
 
-/* defined differently in winsock.h on WinCE */
+  /* defined differently in winsock.h on WinCE */
 #ifndef ENAMETOOLONG
 #define ENAMETOOLONG    38
 #endif
@@ -113,16 +113,16 @@ _CRTIMP extern int errno;
 #define ENOLCK          39
 #define ENOSYS          40
 
-/* defined differently in winsock.h on WinCE */
+  /* defined differently in winsock.h on WinCE */
 #ifndef ENOTEMPTY
 #define ENOTEMPTY       41
 #endif
 
 #define EILSEQ          42
 
-/*
- * Support EDEADLOCK for compatibiity with older MS-C versions.
- */
+  /*
+   * Support EDEADLOCK for compatibiity with older MS-C versions.
+   */
 #define EDEADLOCK       EDEADLK
 
 #ifdef  __cplusplus

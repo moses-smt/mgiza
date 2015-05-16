@@ -8,14 +8,14 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 USA.
 
 */
@@ -35,7 +35,7 @@ extern short DoViterbiTraining;
 template<class TRANSPAIR>
 class MoveSwapMatrix : public alignment
 {
- private:
+private:
   const TRANSPAIR&ef;
   const WordIndex l, m;
   Array2<LogProb, Vector<LogProb> > _cmove, _cswap;
@@ -45,72 +45,66 @@ class MoveSwapMatrix : public alignment
   const int modelnr;
   bool lazyEvaluation;
   bool centerDeleted;
- public:
-  bool check()const
-    {
-	  return 1;
-    }
-  const TRANSPAIR&get_ef()const
-    {return ef;}
-  bool isCenterDeleted()const
-    {return centerDeleted;}
-  bool isLazy()const
-    {return lazyEvaluation;}
+public:
+  bool check()const {
+    return 1;
+  }
+  const TRANSPAIR&get_ef()const {
+    return ef;
+  }
+  bool isCenterDeleted()const {
+    return centerDeleted;
+  }
+  bool isLazy()const {
+    return lazyEvaluation;
+  }
   MoveSwapMatrix(const TRANSPAIR&_ef, const alignment&_a);
   void updateJ(WordIndex j, bool,double thisValue);
   void updateI(WordIndex i,double thisValue);
   void doMove(WordIndex _i, WordIndex _j);
   void doSwap(WordIndex _j1, WordIndex _j2);
-  void delCenter()
-    {
-      centerDeleted=1;
+  void delCenter() {
+    centerDeleted=1;
+  }
+  void delMove(WordIndex x, WordIndex y) {
+    delmove(x,y)=1;
+  }
+  void delSwap(WordIndex x, WordIndex y) {
+    massert(y>x);
+    delswap(x,y)=1;
+    delswap(y,x)=1;
+  }
+  bool isDelMove(WordIndex x, WordIndex y)const {
+    return DoViterbiTraining||delmove(x,y);
+  }
+  bool isDelSwap(WordIndex x, WordIndex y)const {
+    massert(y>x);
+    return DoViterbiTraining||delswap(x,y);
+  }
+  LogProb cmove(WordIndex x, WordIndex y)const {
+    massert( get_al(y)!=x );
+    massert( delmove(x,y)==0 );
+    if( lazyEvaluation )
+      return ef.scoreOfMove(*this,x,y);
+    else {
+      return _cmove(x, y);
     }
-  void delMove(WordIndex x, WordIndex y)
-    {
-      delmove(x,y)=1;
-    }
-  void delSwap(WordIndex x, WordIndex y)
-    {
+  }
+  LogProb cswap(WordIndex x, WordIndex y)const {
+    massert(x<y);
+    massert(delswap(x,y)==0);
+    massert(get_al(x)!=get_al(y));
+    if( lazyEvaluation )
+      return ef.scoreOfSwap(*this,x,y);
+    else {
       massert(y>x);
-      delswap(x,y)=1;
-      delswap(y,x)=1;
+      return _cswap(x, y);
     }
-  bool isDelMove(WordIndex x, WordIndex y)const
-    {
-      return DoViterbiTraining||delmove(x,y);
-    }
-  bool isDelSwap(WordIndex x, WordIndex y)const
-    {
-      massert(y>x);
-      return DoViterbiTraining||delswap(x,y);
-    }
-  LogProb cmove(WordIndex x, WordIndex y)const
-    {
-      massert( get_al(y)!=x );
-      massert( delmove(x,y)==0 );
-      if( lazyEvaluation )
-	return ef.scoreOfMove(*this,x,y);
-      else
-	{
-	  return _cmove(x, y);
-	}
-    }
-  LogProb cswap(WordIndex x, WordIndex y)const
-    {
-      massert(x<y);
-      massert(delswap(x,y)==0);
-      massert(get_al(x)!=get_al(y));
-      if( lazyEvaluation )
-	return ef.scoreOfSwap(*this,x,y);
-      else
-	{
-	  massert(y>x);
-	  return _cswap(x, y);
-	}
-    }
+  }
   void printWrongs()const;
   bool isRight()const;
-  friend ostream&operator<<(ostream&out, const MoveSwapMatrix<TRANSPAIR>&m)
-    {return out << (alignment)m << "\nEF:\n"<< m.ef << "\nCMOVE\n"<<m._cmove << "\nCSWAP\n" << m._cswap << endl;};
+  friend ostream&operator<<(ostream&out, const MoveSwapMatrix<TRANSPAIR>&m) {
+    return out << (alignment)m << "\nEF:\n"<< m.ef << "\nCMOVE\n"<<m._cmove << "\nCSWAP\n" << m._cswap << endl;
+  };
 };
 #endif
