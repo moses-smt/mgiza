@@ -12,6 +12,13 @@ import codecs
 import io
 import os
 
+def normalize_path(path):
+    path = path.replace('\\', os.sep).replace('/', os.sep)
+    path = os.path.expanduser(path)
+    path = os.path.abspath(path)
+    return path
+
+
 if sys.version_info < (3,0,0):
 	sys.stdin = codecs.getreader('UTF-8')(sys.stdin)
 	sys.stdout = codecs.getwriter('UTF-8')(sys.stdout)
@@ -30,7 +37,7 @@ sents = [];
 done = [];
 
 for i in range(1,len(sys.argv)):
-	fname = sys.argv[i].replace('\\', os.sep).replace('/', os.sep)
+	fname = normalize_path(sys.argv[i])
 	files.append(io.open(fname, "r", encoding="UTF-8"));
 	ids.append(0);
 	sents.append("");
