@@ -105,10 +105,7 @@ int model1::em_thread(int noIterations, int nthread, /*Perplexity& perp, sentenc
                       Dictionary& dictionary, bool useDict /*Perplexity* testPerp, sentenceHandler* testHandler,
 										     Perplexity& trainViterbiPerp, Perplexity* testViterbiPerp */ )
 {
-  string modelName="Model1",shortModelName="1";
-  char b[2];
-  b[1] = '\0';
-  b[0] = '0' + nthread;
+  string modelName="Model1", shortModelName="1";
   time_t st = time(NULL);
   string tfile, number, alignfile, test_alignfile;
   bool dump_files = false ;
@@ -124,7 +121,7 @@ int model1::em_thread(int noIterations, int nthread, /*Perplexity& perp, sentenc
     number.insert((size_t)0, 1, (char)(n % 10 + '0'));
   } while((n /= 10) > 0);
   alignfile = Prefix + ".A" + shortModelName + "." + number + ".part" ;
-  alignfile = alignfile + b;
+  alignfile = alignfile + represent_number(nthread, 3);
 
   em_loop(it,perp, sHandler1, false, dump_files, alignfile.c_str(), dictionary, useDict, trainViterbiPerp);
   return 0;

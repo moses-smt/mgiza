@@ -106,12 +106,7 @@ void model3::em(int noIterations, sentenceHandler& sHandler1)
     cout << "\n" << "Model3: Iteration " << it;
 
     // set up the names of the files where the tables will be printed
-    int n = it;
-    number = "";
-    do {
-      //mj changed next line
-      number.insert((size_t) 0, 1, (char)(n % 10 + '0'));
-    } while ((n /= 10) > 0);
+    const string number = represent_number(it);
     tfile = Prefix + ".t3." + number;
     afile = Prefix + ".a3." + number;
     nfile = Prefix + ".n3." + number;
@@ -435,14 +430,7 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
     string d4file2;
     {
       // set up the names of the files where the tables will be printed
-      int n = it;
-      number = "";
-      do {
-        //mj changed next line
-        number.insert((size_t) 0, 1, (char)(n % 10 + '0'));
-      } while ((n /= 10) > 0);
-      if (final)
-        number="final";
+      const string number = (final ? "final" : represent_number(it));
       tfile = Prefix + ".t3." + number;
       tfile_actual = Prefix + ".actual.t3." + number;
       afile = Prefix + ".a3." + number;
@@ -470,17 +458,13 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
     if (testPerp && testHandler)
       (*testHandler).rewind();
 
-    char node[2] ;
-    node[1] = '\0';
     for (k=1 ; k< NCPUS ; k++) {
       th[k].m = this;
       th[k].done = 0;
       th[k].valid = 0;
       th[k].it = it;
       th[k].final = final;
-      th[k].alignfile = alignfile + ".part";
-      node[0] = '0' + k;
-      th[k].alignfile += node;
+      th[k].alignfile = alignfile + ".part" + represent_number(k, 3);
       th[k].dump_files = dump_files;
       th[k].fromModel = fromModel;
       th[k].toModel = toModel;
@@ -490,9 +474,7 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
         cerr << "Error starting thread " << k << endl;
       }
     }
-    node[0] = '0';
-    alignfile = alignfile + ".part";
-    alignfile += node;
+    alignfile = alignfile + ".part" + represent_number(0, 3);
 
 #ifdef TRICKY_IBM3_TRAINING
 
@@ -723,14 +705,7 @@ int model3::viterbi_hto3()
   string d4file2;
   {
     // set up the names of the files where the tables will be printed
-    int n = it;
-    number = "";
-    do {
-      //mj changed next line
-      number.insert((size_t) 0, 1, (char)(n % 10 + '0'));
-    } while ((n /= 10) > 0);
-    if (final)
-      number="final";
+    const string number = (final ? "final" : represent_number(it));
     tfile = Prefix + ".t3." + number;
     tfile_actual = Prefix + ".actual.t3." + number;
     afile = Prefix + ".a3." + number;
@@ -741,14 +716,8 @@ int model3::viterbi_hto3()
     d4file2 = Prefix + ".D4." + number;
     d5file = Prefix + ".d5." + number;
     alignfile = Prefix + ".AH3_";
-    char _p[2];
-    _p[1] = 0;
-    _p[0] = iter + '0';
-    alignfile += _p;
-    alignfile += ".part";
-    _p[1] = 0;
-    _p[0] = part + '0';
-    alignfile += _p;
+    alignfile += represent_number(iter, 3);
+    alignfile += ".part" + represent_number(part, 3);
     test_alignfile = Prefix + ".tst.A3." + number;
     test_alignfile = Prefix + ".tst.A3." + number;
     p0file = Prefix + ".p0_3." + number;
@@ -805,14 +774,7 @@ int model3::viterbi_3to3()
   string d4file2;
   {
     // set up the names of the files where the tables will be printed
-    int n = it;
-    number = "";
-    do {
-      //mj changed next line
-      number.insert((size_t) 0, 1, (char)(n % 10 + '0'));
-    } while ((n /= 10) > 0);
-    if (final)
-      number="final";
+    const string number = (final ? "final" : represent_number(it));
     tfile = Prefix + ".t3." + number;
     tfile_actual = Prefix + ".actual.t3." + number;
     afile = Prefix + ".a3." + number;
@@ -823,14 +785,8 @@ int model3::viterbi_3to3()
     d4file2 = Prefix + ".D4." + number;
     d5file = Prefix + ".d5." + number;
     alignfile = Prefix + ".A3_";
-    char _p[2];
-    _p[1] = 0;
-    _p[0] = iter + '0';
-    alignfile += _p;
-    alignfile += ".part";
-    _p[1] = 0;
-    _p[0] = part + '0';
-    alignfile += _p;
+    alignfile += represent_number(iter, 3);
+    alignfile += ".part" + represent_number(part, 3);
     test_alignfile = Prefix + ".tst.A3." + number;
     p0file = Prefix + ".p0_3." + number;
   }
@@ -894,14 +850,7 @@ d4model* model3::viterbi_3to4()
   string d4file2;
   {
     // set up the names of the files where the tables will be printed
-    int n = it;
-    number = "";
-    do {
-      //mj changed next line
-      number.insert((size_t) 0, 1, (char)(n % 10 + '0'));
-    } while ((n /= 10) > 0);
-    if (final)
-      number="final";
+    const string number = (final ? "final" : represent_number(it));
     tfile = Prefix + ".t3." + number;
     tfile_actual = Prefix + ".actual.t3." + number;
     afile = Prefix + ".a3." + number;
@@ -912,14 +861,8 @@ d4model* model3::viterbi_3to4()
     d4file2 = Prefix + ".D4." + number;
     d5file = Prefix + ".d5." + number;
     alignfile = Prefix + ".A34_";
-    char _p[2];
-    _p[1] = 0;
-    _p[0] = iter + '0';
-    alignfile += _p;
-    alignfile += ".part";
-    _p[1] = 0;
-    _p[0] = part + '0';
-    alignfile += _p;
+    alignfile += represent_number(iter, 3);
+    alignfile += ".part" + represent_number(part, 3);
     test_alignfile = Prefix + ".tst.A3." + number;
     p0file = Prefix + ".p0_3." + number;
   }
@@ -975,12 +918,7 @@ int model3::viterbi_4to4(d4model& d4m)
   string d4file2;
   {
     // set up the names of the files where the tables will be printed
-    int n = it;
-    number = "";
-    do {
-      //mj changed next line
-      number.insert((size_t) 0, 1, (char)(n % 10 + '0'));
-    } while ((n /= 10) > 0);
+    const string number = represent_number(it);
     tfile = Prefix + ".t3." + number;
     tfile_actual = Prefix + ".actual.t3." + number;
     afile = Prefix + ".a3." + number;
@@ -991,14 +929,8 @@ int model3::viterbi_4to4(d4model& d4m)
     d4file2 = Prefix + ".D4." + number;
     d5file = Prefix + ".d5." + number;
     alignfile = Prefix + ".A4_";
-    char _p[2];
-    _p[1] = 0;
-    _p[0] = iter + '0';
-    alignfile += _p;
-    alignfile += ".part";
-    _p[1] = 0;
-    _p[0] = part + '0';
-    alignfile += _p;
+    alignfile += represent_number(iter, 3);
+    alignfile += ".part" + represent_number(part, 3);
     test_alignfile = Prefix + ".tst.A3." + number;
     p0file = Prefix + ".p0_3." + number;
   }
@@ -1136,14 +1068,7 @@ void multi_thread_m34_em(model3& m3, int ncpu, int Model3_Iterations,
     string d4file2;
     {
       // set up the names of the files where the tables will be printed
-      int n = i;
-      number = "";
-      do {
-        //mj changed next line
-        number.insert((size_t) 0, 1, (char)(n % 10 + '0'));
-      } while ((n /= 10) > 0);
-      if (final)
-        number="final";
+      const string number = (final ? "final": represent_number(i));
       tfile = Prefix + ".t3." + number;
       tfile_actual = Prefix + ".actual.t3." + number;
       afile = Prefix + ".a3." + number;

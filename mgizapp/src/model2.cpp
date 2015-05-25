@@ -62,7 +62,7 @@ int model2::em_with_tricks(int noIterations,bool dumpCount,
   int minIter=0;
   string modelName="Model2",shortModelName="2";
   time_t it_st, st, it_fn, fn;
-  string tfile, afile, number, alignfile, test_alignfile;
+  string tfile, afile, alignfile, test_alignfile;
   int pair_no = 0;
   bool dump_files = false ;
   ofstream of2 ;
@@ -75,11 +75,7 @@ int model2::em_with_tricks(int noIterations,bool dumpCount,
     it_st = time(NULL) ;
     cout << endl << "-----------\n" << modelName << ": Iteration " << it << '\n';
     dump_files = (Model2_Dump_Freq != 0) && ((it % Model2_Dump_Freq) == 0) && !NODUMPS;
-    number = "";
-    int n = it;
-    do {
-      number.insert((size_t)0, 1, (char)(n % 10 + '0'));
-    } while((n /= 10) > 0);
+    const string number = represent_number(it);
     tfile = Prefix + ".t" + shortModelName + "." + number ;
     afile = Prefix + ".a" + shortModelName + "." + number ;
     alignfile = Prefix + ".A" + shortModelName + "." + number ;

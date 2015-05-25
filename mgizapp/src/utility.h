@@ -55,5 +55,17 @@ extern double factorial(int) ;
 string my_ctime(const time_t* t);
 
 
+/** Return a nonnegative number as a human-readable string of the given length.
+ *
+ * The string is not localized, and will be at least the specified number of
+ * digits long.  If the value is not large enough, it will be zero-padded.
+ */
+inline std::string represent_number(unsigned int value, int digits=1) {
+  std::string result;
+  for (unsigned int remainder = value ; remainder > 0; remainder /= 10)
+    result.insert(0, 1, '0' + remainder % 10);
+  if (result.size() < digits) result.insert(0, digits - result.size(), '0');
+  return result;
+}
 
 #endif

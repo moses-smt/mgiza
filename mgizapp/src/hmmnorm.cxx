@@ -116,14 +116,6 @@ int main(int argc, char* argv[])
 // Some utility functions to get it compile..
 
 ofstream logmsg;
-const string str2Num(int n)
-{
-  string number = "";
-  do {
-    number.insert((size_t)0, 1, (char)(n % 10 + '0'));
-  } while ((n /= 10) > 0);
-  return (number);
-}
 double LAMBDA=1.09;
 
 Vector<map< pair<int,int>,char > > ReferenceAlignment;

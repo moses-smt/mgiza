@@ -115,7 +115,7 @@ int hmm::em_with_tricks(int noIterations,bool dumpCount,
   string modelName="Hmm",shortModelName="hmm";
   int dumpFreq=ModelH_Dump_Freq;
   time_t it_st, st, it_fn, fn;
-  string tfile, afile,afileh, number, alignfile, test_alignfile;
+  string tfile, afile,afileh, alignfile, test_alignfile;
   bool dump_files = false ;
   ofstream of2 ;
   st = time(NULL) ;
@@ -131,11 +131,7 @@ int hmm::em_with_tricks(int noIterations,bool dumpCount,
 
     cerr << "Dump files " << dump_files << " it " << it << " noIterations " << noIterations << " dumpFreq " << dumpFreq <<endl;
     //dump_files = true;
-    number = "";
-    int n = it;
-    do {
-      number.insert((size_t)0, 1, (char)(n % 10 + '0'));
-    } while((n /= 10) > 0);
+    const string number = represent_number(it);
     tfile = Prefix + ".t" + shortModelName + "." + number ;
     afile = Prefix + ".a" + shortModelName + "." + number ;
     // acfile = Prefix + ".ac" + shortModelName + "." + number ;
@@ -147,26 +143,20 @@ int hmm::em_with_tricks(int noIterations,bool dumpCount,
     initAL();
     sHandler1.rewind();
     int k;
-    char node[2] ;
-    node[1] = '\0';
     for (k=1 ; k< NCPUS ; k++) {
       th[k].m = this;
       th[k].done = 0;
       th[k].valid = 0;
       th[k].it = it;
       th[k].resume = resume;
-      th[k].alignfile = alignfile + ".part";
-      node[0] = '0' + k;
-      th[k].alignfile += node;
+      th[k].alignfile = alignfile + ".part" + represent_number(k, 3);
       th[k].dump_files = dump_files;
       th[k].valid = pthread_create(&(th[k].thread),NULL,hmm_exe_emloop,&(th[k]));
       if(th[k].valid) {
         cerr << "Error starting thread " << k << endl;
       }
     }
-    node[0] = '0';
-    alignfile += ".part";
-    alignfile += node;
+    alignfile += ".part" + represent_number(0, 3);
     em_loop(perp, sHandler1,  dump_files , alignfile.c_str(), trainViterbiPerp, false,it==1 && (!resume),it);
     for (k=1; k<NCPUS; k++) {
       pthread_join((th[k].thread),NULL);
@@ -861,7 +851,7 @@ CTTableDiff<COUNT,PROB>* hmm::em_one_step(int it)
   string modelName="Hmm",shortModelName="hmm";
   int dumpFreq=ModelH_Dump_Freq;
   time_t it_st, st, it_fn, fn;
-  string tfile, afile,afileh, number, alignfile, test_alignfile;
+  string tfile, afile,afileh, alignfile, test_alignfile;
   int pair_no = 0;
   bool dump_files = false ;
   ofstream of2 ;
@@ -873,11 +863,7 @@ CTTableDiff<COUNT,PROB>* hmm::em_one_step(int it)
 
   cout << endl << "-----------\n" << modelName << ": Iteration " << it << '\n';
   dump_files = true ;//(dumpFreq != 0) && ((it % dumpFreq) == 0) && !NODUMPS;
-  number = "";
-  int n = it;
-  do {
-    number.insert((size_t)0, 1, (char)(n % 10 + '0'));
-  } while((n /= 10) > 0);
+  const string number = represent_number(it);
   tfile = Prefix + ".t" + shortModelName + "." + number ;
   afile = Prefix + ".a" + shortModelName + "." + number ;
   afileh = Prefix + ".h" + shortModelName + "." + number ;
@@ -934,7 +920,7 @@ void hmm::em_one_step_2(int it,int part)
   string modelName="Hmm",shortModelName="hmm";
   int dumpFreq=ModelH_Dump_Freq;
   time_t it_st, st, it_fn, fn;
-  string tfile, afile,afileh, number, alignfile, test_alignfile;
+  string tfile, afile,afileh, alignfile, test_alignfile;
   int pair_no = 0;
   bool dump_files = false ;
   ofstream of2 ;
@@ -943,22 +929,12 @@ void hmm::em_one_step_2(int it,int part)
 
 
   dump_files = true ;//(dumpFreq != 0) && ((it % dumpFreq) == 0) && !NODUMPS;
-  number = "";
-  int n = it;
-  do {
-    number.insert((size_t)0, 1, (char)(n % 10 + '0'));
-  } while((n /= 10) > 0);
+  const string number = represent_number(it, 3);
   tfile = Prefix + ".t" + shortModelName + "." + number ;
   afile = Prefix + ".a" + shortModelName + "." + number ;
   afileh = Prefix + ".h" + shortModelName + "." + number ;
-  alignfile = Prefix + ".Ahmm." ;
-  char v[2];
-  v[1] = 0;
-  v[0] = '0' + it;
-  alignfile += v;
-  alignfile += ".part";
-  v[0] = '0' + part;
-  alignfile += v;
+  alignfile = Prefix + ".Ahmm." + represent_number(it, 3) ;
+  alignfile += ".part" + represent_number(part, 3);
 
   counts=HMMTables<int,WordClasses>(GLOBALProbabilityForEmpty,ewordclasses,fwordclasses);
   aCountTable.clear();
@@ -1026,11 +1002,7 @@ int multi_thread_em(int noIter, int noThread, hmm* base)
     cout << endl << "-----------\n" << modelName << ": Iteration " << i << '\n';
     dump_files = (dumpFreq != 0) && ((i % dumpFreq) == 0) && !NODUMPS;
     dump_files = true;
-    string number = "";
-    int n = i;
-    do {
-      number.insert((size_t)0, 1, (char)(n % 10 + '0'));
-    } while((n /= 10) > 0);
+    const string number = represent_number(i);
     tfile = Prefix + ".t" + shortModelName + "." + number ;
     afile = Prefix + ".a" + shortModelName + "." + number ;
     acfile = Prefix + ".ac" + shortModelName + "." + number ;

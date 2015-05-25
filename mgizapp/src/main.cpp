@@ -112,15 +112,6 @@ string countPrefix;
 
 Mutex logmsg_lock;
 ofstream logmsg;
-const string str2Num(int n)
-{
-  string number = "";
-  do {
-    number.insert((size_t)0, 1, (char)(n % 10 + '0'));
-  } while ((n /= 10) > 0);
-  return (number);
-}
-
 double LAMBDA=1.09;
 sentenceHandler *testCorpus=0, *corpus=0;
 Perplexity trainPerp, testPerp, trainViterbiPerp, testViterbiPerp;
@@ -237,7 +228,7 @@ void printDecoderConfigFile()
     lastmodel = 2;
   else
     lastmodel = 1;
-  string lastModelName = str2Num(lastmodel);
+  string lastModelName = represent_number(lastmodel);
   string p=Prefix + ".t" + /*lastModelName*/"3" +".final";
   decoder << "TTable = " << stripPath(p.c_str()) << '\n';
   p = Prefix + ".ti.final";
