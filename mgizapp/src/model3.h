@@ -99,7 +99,7 @@ public:
   d4model* viterbi_3to4();
   int viterbi_3to3();
   int viterbi_4to4(d4model& d4m);
-  void viterbi_thread(int it, string alignfile, bool dump_files,d4model& d4m,d5model& d5m,bool final,char fromModel,char toModel,string& modelName);
+  void viterbi_thread(int it, string alignfile, bool dump_files,d4model& d4m,d5model& d5m,bool is_final,char fromModel,char toModel,string& modelName);
 private:
 
 
@@ -145,7 +145,7 @@ private:
 
   template<class MODEL_TYPE, class A, class B> void viterbi_loop_with_tricks(
     Perplexity&, Perplexity&, sentenceHandler&, bool, const char*,
-    bool, string model, bool final, A*d4m, B*d5m);
+    bool, string model, bool is_final, A*d4m, B*d5m);
 
 };
 

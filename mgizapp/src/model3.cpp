@@ -277,7 +277,7 @@ struct m3_em_loop_t {
   pthread_t thread;
   d4model* d4;
   d5model* d5;
-  bool final;
+  bool is_final;
   m3_em_loop_t() :
     m(0), done(0), valid(0),d4(0),d5(0) {
   }
@@ -287,14 +287,14 @@ struct m3_em_loop_t {
 void* m3_exe_emloop(void *arg)
 {
   m3_em_loop_t* em =(m3_em_loop_t *) arg;
-  em->m->viterbi_thread(em->it, em->alignfile, em->dump_files, *(em->d4),*(em->d5),em->final,em->fromModel,em->toModel,em->modelName);
+  em->m->viterbi_thread(em->it, em->alignfile, em->dump_files, *(em->d4),*(em->d5),em->is_final,em->fromModel,em->toModel,em->modelName);
   em->done = -1;
   return arg;
 }
 
-void model3::viterbi_thread(int it, string alignfile, bool dump_files,d4model& d4m,d5model& d5m,bool final,char fromModel,char toModel,string& modelName)
+void model3::viterbi_thread(int it, string alignfile, bool dump_files,d4model& d4m,d5model& d5m,bool is_final,char fromModel,char toModel,string& modelName)
 {
-#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    dump_files, alignfile.c_str(),     true,  modelName,final
+#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    dump_files, alignfile.c_str(),     true,  modelName,is_final
   switch (toModel) {
   case '3': {
     switch (fromModel) {
@@ -413,9 +413,9 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
   }
 
   for (unsigned int it=1; it < trainingString.length(); it++) {
-    bool final=0;
+    bool is_final=false;
     if (it==trainingString.length()-1)
-      final=1;
+      is_final=true;
     string modelName;
     char fromModel=trainingString[it-1], toModel=trainingString[it];
     if (fromModel==toModel)
@@ -425,12 +425,12 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
     it_st = time(NULL);
     cout <<"\n---------------------\n"<<modelName<<": Iteration " << it
          <<'\n';
-    dump_files = (final || ((Model3_Dump_Freq != 0) && ((it
+    dump_files = (is_final || ((Model3_Dump_Freq != 0) && ((it
                             % Model3_Dump_Freq) == 0))) && !NODUMPS;
     string d4file2;
     {
       // set up the names of the files where the tables will be printed
-      const string number = (final ? "final" : represent_number(it));
+      const string number = (is_final ? "final" : represent_number(it));
       tfile = Prefix + ".t3." + number;
       tfile_actual = Prefix + ".actual.t3." + number;
       afile = Prefix + ".a3." + number;
@@ -463,7 +463,7 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
       th[k].done = 0;
       th[k].valid = 0;
       th[k].it = it;
-      th[k].final = final;
+      th[k].is_final = is_final;
       th[k].alignfile = alignfile + ".part" + represent_number(k, 3);
       th[k].dump_files = dump_files;
       th[k].fromModel = fromModel;
@@ -478,8 +478,8 @@ int model3::viterbi(int noIterationsModel3, int noIterationsModel4,
 
 #ifdef TRICKY_IBM3_TRAINING
 
-#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    dump_files, alignfile.c_str(),     true,  modelName,final
-#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,final
+#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    dump_files, alignfile.c_str(),     true,  modelName,is_final
+#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,is_final
     switch (toModel) {
     case '3':
       switch (fromModel) {
@@ -698,14 +698,14 @@ int model3::viterbi_hto3()
   string modelName="H23";
   //cout <<"\n---------------------\n"<<modelName<<": Iteration " << it<<'\n';
   int it = 1;
-  bool final =false;
+  bool is_final =false;
   ///ump_files = true;
-  dump_files = (final || ((Model3_Dump_Freq != 0) && ((it % Model3_Dump_Freq)
+  dump_files = (is_final || ((Model3_Dump_Freq != 0) && ((it % Model3_Dump_Freq)
                           == 0))) && !NODUMPS;
   string d4file2;
   {
     // set up the names of the files where the tables will be printed
-    const string number = (final ? "final" : represent_number(it));
+    const string number = (is_final ? "final" : represent_number(it));
     tfile = Prefix + ".t3." + number;
     tfile_actual = Prefix + ".actual.t3." + number;
     afile = Prefix + ".a3." + number;
@@ -732,8 +732,8 @@ int model3::viterbi_hto3()
 
 #ifdef TRICKY_IBM3_TRAINING
 
-#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    true, alignfile.c_str(),     true,  modelName,final
-#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,final
+#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    true, alignfile.c_str(),     true,  modelName,is_final
+#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,is_final
   viterbi_loop_with_tricks<transpair_modelhmm, const hmm>(TRAIN_ARGS,h,(void*)0);
   if (testPerp && testHandler)
     viterbi_loop_with_tricks<transpair_modelhmm, const hmm>(TEST_ARGS, h,(void*)0);
@@ -754,7 +754,7 @@ int model3::viterbi_hto3()
 
 int model3::viterbi_3to3()
 {
-  bool final = false;
+  bool is_final = false;
   double minErrors=1.0;
   int minIter=0;
   bool dump_files = false;
@@ -768,13 +768,13 @@ int model3::viterbi_3to3()
 
   // cout <<"\n---------------------\n"<<modelName<<": Iteration " << it<<'\n';
 
-  dump_files = (final || ((Model3_Dump_Freq != 0) && ((it % Model3_Dump_Freq)
+  dump_files = (is_final || ((Model3_Dump_Freq != 0) && ((it % Model3_Dump_Freq)
                           == 0))) && !NODUMPS;
   dump_files = true;
   string d4file2;
   {
     // set up the names of the files where the tables will be printed
-    const string number = (final ? "final" : represent_number(it));
+    const string number = (is_final ? "final" : represent_number(it));
     tfile = Prefix + ".t3." + number;
     tfile_actual = Prefix + ".actual.t3." + number;
     afile = Prefix + ".a3." + number;
@@ -800,8 +800,8 @@ int model3::viterbi_3to3()
 
 #ifdef TRICKY_IBM3_TRAINING
 
-#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    true, alignfile.c_str(),     true,  modelName,final
-#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,final
+#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    true, alignfile.c_str(),     true,  modelName,is_final
+#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,is_final
   viterbi_loop_with_tricks<transpair_model3>( TRAIN_ARGS, (void*)0,(void*)0);
   if (testPerp && testHandler)
     viterbi_loop_with_tricks<transpair_model3>( TEST_ARGS, (void*)0,(void*)0);
@@ -823,7 +823,7 @@ int model3::viterbi_3to3()
 d4model* model3::viterbi_3to4()
 {
   double minErrors=1.0;
-  bool final = false;
+  bool is_final = false;
   bool dump_files = false;
   if(ewordclasses==NULL)
     ewordclasses = new WordClasses;
@@ -844,13 +844,13 @@ d4model* model3::viterbi_3to4()
   int it = 1;
   //cout <<"\n---------------------\n"<<modelName<<": Iteration " << it<<'\n';
 
-  dump_files = (final || ((Model3_Dump_Freq != 0) && ((it % Model3_Dump_Freq)
+  dump_files = (is_final || ((Model3_Dump_Freq != 0) && ((it % Model3_Dump_Freq)
                           == 0))) && !NODUMPS;
   dump_files = true;
   string d4file2;
   {
     // set up the names of the files where the tables will be printed
-    const string number = (final ? "final" : represent_number(it));
+    const string number = (is_final ? "final" : represent_number(it));
     tfile = Prefix + ".t3." + number;
     tfile_actual = Prefix + ".actual.t3." + number;
     afile = Prefix + ".a3." + number;
@@ -876,8 +876,8 @@ d4model* model3::viterbi_3to4()
 
 #ifdef TRICKY_IBM3_TRAINING
 
-#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    true, alignfile.c_str(),     true,  modelName,final
-#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,final
+#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    true, alignfile.c_str(),     true,  modelName,is_final
+#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,is_final
   viterbi_loop_with_tricks<transpair_model3, void, d4model>(TRAIN_ARGS, (void*)0,&d4m);
   if (testPerp && testHandler)
     viterbi_loop_with_tricks<transpair_model3, void, d4model>( TEST_ARGS , (void*)0,&d4m);
@@ -908,8 +908,8 @@ int model3::viterbi_4to4(d4model& d4m)
 
   cout << "Starting Model4 To Model 4 Viterbi Training";
   int it = 1;
-  bool final = false;
-  dump_files = (final || ((Model3_Dump_Freq != 0) && ((it % Model3_Dump_Freq)
+  bool is_final = false;
+  dump_files = (is_final || ((Model3_Dump_Freq != 0) && ((it % Model3_Dump_Freq)
                           == 0))) && !NODUMPS;
   dump_files = true;
 
@@ -944,8 +944,8 @@ int model3::viterbi_4to4(d4model& d4m)
 
 #ifdef TRICKY_IBM3_TRAINING
 
-#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    true, alignfile.c_str(),     true,  modelName,final
-#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,final
+#define TRAIN_ARGS perp,      trainViterbiPerp, sHandler1,    true, alignfile.c_str(),     true,  modelName,is_final
+#define TEST_ARGS  *testPerp, *testViterbiPerp, *testHandler, dump_files, test_alignfile.c_str(),false, modelName,is_final
 
   viterbi_loop_with_tricks<transpair_model4, d4model, d4model>(TRAIN_ARGS , &d4m,&d4m);
 
@@ -1054,21 +1054,21 @@ void multi_thread_m34_em(model3& m3, int ncpu, int Model3_Iterations,
     m3.perp.clear();
     m3.trainViterbiPerp.clear();
     m3.iter = i;
-    bool final = (i==Model3_Iterations-1 || i == Model4_Iterations
+    bool is_final = (i==Model3_Iterations-1 || i == Model4_Iterations
                   +Model3_Iterations-1);
-    dump_files = (final || ((Model3_Dump_Freq != 0) && ((i
+    dump_files = (is_final || ((Model3_Dump_Freq != 0) && ((i
                             % Model3_Dump_Freq) == 0))) && !NODUMPS;
     m3.sHandler1.rewind();
     m3.perp.clear() ; // clears cross_entrop & perplexity
     m3.trainViterbiPerp.clear() ; // clears cross_entrop & perplexity
     string modelName;
     it_st = time(NULL);
-    dump_files = (final || ((Model3_Dump_Freq != 0) && ((i
+    dump_files = (is_final || ((Model3_Dump_Freq != 0) && ((i
                             % Model3_Dump_Freq) == 0))) && !NODUMPS;
     string d4file2;
     {
       // set up the names of the files where the tables will be printed
-      const string number = (final ? "final": represent_number(i));
+      const string number = (is_final ? "final": represent_number(i));
       tfile = Prefix + ".t3." + number;
       tfile_actual = Prefix + ".actual.t3." + number;
       afile = Prefix + ".a3." + number;

@@ -31,9 +31,9 @@ USA.
 #include <strstream>
 
 
-bool absolutePathNames=0;
+bool absolutePathNames = false;
 string ParameterPathPrefix;
-bool ParameterChangedFlag=0;
+bool ParameterChangedFlag = false;
 
 bool writeParameters(ofstream&of,const ParSet&parset,int level)
 {
@@ -56,7 +56,7 @@ bool writeParameters(ofstream&of,const ParSet&parset,int level)
       of << endl;
     }
   }
-  return 1;
+  return true;
 }
 
 bool readParameters(ifstream&f,const ParSet&parset,int verb,int level)
@@ -70,7 +70,7 @@ bool readParameters(ifstream&f,const ParSet&parset,int verb,int level)
     if(makeSetCommand(s1,s2,parset,verb,level)==0)
       cerr << "ERROR: could not set: (C) " << s1 << " " << s2 << endl;
   }
-  return 1;
+  return true;
 }
 
 
@@ -85,7 +85,7 @@ bool makeSetCommand(string _s1,string s2,const ParSet&parset,int verb,int level)
         (*i)->setParameter(s2,verb);
       else if(verb>1)
         cerr << "ERROR: Could not set: (A) " << s1 << " " << s2 << " " << level << " " << (*i)->getLevel() << endl;
-      return 1;
+      return true;
     } else if( (*i)->getString().substr(0,s1.length())==s1 ) {
       anf=(*i);
       anfset++;
@@ -96,13 +96,13 @@ bool makeSetCommand(string _s1,string s2,const ParSet&parset,int verb,int level)
       anf->setParameter(s2,verb);
     else if( verb>1 )
       cerr << "ERROR: Could not set: (B) " << s1 << " " << s2 << " " << level << " " << anf->getLevel() << endl;
-    return 1;
+    return true;
   }
   if( anfset>1 )
     cerr << "ERROR: ambiguous parameter '" << s1 << "'.\n";
   if( anfset==0 )
     cerr << "ERROR: parameter '" << s1 << "' does not exist.\n";
-  return 0;
+  return false;
 }
 
 ostream& printPars(ostream&of,const ParSet&parset,int level)

@@ -378,7 +378,7 @@ inline bool operator<(const Als&x,const Als&y)
 template<class MODEL_TYPE, class ADDITIONAL_MODEL_DATA_IN,class ADDITIONAL_MODEL_DATA_OUT>
 void model3::viterbi_loop_with_tricks(Perplexity& perp, Perplexity& viterbiPerp, sentenceHandler& sHandler1,
                                       bool dump_files, const char* alignfile,
-                                      bool collect_counts, string model, bool final,
+                                      bool collect_counts, string model, bool is_final,
                                       ADDITIONAL_MODEL_DATA_IN*dm_in,
                                       ADDITIONAL_MODEL_DATA_OUT*dm_out)
 {
@@ -393,7 +393,7 @@ void model3::viterbi_loop_with_tricks(Perplexity& perp, Perplexity& viterbiPerp,
   int pair_no;
   int HillClimbingSteps=0;
   NumberOfAlignmentsInSophisticatedCountCollection=0;
-  if (dump_files||FEWDUMPS||(final&&(ONLYALDUMPS)) ) {
+  if (dump_files||FEWDUMPS||(is_final&&(ONLYALDUMPS)) ) {
     of2.open(alignfile);
     if(of2.is_open()) {
       cout << "I will write alignment to " << alignfile << endl;
@@ -402,7 +402,7 @@ void model3::viterbi_loop_with_tricks(Perplexity& perp, Perplexity& viterbiPerp,
   /*  if(!of2.is_open()){
           cerr << "I don't know why you do not let me dump file " << alignfile << endl;
       }*/
-  if( dump_files&&PrintN&&final ) {
+  if( dump_files&&PrintN&&is_final ) {
     string x=alignfile+string("NBEST");
     of3= new ofstream(x.c_str());
   }
@@ -525,7 +525,7 @@ void model3::viterbi_loop_with_tricks(Perplexity& perp, Perplexity& viterbiPerp,
     perp.addFactor(log(double(align_total_count)), count, l, m,0);
     viterbiPerp.addFactor(log(double(setOfGoodCenters[bestAlignment].second)), count, l, m,0);
     massert(log(double(setOfGoodCenters[bestAlignment].second)) <= log(double(align_total_count)));
-    if (dump_files||(FEWDUMPS&&sent.sentenceNo<1000)||(final&&(ONLYALDUMPS)) )
+    if (dump_files||(FEWDUMPS&&sent.sentenceNo<1000)||(is_final&&(ONLYALDUMPS)) )
       printAlignToFile(es, fs, Elist.getVocabList(), Flist.getVocabList(), of2, (setOfGoodCenters[bestAlignment].first)->getAlignment(), sent.sentenceNo,
                        setOfGoodCenters[bestAlignment].second);
     for(unsigned int i=0; i<setOfGoodCenters.size(); ++i)
@@ -590,7 +590,7 @@ void model3::viterbi_loop_with_tricks(Perplexity& perp, Perplexity& viterbiPerp,
 
   } /* of sentence pair E, F */
   //sHandler1.rewind();
-  if (dump_files||FEWDUMPS||(final&&(ONLYALDUMPS)) )
+  if (dump_files||FEWDUMPS||(is_final&&(ONLYALDUMPS)) )
     of2.close();
   delete of3;
   delete writeNBestErrorsFile;
@@ -604,7 +604,7 @@ void model3::viterbi_loop_with_tricks(Perplexity& perp, Perplexity& viterbiPerp,
 template<class MODEL_TYPE, class ADDITIONAL_MODEL_DATA_IN,class ADDITIONAL_MODEL_DATA_OUT>
 void model3::viterbi_loop_with_tricks_1(Perplexity& perp, Perplexity& viterbiPerp, sentenceHandler& sHandler1,
                                         bool dump_files, const char* alignfile,
-                                        bool collect_counts, string model, bool final,
+                                        bool collect_counts, string model, bool is_final,
                                         ADDITIONAL_MODEL_DATA_IN*dm_in,
                                         ADDITIONAL_MODEL_DATA_OUT*dm_out)
 {
@@ -618,9 +618,9 @@ void model3::viterbi_loop_with_tricks_1(Perplexity& perp, Perplexity& viterbiPer
   int pair_no;
   HillClimbingSteps=0;
   NumberOfAlignmentsInSophisticatedCountCollection=0;
-  if (dump_files||FEWDUMPS||(final&&(ONLYALDUMPS)) )
+  if (dump_files||FEWDUMPS||(is_final&&(ONLYALDUMPS)) )
     of2.open(alignfile);
-  if( dump_files&&PrintN&&final ) {
+  if( dump_files&&PrintN&&is_final ) {
     string x=alignfile+string("NBEST");
     of3= new ofstream(x.c_str());
   }
@@ -759,7 +759,7 @@ void model3::viterbi_loop_with_tricks_1(Perplexity& perp, Perplexity& viterbiPer
     perp.addFactor(log(double(align_total_count)), count, l, m,0);
     viterbiPerp.addFactor(log(double(setOfGoodCenters[bestAlignment].second)), count, l, m,0);
     massert(log(double(setOfGoodCenters[bestAlignment].second)) <= log(double(align_total_count)));
-    if (dump_files||(FEWDUMPS&&sent.sentenceNo<1000)||(final&&(ONLYALDUMPS)) )
+    if (dump_files||(FEWDUMPS&&sent.sentenceNo<1000)||(is_final&&(ONLYALDUMPS)) )
       printAlignToFile(es, fs, Elist.getVocabList(), Flist.getVocabList(), of2, (setOfGoodCenters[bestAlignment].first)->getAlignment(), sent.sentenceNo,
                        setOfGoodCenters[bestAlignment].second);
     for(unsigned int i=0; i<setOfGoodCenters.size(); ++i)
@@ -824,7 +824,7 @@ void model3::viterbi_loop_with_tricks_1(Perplexity& perp, Perplexity& viterbiPer
 
   } /* of sentence pair E, F */
   //sHandler1.rewind();
-  if (dump_files||FEWDUMPS||(final&&(ONLYALDUMPS)) )
+  if (dump_files||FEWDUMPS||(is_final&&(ONLYALDUMPS)) )
     of2.close();
   delete of3;
   delete writeNBestErrorsFile;
@@ -839,7 +839,7 @@ void model3::viterbi_loop_with_tricks_1(Perplexity& perp, Perplexity& viterbiPer
 #include "collCounts.cpp"
 #define INSTANTIATE(A,B,C) template \
 void model3::viterbi_loop_with_tricks<A,B,C>(Perplexity& perp, Perplexity& viterbiPerp, sentenceHandler& sHandler1,  \
-					     bool dump_files, const char* alignfile,bool collect_counts, string, bool final,\
+					     bool dump_files, const char* alignfile,bool collect_counts, string, bool is_final,\
 					     B*d4m,C*d5m);
 
 INSTANTIATE(transpair_model3, void, void);
