@@ -28,6 +28,7 @@ USA.
 #include <direct.h>
 #define getcwd _getcwd
 #endif
+#include <stdexcept>
 #include <strstream>
 
 
@@ -47,7 +48,9 @@ bool writeParameters(ofstream&of,const ParSet&parset,int level)
       of << (*i)->getString() << " ";
       if( absolutePathNames&&(*i)->isFilename()&&s.length()&&s[0]!='/' ) {
         char path[1024];
-        getcwd(path,1024);
+        if (getcwd(path, 1024) == NULL)
+          throw std::runtime_error(
+              "Could not get current working directory.");
         of << path << '/';
       }
       if( ParameterPathPrefix.length()&&(*i)->isFilename()&&s.length()&&s[0]!='/' )
