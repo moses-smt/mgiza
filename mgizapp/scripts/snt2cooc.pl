@@ -1,6 +1,9 @@
 #!/usr/bin/perl -w 
 
 # sntcooc.perl [-sort-buffer-size 200M] [-sort-batch-size 253] [-sort-compress gzip] output vcb1 vcb2 snt12 
+#
+# This file is part of mgiza++.  Its use is licensed under the GNU General
+# Public License version 2 or, at your option, any later version.
 
 use strict;
 use File::Basename;

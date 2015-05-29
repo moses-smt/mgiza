@@ -1,7 +1,13 @@
 #!/usr/bin/env python
+#
+# This file is part of mgiza++.  Its use is licensed under the GNU General
+# Public License version 2 or, at your option, any later version.
 
-# This script post process the snt file -- either in single-line format or in multi-line format
-# The output, however, will always be in single-line format
+"""Post-process the snt file.
+
+The file can be either in single-line format or in multi-line format.
+The output, however, will always be in single-line format.
+"""
 
 from __future__ import unicode_literals
 from optparse import OptionParser

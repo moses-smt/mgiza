@@ -6,6 +6,10 @@
 #produced by giza containing the frequency of each traning sentence.
 
 #Copyright Marcello Federico, November 2004
+#
+# This file is part of mgiza++.  Its use is licensed under the GNU General
+# Public License version 2 or, at your option, any later version.
+
 
 ($cnt,$dir,$inv)=();
 

@@ -1,3 +1,6 @@
+# This file is part of mgiza++.  Its use is licensed under the GNU General
+# Public License version 2 or, at your option, any later version.
+
 PRE=test
 SRC=fr
 TGT=en

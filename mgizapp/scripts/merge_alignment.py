@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # Author : Qin Gao
 # Date   : Dec 31, 2007
+#
+# This file is part of mgiza++.  Its use is licensed under the GNU General
+# Public License version 2 or, at your option, any later version.
 
 """Combine multiple alignment files into a single one.
 
