@@ -97,7 +97,15 @@ double zufall01()
 
 double zufall(double min,double max)
 {
-  double z=zufall01()*(max-min)+min;
+  double z;
+  // Get a random double from 0 inclusive to 1 exclusive, and scale to fit
+  // the [min, max) interval.  In theory this always produces a number in the
+  // interval, but due to rounding errors it's possible occasionally to get
+  // something just outside it, especially z == max.  No point trying to
+  // optimize for that; we can just retry if it happens.
+  do {
+    z = zufall01()*(max-min)+min;
+  } while (z < min || z>= max);
   assert(z>=min&&z<max);
   return z;
 }
