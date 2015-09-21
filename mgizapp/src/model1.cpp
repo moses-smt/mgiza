@@ -118,7 +118,7 @@ int model1::em_thread(int noIterations, int nthread, /*Perplexity& perp, sentenc
   number = "";
   int n = it;
   do {
-    number.insert((size_t)0, 1, (char)(n % 10 + '0'));
+    number.insert((size_t)0, (size_t)1, (char)(n % 10 + '0'));
   } while((n /= 10) > 0);
   alignfile = Prefix + ".A" + shortModelName + "." + number + ".part" ;
   alignfile = alignfile + represent_number(nthread, 3);
@@ -150,7 +150,7 @@ int model1::em_with_tricks(int noIterations, /*Perplexity& perp, sentenceHandler
     number = "";
     int n = it;
     do {
-      number.insert((size_t)0, 1, (char)(n % 10 + '0'));
+      number.insert((size_t)0, (size_t)1, (char)(n % 10 + '0'));
     } while((n /= 10) > 0);
     tfile = Prefix + ".t" + shortModelName + "." + number ;
     alignfile = Prefix + ".A" + shortModelName + "." + number+".part0" ;
@@ -430,7 +430,7 @@ CTTableDiff<COUNT,PROB>* model1::one_step_em(int it, bool seedModel1,
   number = "";
   int n = it;
   do {
-    number.insert((size_t)0, 1, (char)(n % 10 + '0'));
+    number.insert((size_t)0, (size_t)1, (char)(n % 10 + '0'));
   } while((n /= 10) > 0);
   tfile = Prefix + ".t" + shortModelName + "." + number ;
   alignfile = Prefix + ".A1" ;
