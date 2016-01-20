@@ -51,6 +51,7 @@ char *Get_File_Spec ()
   user = "WINUSER";
 #else
   user = getenv("USER");
+  if (user == NULL) user = "USER";
 #endif
 
   file_spec = (char *)malloc(sizeof(char) *
