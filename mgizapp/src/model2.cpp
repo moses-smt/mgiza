@@ -63,7 +63,6 @@ int model2::em_with_tricks(int noIterations,bool dumpCount,
   string modelName="Model2",shortModelName="2";
   time_t it_st, st, it_fn, fn;
   string tfile, afile, alignfile, test_alignfile;
-  int pair_no = 0;
   bool dump_files = false ;
   ofstream of2 ;
   st = time(NULL) ;
@@ -71,7 +70,6 @@ int model2::em_with_tricks(int noIterations,bool dumpCount,
   cout << "\n==========================================================\n";
   cout << modelName << " Training Started at: " << my_ctime(&st) << " iter: " << noIterations << "\n";
   for(int it=1; it <= noIterations ; it++) {
-    pair_no = 0;
     it_st = time(NULL) ;
     cout << endl << "-----------\n" << modelName << ": Iteration " << it << '\n';
     dump_files = (Model2_Dump_Freq != 0) && ((it % Model2_Dump_Freq) == 0) && !NODUMPS;
@@ -208,11 +206,12 @@ void model2::em_loop(Perplexity& perp, sentenceHandler& sHandler1,
             else e = PROB_SMOOTH  ;
             e *= aTable.getValue(i,j, l, m);
             COUNT temp = COUNT(e) * val ;
-            if( NoEmptyWord==0 || i!=0 )
+            if( NoEmptyWord==0 || i!=0 ) {
               if (sPtrCache[i] != 0)
                 (*(sPtrCache[i])).count += temp ;
               else
                 tTable.incCount(es[i], fs[j], temp);
+            }
             aCountTable.addValue(i,j, l, m,temp) ;
           } /* end of for i */
         } // end of if (denom > 0)

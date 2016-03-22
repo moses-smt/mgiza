@@ -74,7 +74,7 @@ void smooth_standard(T*a,T*b,double p)
 
 
 hmm::hmm(model2&m2,WordClasses &e, WordClasses& f)
-  :   ewordclasses(e), fwordclasses(f),model2(m2),counts(GLOBALProbabilityForEmpty,ewordclasses,fwordclasses),
+  :   model2(m2), ewordclasses(e), fwordclasses(f), counts(GLOBALProbabilityForEmpty,ewordclasses,fwordclasses),
       probs(GLOBALProbabilityForEmpty,ewordclasses,fwordclasses)
 {
 }
