@@ -223,7 +223,13 @@ void multiSolveProblem(Problem &problem,int versuche,int maxSeconds)
   end[GDA_OPT].title =  " GDA";
   end[RRT_OPT].title =  " RRT";
   end[TA_OPT].title =   "  TA";
-  end[MY_OPT].title =   "  MY";
+
+  /* What's this for?  It goes beyond the end of the array, because of the
+   * order of the TA_OPT/HC_OPT/SA_OPT/... enum values.  The code ignores
+   * this extra field, going only up to MAX_OPT_NR.  Looks as if MY_OPT was
+   * added as an afterthought and never fully implemented.
+   */
+  // end[MY_OPT].title =   "  MY";
 
   for(i=0; i<MAX_OPT_NR; i++)
     end[i].quantil(0.5);
