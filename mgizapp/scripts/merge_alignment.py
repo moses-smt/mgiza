@@ -46,6 +46,8 @@ def main():
         sys.stdin = codecs.getreader('UTF-8')(sys.stdin)
         sys.stdout = codecs.getwriter('UTF-8')(sys.stdout)
         sys.stderr = codecs.getwriter('UTF-8')(sys.stderr)
+    else:
+        sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
 
     if len(sys.argv) < 2:
         sys.stderr.write("Provide me the file names (at least 2)\n")
