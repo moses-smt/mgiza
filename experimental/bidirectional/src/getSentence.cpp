@@ -209,7 +209,7 @@ int sentenceHandler::getNextSentence(sentPair& sent, vcbList* elist, vcbList* fl
             cout << "Reading more sentence pairs into memory ... \n";
             while((noSentInBuffer < TRAIN_BUFFER_SIZE) && readNextSentence(s)){
                 if ((s.fSent.size()-1) > (MAX_FERTILITY-1) * (s.eSent.size()-1)){
-                    cerr << "WARNING: The following sentence pair has source/target sentence length ration more than\n"<<
+                    cerr << "WARNING: The following sentence pair has source/target sentence length ratio more than\n"<<
                         "the maximum allowed limit for a source word fertility\n"<<
                         " source length = " << s.eSent.size()-1 << " target length = " << s.fSent.size()-1 <<
                         " ratio " << double(s.fSent.size()-1)/  (s.eSent.size()-1) << " ferility limit : " <<
