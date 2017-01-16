@@ -638,7 +638,7 @@ double StartTraining(int&result)
   }
 
   if(restart == 11 && Model4_Iterations == 0) { // Restart on model 3 but not train on model 3
-    cerr << "You specified to load model 4 and train model 4 (restart == 10) but you specified zero Model 4 iteration, please revise your parameters";
+    cerr << "You specified to load model 4 and train model 4 (restart == 11) but you specified zero Model 4 iteration, please revise your parameters";
     exit(1);
   }
 
