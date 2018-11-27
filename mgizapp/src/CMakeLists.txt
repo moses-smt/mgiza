@@ -114,7 +114,7 @@ TARGET_LINK_LIBRARIES (
     )
 
 INSTALL(TARGETS mgiza_lib mgiza snt2cooc snt2plain plain2snt symal hmmnorm d4norm snt2coocrmp
-    RUNTIME DESTINATION bin
+    RUNTIME DESTINATION .
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     )
