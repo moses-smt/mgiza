@@ -49,7 +49,7 @@ SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 # BOOST_ROOT=/e/programs/boost_1_35_0
 # BOOST_LIBRARYDIR=$BOOST_ROOT/stage/lib
 
-set(Boost_USE_STATIC_LIBS        ON)
+#set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
