@@ -80,6 +80,9 @@ ELSE()
     ENDIF()
 ENDIF()
 
+SET(CMAKE_INSTALL_BINDIR "." CACHE STRING "Install runtime destination")
+SET(CMAKE_INSTALL_LIBDIR "lib" CACHE STRING "Install library destination")
+
 ADD_SUBDIRECTORY (src)
 ADD_SUBDIRECTORY (src/mkcls)
 ADD_SUBDIRECTORY (scripts)
